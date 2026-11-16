@@ -66,7 +66,7 @@ export const COLLEGE_INFO = {
   images: {
     logo: "/assets/college/college-logo_075efbff.jpg",
     campus: "/assets/college/campus_86930cb8.jpg",
-    principal: "/assets/college/principal-photo_e6a19362.jpg",
+    principal: "/assets/aistudio/IMG-20261116-WA0032_0a59b3c0.jpg",
     qr: "/assets/college/college-location-qr_602c0c79.png",
     boardResultsFlyer: "/assets/college/817460125_1493703939446649_9144013667062097966_n_92b09ca6.jpg",
     boardResultsOfficial: "/assets/college/815703728_1493032862847090_3032195106224050107_n_6a280dce.jpg",
@@ -353,7 +353,7 @@ export const GALLERY_PHOTOS: GalleryPhoto[] = [
   },
   {
     id: "photo-principal",
-    src: "/assets/college/principal-photo_e6a19362.jpg",
+    src: "/assets/aistudio/IMG-20261116-WA0032_0a59b3c0.jpg",
     title: "Principal Prof. Yasmeen Panhwar Address",
     category: "faculty",
     caption: "Principal addressing the faculty and student assembly on academic distinction and Islamic values.",

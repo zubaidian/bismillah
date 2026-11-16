@@ -45,7 +45,7 @@ import {
   Search
 } from 'lucide-react';
 
-const TOUR_STORAGE_KEY = 'ggzc_campus_tour_map_stops_v32';
+const TOUR_STORAGE_KEY = 'ggzc_campus_tour_map_stops_v33';
 
 const EAST_STAIRS_STOP_IDS = new Set([
   'general-staff-room',
@@ -72,8 +72,16 @@ function buildWalkRouteBetween(
   const dest = { x: targetStop.mapX, y: targetStop.mapY };
   const waypoints: { x: number; y: number }[] = [fromPos];
 
+  const isNorthEastStop =
+    dest.x >= 72 ||
+    targetStop.id === 'botany-dept-lab' ||
+    targetStop.id === 'zoology-botany-labs' ||
+    targetStop.id === 'greenhouse-prayer-ground';
+  const isNorthEastFrom =
+    fromPos.x >= 72 || (fromPos.y <= 12 && fromPos.x >= 45);
+
   // If moving between west-wing stops (Tennis & Volleyball, Hostel, Small Garden, Computer Dept, Pak Studies, Urdu, Physical Education, Commerce by Stairs)
-  if (fromPos.x < 48 && dest.x < 48 && fromPos.y < 80 && dest.y < 80) {
+  if (fromPos.x < 45 && dest.x < 45 && fromPos.y < 80 && dest.y < 80) {
     if (fromPos.y < 10 && targetStop.id !== 'commerce-dept-library') {
       waypoints.push({ x: 44.3, y: 7.1 });
       waypoints.push({ x: 44.3, y: 20.5 });
@@ -102,41 +110,66 @@ function buildWalkRouteBetween(
       waypoints.push(dest);
     }
   } else if (
-    fromPos.x >= 53 &&
-    dest.x >= 53 &&
+    fromPos.x >= 52 &&
+    dest.x >= 52 &&
     fromPos.y >= 16 &&
     fromPos.y <= 46 &&
     dest.y >= 16 &&
     dest.y <= 46 &&
-    fromPos.x < 88 &&
-    dest.x < 88
+    fromPos.x < 75.5 &&
+    dest.x < 75.5
   ) {
-    // Direct walking along Principal's Office <-> Chemistry Lab <-> Stairs (x=76.8) <-> By-Stairs 1st Floor / Auditorium Hall path
+    // Direct walking along Principal's Office <-> Stairs (x=65.7) <-> By-Stairs 1st Floor / Auditorium Hall path (x=73.2)
     if (Math.abs(fromPos.y - 41.9) < 3 && targetStop.id === 'auditorium-hall') {
-      waypoints.push({ x: 83.8, y: 41.9 });
+      waypoints.push({ x: 73.2, y: 41.9 });
       waypoints.push(dest);
     } else {
       if (fromPos.y < 36) {
-        waypoints.push({ x: 76.8, y: fromPos.y });
-        waypoints.push({ x: 76.8, y: 41.9 });
+        waypoints.push({ x: 65.7, y: fromPos.y });
+        waypoints.push({ x: 65.7, y: 41.9 });
       } else {
-        waypoints.push({ x: 76.8, y: 41.9 });
+        waypoints.push({ x: 65.7, y: 41.9 });
       }
       if (targetStop.id === 'auditorium-hall') {
-        waypoints.push({ x: 83.8, y: 41.9 });
+        waypoints.push({ x: 73.2, y: 41.9 });
         waypoints.push(dest);
       } else if (dest.y < 36) {
-        waypoints.push({ x: 76.8, y: dest.y });
+        waypoints.push({ x: 65.7, y: dest.y });
         waypoints.push(dest);
       } else {
         waypoints.push(dest);
       }
     }
-  } else if (fromPos.x >= 87 && dest.x >= 87 && fromPos.y <= 75 && dest.y <= 75) {
-    // Direct walk along the Straight Long Corridor connecting Garden -> Sindhi -> Physiology -> Economics -> Geography -> Psychology
-    waypoints.push({ x: 88.8, y: fromPos.y });
-    waypoints.push({ x: 88.8, y: dest.y });
-    waypoints.push(dest);
+  } else if (isNorthEastFrom && isNorthEastStop && fromPos.y <= 76 && dest.y <= 76) {
+    // Direct walk along Assembly -> Zoology -> Botany Path -> Very Big Ground -> Garden -> Corridor (x=77.5)
+    if (fromPos.y > 35 && dest.y > 35) {
+      waypoints.push({ x: 77.5, y: fromPos.y });
+      waypoints.push({ x: 77.5, y: dest.y });
+      waypoints.push(dest);
+    } else if (fromPos.y > 35) {
+      waypoints.push({ x: 77.5, y: fromPos.y });
+      waypoints.push({ x: 77.5, y: 38.3 });
+      waypoints.push({ x: 86.8, y: 32.5 });
+      if (dest.y < 25) {
+        waypoints.push({ x: 86.8, y: 7.6 });
+      }
+      waypoints.push(dest);
+    } else if (dest.y > 35) {
+      if (fromPos.y < 25) {
+        waypoints.push({ x: 86.8, y: 7.6 });
+      }
+      waypoints.push({ x: 86.8, y: 32.5 });
+      waypoints.push({ x: 77.5, y: 38.3 });
+      waypoints.push({ x: 77.5, y: dest.y });
+      waypoints.push(dest);
+    } else {
+      if (fromPos.y <= 12 && dest.y > 12) {
+        waypoints.push({ x: 86.8, y: 7.6 });
+      } else if (fromPos.y > 12 && dest.y <= 12) {
+        waypoints.push({ x: 86.8, y: 7.6 });
+      }
+      waypoints.push(dest);
+    }
   } else {
     const spineYFrom = Math.max(18, Math.min(91, fromPos.y));
     const spineEntry = gateRoute[1] || { x: 50, y: Math.max(18, Math.min(91, dest.y)) };
@@ -283,13 +316,13 @@ function getSurroundingsAtCoord(
         : `Going By Stairs ↑ to 1st Floor ${targetStop.shortName || targetStop.name}`,
       leftView: isCommerce
         ? 'Small Garden, Computer Department (Computer Lab & Big Multimedia), Pak Studies, Urdu & Physical Education below'
-        : 'Principal’s Office & Chemistry Lab below · General Staff Room & English Classes on 1st Floor',
+        : 'Principal’s Office below · General Staff Room & English Classes on 1st Floor',
       aheadView: isCommerce
         ? 'Climbing Commerce Stairs ↑ directly to 1st Floor Commerce & Commerce Library'
         : `Climbing Central Stairs ↑ directly to ${targetStop.shortName || targetStop.name} (Statistics right before Dark Room)`,
       rightView: isCommerce
-        ? 'Assembly, Zoology & Botany Lab → Straight Long Path → Ground & Garden straight ahead'
-        : 'Physics Optics Dark Room, Auditorium Hall & Straight Long Corridor (Sindhi, Physiology, Economics, Geography, Psychology) on the right'
+        ? 'Assembly, Zoology & Botany → Very Big Ground (Car Parking, Old Bus, Sports Gymnasium) → Garden'
+        : 'Physics Optics Dark Room, Auditorium Hall & East Corridor (Economics, Physiology, Psychology, Sindhi, Geography, Chemistry Office & Labs 1–2)'
     };
   }
 
@@ -359,6 +392,7 @@ export function VirtualCampusTour() {
       localStorage.removeItem('ggzc_campus_tour_map_stops_v29');
       localStorage.removeItem('ggzc_campus_tour_map_stops_v30');
       localStorage.removeItem('ggzc_campus_tour_map_stops_v31');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v32');
       const saved = localStorage.getItem(TOUR_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -559,7 +593,7 @@ export function VirtualCampusTour() {
     return () => clearTimeout(restartTimer);
   }, [autoLoopWalk, simActive, isSimulating, simProgress, mapMode, formState, activeView]);
 
-  // Sync with menu shortcuts like #central-library
+  // Sync with menu shortcuts like #campus-tour / #campus-virtual-map and #central-library
   useEffect(() => {
     const selectStopById = (stopId: string) => {
       const idx = stops.findIndex((s) => s.id === stopId);
@@ -569,22 +603,48 @@ export function VirtualCampusTour() {
       }
     };
 
+    const openVirtualMap = () => {
+      setActiveView('map');
+      setMapMode('browse');
+      setFormState(null);
+    };
+
     const handleCustomSelect = (e: Event) => {
       const detail = (e as CustomEvent<string>).detail;
-      if (detail) selectStopById(detail);
+      if (detail) {
+        openVirtualMap();
+        selectStopById(detail);
+      }
+    };
+
+    const handleOpenMapEvent = () => {
+      openVirtualMap();
     };
 
     const handleHash = () => {
       if (window.location.hash === '#central-library') {
+        openVirtualMap();
         selectStopById('central-library');
+      } else if (
+        window.location.hash === '#campus-tour' ||
+        window.location.hash === '#campus-virtual-map'
+      ) {
+        openVirtualMap();
+        window.setTimeout(() => {
+          document
+            .querySelector('#campus-virtual-map')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       }
     };
 
     handleHash();
     window.addEventListener('campus-tour:select-stop', handleCustomSelect);
+    window.addEventListener('campus-tour:open-map', handleOpenMapEvent);
     window.addEventListener('hashchange', handleHash);
     return () => {
       window.removeEventListener('campus-tour:select-stop', handleCustomSelect);
+      window.removeEventListener('campus-tour:open-map', handleOpenMapEvent);
       window.removeEventListener('hashchange', handleHash);
     };
   }, [stops]);
@@ -965,7 +1025,7 @@ export function VirtualCampusTour() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search any spot (e.g. Tennis & Volleyball, Sindhi, Physiology, Economics, Geography, Ground, Garden, Hostel, Physics)..."
+                placeholder="Search any spot (e.g. Car Parking, Old Bus, Sports Gymnasium, Very Big Ground, Garden, Economics, Physiology, Psychology, Sindhi, Geography, Chemistry Office, Chemistry Lab 1, Chemistry Lab 2)..."
                 aria-label="Search department or campus location"
                 className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-[#021914] border border-emerald-600/80 text-sm font-semibold text-white placeholder-stone-400 focus:outline-none focus:border-amber-300 shadow-lg"
               />
@@ -1024,7 +1084,7 @@ export function VirtualCampusTour() {
                 </>
               ) : (
                 <p className="text-xs font-semibold text-amber-200 px-1">
-                  No department or room matched &ldquo;{searchQuery}&rdquo;. Try Tennis &amp; Volleyball, Ground, Garden, Sindhi, Physiology, Economics, Geography, Psychology, Small Garden, or Physics.
+                  No department or room matched &ldquo;{searchQuery}&rdquo;. Try Car Parking, Old Bus, Sports Gymnasium, Very Big Ground, Garden, Economics, Physiology, Psychology, Sindhi, Geography, Chemistry Office, Chemistry Lab 1, Chemistry Lab 2, or Physics.
                 </p>
               )}
             </div>
@@ -1058,7 +1118,10 @@ export function VirtualCampusTour() {
         </div>
 
         {/* Main Map & Tour Showcase Container */}
-        <div className="bg-[#03241e] border border-amber-300/40 rounded-3xl p-3 sm:p-5 lg:p-6 shadow-2xl space-y-6">
+        <div
+          id="campus-virtual-map"
+          className="scroll-mt-24 bg-[#03241e] border border-amber-300/40 rounded-3xl p-3 sm:p-5 lg:p-6 shadow-2xl space-y-6"
+        >
           {/* Top Control Bar */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-emerald-800/80 pb-5">
             {/* Left Metadata + Mode Switcher */}

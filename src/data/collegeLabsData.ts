@@ -1,9 +1,10 @@
 export type LabSlug =
-  | 'computer-science'
   | 'physics'
+  | 'computer-science'
   | 'chemistry'
   | 'zoology'
-  | 'botany';
+  | 'botany'
+  | 'psychology';
 
 export interface CollegeLabInfo {
   id: LabSlug;
@@ -26,22 +27,6 @@ export interface LabPhotoItem {
 
 export const COLLEGE_LABS: CollegeLabInfo[] = [
   {
-    id: 'computer-science',
-    name: 'Computer Science Lab',
-    location: 'Information Technology Complex · Ground Floor',
-    programs: 'HSC Computer Science · General Science · Digital Skills',
-    summary:
-      'Equipped with modern desktop systems, high-speed fiber networking, smart projection screens, and continuous solar/UPS backup—supporting our BISE Hyderabad Board position achievers.',
-    equipment: [
-      'Modern desktop computing workstations & fiber-optic internet',
-      'Curriculum environments for Python, Figma UI/UX, C++, and Databases',
-      'Interactive multimedia projector & continuous solar/UPS power backup',
-    ],
-    defaultPhotoTitle: 'Computer Science & IT Lab',
-    defaultPhotoCaption:
-      'Desktop workstations, smart display screen, and coding environment for Python, Figma, and C++.',
-  },
-  {
     id: 'physics',
     name: 'Physics Lab',
     location: 'Science Wing · Block B1',
@@ -56,6 +41,22 @@ export const COLLEGE_LABS: CollegeLabInfo[] = [
     defaultPhotoTitle: 'Physics Practical Laboratory',
     defaultPhotoCaption:
       'Apparatus benches for optics, mechanics, electromagnetism, and board practical experiments.',
+  },
+  {
+    id: 'computer-science',
+    name: 'Computer Science Lab',
+    location: 'Information Technology Complex · Ground Floor',
+    programs: 'HSC Computer Science · General Science · Digital Skills',
+    summary:
+      'Equipped with modern desktop systems, high-speed fiber networking, smart projection screens, and continuous solar/UPS backup—supporting our BISE Hyderabad Board position achievers.',
+    equipment: [
+      'Modern desktop computing workstations & fiber-optic internet',
+      'Curriculum environments for Python, Figma UI/UX, C++, and Databases',
+      'Interactive multimedia projector & continuous solar/UPS power backup',
+    ],
+    defaultPhotoTitle: 'Computer Science & IT Lab',
+    defaultPhotoCaption:
+      'Desktop workstations, smart display screen, and coding environment for Python, Figma, and C++.',
   },
   {
     id: 'chemistry',
@@ -104,5 +105,21 @@ export const COLLEGE_LABS: CollegeLabInfo[] = [
     defaultPhotoTitle: 'Botany Lab & Herbarium Collection',
     defaultPhotoCaption:
       'Plant anatomy microscopy benches and preserved regional botanical specimen archives.',
+  },
+  {
+    id: 'psychology',
+    name: 'Psychology Lab',
+    location: 'Straight Long Corridor · After Geography',
+    programs: 'HSC Humanities · Associate Degree in Arts (ADA)',
+    summary:
+      'Dedicated behavioral sciences testing and counseling laboratory supporting experimental psychology practicals in sensory perception, memory, cognitive assessment, and student wellness.',
+    equipment: [
+      'Sensory perception, reaction-time & memory testing apparatus',
+      'Standardized psychometric, personality & cognitive assessment kits',
+      'Confidential student counseling & behavioral observation clinic',
+    ],
+    defaultPhotoTitle: 'Psychology Testing & Counseling Lab',
+    defaultPhotoCaption:
+      'Apparatus for perception, learning, memory experiments, and confidential student counseling.',
   },
 ];

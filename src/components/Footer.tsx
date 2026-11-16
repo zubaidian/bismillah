@@ -223,7 +223,18 @@ export function Footer({ onOpenAdmin }: FooterProps) {
                 </a>
               </li>
               <li>
-                <a href="#campus-tour" className="hover:text-amber-300 transition-colors">
+                <a
+                  href="#campus-virtual-map"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent('campus-tour:open-map'));
+                    const target =
+                      document.querySelector('#campus-virtual-map') ||
+                      document.querySelector('#campus-tour');
+                    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="hover:text-amber-300 transition-colors"
+                >
                   Virtual Campus Tour
                 </a>
               </li>

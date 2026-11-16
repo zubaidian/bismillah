@@ -43,6 +43,41 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
+
+    if (href === '#campus-tour') {
+      import('./VirtualCampusTour').catch(() => {});
+      window.dispatchEvent(new CustomEvent('campus-tour:open-map'));
+
+      const scrollToMap = (behavior: ScrollBehavior = 'smooth') => {
+        const mapEl = document.querySelector('#campus-virtual-map') || document.querySelector('#campus-tour');
+        if (mapEl) {
+          mapEl.scrollIntoView({ behavior, block: 'start' });
+          return Boolean(document.querySelector('#campus-virtual-map'));
+        }
+        return false;
+      };
+
+      if (scrollToMap('smooth')) {
+        window.setTimeout(() => scrollToMap('smooth'), 260);
+        return;
+      }
+
+      document.querySelector('#campus-tour')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      let attempts = 0;
+      const pollForMap = () => {
+        attempts += 1;
+        window.dispatchEvent(new CustomEvent('campus-tour:open-map'));
+        if (scrollToMap('smooth')) {
+          window.setTimeout(() => scrollToMap('smooth'), 300);
+        } else if (attempts < 30) {
+          window.setTimeout(pollForMap, 80);
+        }
+      };
+      window.setTimeout(pollForMap, 80);
+      return;
+    }
+
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });

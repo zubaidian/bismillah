@@ -28,7 +28,7 @@ export function CollegeLabsSection() {
 
   // Upload Form State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedLabId, setSelectedLabId] = useState<LabSlug>('computer-science');
+  const [selectedLabId, setSelectedLabId] = useState<LabSlug>('physics');
   const [photoTitle, setPhotoTitle] = useState('');
   const [photoCaption, setPhotoCaption] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
@@ -153,7 +153,7 @@ export function CollegeLabsSection() {
             College Laboratories &amp; Practical Wings
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Dedicated practical halls for Computer Science, Physics, Chemistry, Zoology, and Botany—supporting BISE Hyderabad Board and University degree experiments.
+            Dedicated practical halls for Physics, Computer Science, Chemistry, Zoology, Botany, and Psychology—supporting BISE Hyderabad Board and University degree experiments.
           </p>
         </div>
 
@@ -169,7 +169,7 @@ export function CollegeLabsSection() {
                   : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
               }`}
             >
-              All 5 Labs
+              All {COLLEGE_LABS.length} Labs
             </button>
             {COLLEGE_LABS.map((lab) => (
               <button

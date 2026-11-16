@@ -231,7 +231,7 @@ export function GallerySection() {
                     className={
                       isEmblemOrQr
                         ? 'w-full h-full object-contain transition-transform duration-500 group-hover:scale-105'
-                        : `w-full h-full object-cover ${isPortrait ? 'object-top' : 'object-center'} transition-transform duration-500 group-hover:scale-105`
+                        : `w-full h-full object-cover ${isPortrait ? 'object-[center_35%]' : 'object-center'} transition-transform duration-500 group-hover:scale-105`
                     }
                   />
 
