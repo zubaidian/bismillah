@@ -4,6 +4,7 @@ import {
   STUDENT_RESOURCES,
   StudentResourceDoc,
 } from '../data/studentResourcesData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   CheckCircle2,
   Download,
@@ -21,6 +22,7 @@ const RESOURCE_CATEGORIES: ('All' | ResourceCategory)[] = [
 ];
 
 export function StudentResourcesSection() {
+  const { dir, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<'All' | ResourceCategory>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [previewDoc, setPreviewDoc] = useState<StudentResourceDoc | null>(null);
@@ -33,6 +35,13 @@ export function StudentResourcesSection() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [previewDoc]);
+
+  const getCategoryLabel = (cat: 'All' | ResourceCategory) => {
+    if (cat === 'All') return `${t.resources.allDocs} (${STUDENT_RESOURCES.length})`;
+    if (cat === 'Admission Forms') return t.resources.categories.admissionForms;
+    if (cat === 'Enrollment Slips') return t.resources.categories.enrollmentSlips;
+    return t.resources.categories.guides;
+  };
 
   const filteredResources = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
@@ -53,16 +62,17 @@ export function StudentResourcesSection() {
   return (
     <section
       id="student-resources"
-      className="py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative border-t border-stone-200"
+      dir={dir}
+      className="scroll-mt-20 py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative border-t border-stone-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Student Resources &amp; Downloadable Forms
+            {t.resources.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Official downloadable PDF admission forms, BISE &amp; University enrollment slips, and semester registration guides for scholars of Government Girls Zubaida College, Hyderabad.
+            {t.resources.subtitle}
           </p>
         </div>
 
@@ -75,15 +85,13 @@ export function StudentResourcesSection() {
                   key={cat}
                   type="button"
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     activeCategory === cat
                       ? 'bg-[#064b36] text-white shadow-sm'
                       : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
                   }`}
                 >
-                  {cat === 'All'
-                    ? `All Documents (${STUDENT_RESOURCES.length})`
-                    : cat}
+                  {getCategoryLabel(cat)}
                 </button>
               ))}
             </div>
@@ -94,7 +102,7 @@ export function StudentResourcesSection() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search forms, slips, or guides..."
+                placeholder={t.resources.searchPlaceholder}
                 className="w-full pl-9 pr-3 py-2 rounded-xl border border-stone-200 text-xs sm:text-sm bg-stone-50 text-stone-800 focus:outline-none focus:ring-2 focus:ring-[#064b36]"
               />
             </div>
@@ -107,10 +115,11 @@ export function StudentResourcesSection() {
             {filteredResources.map((doc) => (
               <article
                 key={doc.id}
+                dir="ltr"
                 className="rounded-2xl bg-gradient-to-b from-[#064b36] to-[#042f28] text-white border-2 border-amber-300/35 hover:border-amber-300/70 shadow-lg hover:shadow-xl transition-all p-6 flex flex-col justify-between gap-5 text-left"
               >
                 <div className="space-y-3.5">
-                  {/* Category & Code Header (Plain Text, Zero Badges) */}
+                  {/* Category & Code Header */}
                   <div className="flex items-center justify-between gap-2 border-b border-emerald-800/80 pb-3 text-[11px]">
                     <span className="font-bold uppercase tracking-wider text-amber-300">
                       {doc.category}
@@ -166,16 +175,16 @@ export function StudentResourcesSection() {
                       className="px-3.5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-xs shadow transition-colors flex items-center justify-center gap-1.5"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>Download PDF</span>
+                      <span>{t.resources.downloadPdf}</span>
                     </a>
 
                     <button
                       type="button"
                       onClick={() => setPreviewDoc(doc)}
-                      className="px-3.5 py-2.5 rounded-xl bg-[#03241e] hover:bg-[#05352c] text-amber-200 border border-amber-300/40 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                      className="px-3.5 py-2.5 rounded-xl bg-[#03241e] hover:bg-[#05352c] text-amber-200 border border-amber-300/40 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <Eye className="w-3.5 h-3.5" />
-                      <span>Preview PDF</span>
+                      <span>{t.resources.previewPdf}</span>
                     </button>
                   </div>
                 </div>
@@ -186,10 +195,10 @@ export function StudentResourcesSection() {
           <div className="text-center py-12 bg-white rounded-2xl border border-stone-200 p-8 space-y-3">
             <FileText className="w-10 h-10 text-stone-400 mx-auto" />
             <h3 className="font-serif font-bold text-lg text-stone-800">
-              No matching forms or guides found
+              {t.resources.emptyTitle}
             </h3>
             <p className="text-xs text-stone-500 max-w-md mx-auto">
-              Try clearing your search or selecting &ldquo;All Documents&rdquo; above.
+              {t.resources.emptyDesc}
             </p>
             <button
               type="button"
@@ -197,9 +206,9 @@ export function StudentResourcesSection() {
                 setSearchQuery('');
                 setActiveCategory('All');
               }}
-              className="px-4 py-2 bg-[#064b36] text-white text-xs font-semibold rounded-lg"
+              className="px-4 py-2 bg-[#064b36] text-white text-xs font-semibold rounded-lg cursor-pointer"
             >
-              Show All Resources
+              {t.resources.showAll}
             </button>
           </div>
         )}

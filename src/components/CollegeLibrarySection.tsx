@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  COLLEGE_LIBRARY_INFO,
   DEFAULT_LIBRARY_PHOTO_SLOTS,
   LibraryPhotoItem,
 } from '../data/collegeLibraryData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   BookOpen,
   CalendarClock,
@@ -21,6 +21,8 @@ import {
 const STORAGE_KEY = 'ggzc_college_library_photos';
 
 export function CollegeLibrarySection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.library;
   const [customPhotos, setCustomPhotos] = useState<LibraryPhotoItem[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -134,32 +136,33 @@ export function CollegeLibrarySection() {
   return (
     <section
       id="college-library"
+      dir={dir}
       className="py-16 sm:py-24 bg-white text-stone-900 relative border-t border-stone-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            {COLLEGE_LIBRARY_INFO.heading}
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            {COLLEGE_LIBRARY_INFO.subheading}
+            {s.subtitle}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs sm:text-sm text-stone-600 font-medium">
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-[#064b36]" />
-              <span>{COLLEGE_LIBRARY_INFO.location}</span>
+              <span>{s.location}</span>
             </span>
             <span className="inline-flex items-center gap-1.5">
               <CalendarClock className="w-4 h-4 text-[#064b36]" />
-              <span>{COLLEGE_LIBRARY_INFO.timings}</span>
+              <span>{s.timings}</span>
             </span>
           </div>
         </div>
 
         {/* Library Key Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {COLLEGE_LIBRARY_INFO.stats.map((stat) => (
+          {s.stats.map((stat) => (
             <div
               key={stat.label}
               className="p-5 rounded-2xl bg-[#f8faf7] border border-stone-200 shadow-sm text-center"
@@ -177,16 +180,16 @@ export function CollegeLibrarySection() {
         {/* Library Photos & Gallery Showcase (In live mode, only rendered if photos exist) */}
         {(import.meta.env.DEV || displayPhotos.length > 0) && (
         <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#064b36] to-[#042f28] text-white border-2 border-amber-300/40 shadow-2xl space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-800/80 pb-5 text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-800/80 pb-5 text-start">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-amber-300">
                 <Camera className="w-5 h-5" />
                 <h3 className="font-serif text-2xl font-bold text-white">
-                  College Library Photo Gallery
+                  {s.galleryTitle}
                 </h3>
               </div>
               <p className="text-xs sm:text-sm text-emerald-100">
-                Photographs of the Reading Hall, Book Stacks, Government Book Bank, and Science Reference Wing.
+                {s.gallerySubtitle}
               </p>
             </div>
 
@@ -357,7 +360,7 @@ export function CollegeLibrarySection() {
                           className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/75 text-amber-200 text-[11px] font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <Maximize2 className="w-3 h-3" />
-                          <span>Enlarge</span>
+                          <span>{s.enlargeBtn}</span>
                         </button>
                       </>
                     ) : import.meta.env.DEV ? (
@@ -411,10 +414,10 @@ export function CollegeLibrarySection() {
         )}
 
         {/* Library Collections & Membership Rules */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-start">
           {/* 4 Collection Wings */}
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {COLLEGE_LIBRARY_INFO.wings.map((wing) => (
+            {s.wings.map((wing) => (
               <div
                 key={wing.id}
                 className="p-6 rounded-2xl bg-[#f8faf7] border border-stone-200 shadow-sm hover:border-emerald-700/40 transition-colors space-y-3"
@@ -450,14 +453,14 @@ export function CollegeLibrarySection() {
             <div className="flex items-center gap-2 border-b border-emerald-800/80 pb-3">
               <BookOpen className="w-5 h-5 text-amber-300 shrink-0" />
               <h3 className="font-serif text-xl font-bold text-amber-300">
-                Library Rules &amp; Book Lending
+                {s.rulesTitle}
               </h3>
             </div>
             <p className="text-xs text-emerald-100 leading-relaxed">
-              Every enrolled student of Intermediate, Associate Degree, and BS 4-Year programs is entitled to a College Library Card and Book Bank support.
+              {s.rulesDesc}
             </p>
             <ul className="space-y-3 pt-1">
-              {COLLEGE_LIBRARY_INFO.guidelines.map((rule, idx) => (
+              {s.guidelines.map((rule, idx) => (
                 <li
                   key={idx}
                   className="flex items-start gap-2.5 text-xs text-stone-200 leading-relaxed"

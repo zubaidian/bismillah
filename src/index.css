@@ -3,7 +3,8 @@
 @theme {
   --font-serif: "Playfair Display", Georgia, serif;
   --font-display: "Cinzel", "Playfair Display", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Noto Naskh Arabic", system-ui, -apple-system, sans-serif;
+  --font-rtl: "Noto Naskh Arabic", "Noto Nastaliq Urdu", system-ui, sans-serif;
   --color-college-green: #064b36;
   --color-college-dark: #042f28;
   --color-college-deep: #02251f;
@@ -15,6 +16,12 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+}
+
+html[lang="ur"] [dir="rtl"],
+html[lang="sd"] [dir="rtl"] {
+  font-family: var(--font-rtl);
+  line-height: 1.75;
 }
 
 /* Custom scrollbar */

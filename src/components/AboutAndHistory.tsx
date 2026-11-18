@@ -1,50 +1,38 @@
-import { COLLEGE_INFO, TIMELINE_EVENTS } from '../data/collegeData';
+import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Quote, Play } from 'lucide-react';
 
 export function AboutAndHistory() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.about;
+
   return (
-    <section id="about" className="py-16 sm:py-24 bg-[#064b36] text-white relative">
+    <section id="about" dir={dir} className="py-16 sm:py-24 bg-[#064b36] text-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Lead */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 space-y-6">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-white">
-              A Future Shaped By <span className="italic font-normal text-amber-300">Possibility.</span>
+              {s.headingBefore} <span className="italic font-normal text-amber-300">{s.headingHighlight}</span>
             </h2>
 
             <p className="text-amber-100/95 text-lg sm:text-xl font-serif italic leading-relaxed">
-              &ldquo;Education is more than a qualification. It is the confidence to ask questions, the courage to imagine, and the ability to make a lasting difference in the world.&rdquo;
+              {s.leadQuote}
             </p>
 
             <div className="space-y-4 text-stone-200 text-base leading-relaxed">
-              <p>
-                Government Girls Zubaida College Hyderabad is one of the oldest, most prestigious, and revered educational landmarks in Sindh. Established in 1953, the college answered an urgent historical calling: providing higher secondary and collegiate education for young women in Hyderabad at a time when such opportunities were severely limited.
-              </p>
-              <p>
-                Guided continuously by our sacred motto <strong className="text-amber-300 font-serif italic">&ldquo;SERVICE ABOVE SELF&rdquo;</strong>, Zubaida College has nurtured three generations of visionary women. Today, our distinguished alumni serve as renowned doctors, professors, scientists, judges, educators, and leaders across Pakistan and around the globe.
-              </p>
-              <p>
-                It is far more than an educational building — it is the living embodiment of the bright futures and aspirations of the daughters of Hyderabad.
-              </p>
+              <p>{s.p1}</p>
+              <p>{s.p2}</p>
+              <p>{s.p3}</p>
             </div>
 
             <div className="pt-2 flex flex-wrap gap-4 text-sm font-semibold">
-              <div className="flex items-center gap-2 text-amber-300">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <span>Established 1953</span>
-              </div>
-              <div className="flex items-center gap-2 text-amber-300">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <span>2,000 Enrolled Students</span>
-              </div>
-              <div className="flex items-center gap-2 text-amber-300">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <span>Motto: Service Above Self</span>
-              </div>
-              <div className="flex items-center gap-2 text-amber-300">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                <span>Sindh Education Dept. Affiliation</span>
-              </div>
+              {s.pillars.map((pillar) => (
+                <div key={pillar} className="flex items-center gap-2 text-amber-300">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span>{pillar}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -57,22 +45,22 @@ export function AboutAndHistory() {
                 className="w-full h-72 sm:h-80 object-cover object-center"
               />
               <div className="p-4 bg-[#042f28] text-xs text-stone-300 flex items-center justify-between border-t border-emerald-800">
-                <span className="font-semibold text-amber-200">Main Campus Gateway</span>
-                <span>Opposite Central Jail, Pathan Colony, Hirabad</span>
+                <span className="font-semibold text-amber-200">{s.gatewayTitle}</span>
+                <span>{s.gatewayAddr}</span>
               </div>
             </div>
 
             {/* Quote Card */}
-            <div className="p-6 rounded-2xl bg-[#042f28] border-2 border-amber-300/60 shadow-xl relative text-left">
+            <div className="p-6 rounded-2xl bg-[#042f28] border-2 border-amber-300/60 shadow-xl relative text-start">
               <Quote className="w-8 h-8 text-amber-400/40 absolute top-4 right-4" />
               <p className="font-serif italic text-lg sm:text-xl text-amber-200 leading-snug">
-                &ldquo;Every student deserves the dignity and opportunity to discover just how far her intellect and potential can take her.&rdquo;
+                {s.quoteCard}
               </p>
               <div className="mt-4 pt-3 border-t border-emerald-800 flex items-center justify-between text-xs">
                 <span className="font-bold text-white tracking-wider uppercase">
-                  The Spirit of Learning
+                  {s.quoteLabel}
                 </span>
-                <span className="text-amber-300 font-serif">Govt Girls Zubaida College</span>
+                <span className="text-amber-300 font-serif">{s.collegeLabel}</span>
               </div>
             </div>
           </div>
@@ -82,15 +70,15 @@ export function AboutAndHistory() {
         <div id="history" className="mt-20 pt-16 border-t border-emerald-800">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
             <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
-              Seven Decades of Empowering Sindh&rsquo;s Daughters
+              {s.timelineTitle}
             </h3>
             <p className="text-sm text-stone-300">
-              A journey of perseverance, educational equity, and academic distinction from 1953 to the present.
+              {s.timelineSubtitle}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TIMELINE_EVENTS.map((event, index) => (
+            {s.timeline.map((event, index) => (
               <div
                 key={event.year}
                 className="p-6 rounded-xl bg-[#042f28] border border-amber-300/30 hover:border-amber-300 transition-colors shadow-lg flex flex-col justify-between"

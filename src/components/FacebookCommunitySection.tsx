@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   ExternalLink,
   MessageCircle,
-  Video,
   Radio,
   CheckCircle2,
   Info,
@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 
 export function FacebookCommunitySection() {
+  const { t, dir } = useLanguage();
+  const s = t.sections.community;
   const [activeTab, setActiveTab] = useState<'timeline' | 'live' | 'recent'>('timeline');
   const [pageUrl, setPageUrl] = useState(COLLEGE_INFO.facebookUrl);
   const [isConfiguring, setIsConfiguring] = useState(false);
@@ -78,17 +80,17 @@ export function FacebookCommunitySection() {
   ];
 
   return (
-    <section id="facebook-updates" className="py-16 sm:py-24 bg-[#042f28] text-white relative">
+    <section id="facebook-updates" dir={dir} className="py-16 sm:py-24 bg-[#042f28] text-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           {/* Left Column: Community Overview & Action Zone */}
-          <div className="lg:col-span-6 space-y-6 text-left">
+          <div className="lg:col-span-6 space-y-6 text-start">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-              Connect With Our <span className="italic font-normal text-amber-300">Live Facebook Feed</span>
+              {s.headingBefore} <span className="italic font-normal text-amber-300">{s.headingHighlight}</span>
             </h2>
 
             <p className="text-stone-300 text-base sm:text-lg leading-relaxed">
-              Stay in touch with daily campus activities, extracurricular galas, exam schedules, Board honors, and emergency public holiday circulars directly from our college Facebook page.
+              {s.subtitle}
             </p>
 
             {/* Official Facebook Channel Card */}
@@ -100,10 +102,10 @@ export function FacebookCommunitySection() {
                   </div>
                   <div>
                     <h4 className="font-bold text-white text-base">
-                      Govt Girls Zubaida College Hyderabad
+                      {s.channelTitle}
                     </h4>
                     <span className="text-xs text-amber-300 font-mono">
-                      Official Page · Active Community
+                      {s.channelSub}
                     </span>
                   </div>
                 </div>
@@ -145,7 +147,7 @@ export function FacebookCommunitySection() {
               )}
 
               <p className="text-xs text-stone-300 leading-relaxed">
-                Directly managed by the college administration for rapid notices, holiday bulletins, and student queries.
+                {s.channelDesc}
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -155,7 +157,7 @@ export function FacebookCommunitySection() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all active:scale-95"
                 >
-                  <span>Open Official Facebook Page ↗</span>
+                  <span>{s.openFbBtn}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
 
@@ -164,7 +166,7 @@ export function FacebookCommunitySection() {
                   className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#02241e] hover:bg-[#032d26] border border-blue-400/40 text-blue-300 font-semibold text-xs transition-colors"
                 >
                   <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                  <span>View 2026 Live Event Tracker</span>
+                  <span>{s.viewEventsBtn}</span>
                 </a>
 
                 {import.meta.env.DEV && (
@@ -183,11 +185,11 @@ export function FacebookCommunitySection() {
             <div className="grid grid-cols-2 gap-3.5 text-xs text-stone-300">
               <div className="p-3.5 rounded-xl bg-[#021f19] border border-emerald-800 flex items-center gap-2.5">
                 <Radio className="w-4 h-4 text-emerald-400 shrink-0 animate-pulse" />
-                <span>Live Event Streams &amp; Convocations</span>
+                <span>{s.feat1}</span>
               </div>
               <div className="p-3.5 rounded-xl bg-[#021f19] border border-emerald-800 flex items-center gap-2.5">
                 <MessageCircle className="w-4 h-4 text-amber-300 shrink-0" />
-                <span>Real-Time Student Notices</span>
+                <span>{s.feat2}</span>
               </div>
             </div>
           </div>
@@ -200,7 +202,7 @@ export function FacebookCommunitySection() {
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
                   <span className="text-xs font-bold text-stone-800 uppercase tracking-wider">
-                    Facebook Live Feed
+                    {s.feedTitle}
                   </span>
                 </div>
 
@@ -214,7 +216,7 @@ export function FacebookCommunitySection() {
                         : 'text-stone-600 hover:text-stone-900'
                     }`}
                   >
-                    Live Plugin
+                    {s.tabs.timeline}
                   </button>
                   <button
                     onClick={() => setActiveTab('recent')}
@@ -224,7 +226,7 @@ export function FacebookCommunitySection() {
                         : 'text-stone-600 hover:text-stone-900'
                     }`}
                   >
-                    Recent Posts
+                    {s.tabs.recent}
                   </button>
                   <button
                     onClick={() => setActiveTab('live')}
@@ -234,7 +236,7 @@ export function FacebookCommunitySection() {
                         : 'text-stone-600 hover:text-stone-900'
                     }`}
                   >
-                    Live Video
+                    {s.tabs.live}
                   </button>
                 </div>
               </div>
@@ -262,23 +264,23 @@ export function FacebookCommunitySection() {
                   </div>
 
                   {/* Browser Privacy Notice & Fallback */}
-                  <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl text-left text-xs text-stone-600 space-y-1">
+                  <div className="p-3 bg-stone-50 border border-stone-200 rounded-xl text-start text-xs text-stone-600 space-y-1">
                     <div className="flex items-center justify-between font-semibold text-stone-800">
                       <span className="flex items-center gap-1.5 text-blue-700">
                         <Info className="w-3.5 h-3.5" />
-                        <span>Connected to Official Facebook Timeline</span>
+                        <span>{s.connectedLabel}</span>
                       </span>
                       <button
                         onClick={() => setIframeKey((k) => k + 1)}
                         className="text-[11px] text-stone-500 hover:text-stone-800 flex items-center gap-1"
-                        title="Reload feed"
+                        title={s.reloadBtn}
                       >
                         <RefreshCw className="w-3 h-3" />
-                        <span>Reload</span>
+                        <span>{s.reloadBtn}</span>
                       </button>
                     </div>
                     <p className="text-[11px] text-stone-500">
-                      If your browser restricts cross-site cookies, click &ldquo;Recent Posts&rdquo; above or open Facebook directly:
+                      {s.cookieHint}
                     </p>
                     <a
                       href={pageUrl}
@@ -286,7 +288,7 @@ export function FacebookCommunitySection() {
                       rel="noopener noreferrer"
                       className="inline-block text-xs font-bold text-blue-700 hover:underline pt-0.5"
                     >
-                      Open Govt Girls Zubaida College on Facebook ↗
+                      {s.openDirectBtn}
                     </a>
                   </div>
                 </div>
@@ -294,11 +296,11 @@ export function FacebookCommunitySection() {
 
               {/* View 2: Live College Posts Feed */}
               {activeTab === 'recent' && (
-                <div className="space-y-3 max-h-[540px] overflow-y-auto pr-1">
+                <div className="space-y-3 max-h-[540px] overflow-y-auto pe-1">
                   {liveRecentPosts.map((post) => (
                     <div
                       key={post.id}
-                      className="p-4 rounded-xl bg-stone-50 border border-stone-200 text-left space-y-2.5 shadow-sm hover:border-blue-400 transition-colors"
+                      className="p-4 rounded-xl bg-stone-50 border border-stone-200 text-start space-y-2.5 shadow-sm hover:border-blue-400 transition-colors"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -330,7 +332,7 @@ export function FacebookCommunitySection() {
                           <span>{post.likes}</span>
                           <span className="mx-1">·</span>
                           <MessageCircle className="w-3.5 h-3.5 text-stone-400" />
-                          <span>{post.comments} comments</span>
+                          <span>{post.comments} {s.commentsLabel}</span>
                         </span>
 
                         <a
@@ -339,7 +341,7 @@ export function FacebookCommunitySection() {
                           rel="noopener noreferrer"
                           className="font-bold text-blue-700 hover:underline text-[11px]"
                         >
-                          View on Facebook ↗
+                          {s.viewOnFb}
                         </a>
                       </div>
                     </div>
@@ -349,12 +351,12 @@ export function FacebookCommunitySection() {
 
               {/* View 3: Facebook Live Stream / Video Broadcaster */}
               {activeTab === 'live' && (
-                <div className="space-y-3 text-left">
+                <div className="space-y-3 text-start">
                   <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 text-xs flex items-start gap-2">
                     <Radio className="w-4 h-4 text-rose-600 shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <strong className="block font-bold">Facebook Live Broadcast Hub</strong>
-                      <span>When the college starts a live ceremony, debate, or assembly, watch live here.</span>
+                      <strong className="block font-bold">{s.liveNoticeTitle}</strong>
+                      <span>{s.liveNoticeDesc}</span>
                     </div>
                   </div>
 

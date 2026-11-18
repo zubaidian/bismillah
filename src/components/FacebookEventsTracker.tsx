@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -127,6 +128,9 @@ const INITIAL_2026_FACEBOOK_EVENTS: FacebookEventItem[] = [
 ];
 
 export function FacebookEventsTracker() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.events;
+
   const [events, setEvents] = useState<FacebookEventItem[]>(() => {
     try {
       localStorage.removeItem('ggzc_facebook_events_2026');
@@ -362,16 +366,16 @@ export function FacebookEventsTracker() {
   };
 
   return (
-    <section id="events" className="py-10 bg-[#021f19] text-white border-y-2 border-amber-400/40 relative select-none">
+    <section id="events" dir={dir} className="py-10 bg-[#021f19] text-white border-y-2 border-amber-400/40 relative select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header Bar */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
-          <div className="space-y-1 text-left">
+          <div className="space-y-1 text-start">
             <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
-              Live 2026 Campus Events &amp; Assemblies
+              {s.title}
             </h3>
             <p className="text-xs text-stone-300">
-              Continuous live scrolling window syncing curricular, examination, and cultural happenings from our official Facebook page.
+              {s.subtitle}
             </p>
           </div>
 
@@ -397,7 +401,7 @@ export function FacebookEventsTracker() {
                   scrollSpeed === 'slow' ? 'bg-emerald-800 text-amber-300' : 'text-stone-400 hover:text-stone-200'
                 }`}
               >
-                Slow
+                {s.slow}
               </button>
               <button
                 onClick={() => setScrollSpeed('normal')}
@@ -405,7 +409,7 @@ export function FacebookEventsTracker() {
                   scrollSpeed === 'normal' ? 'bg-emerald-800 text-amber-300' : 'text-stone-400 hover:text-stone-200'
                 }`}
               >
-                Normal
+                {s.normal}
               </button>
               <button
                 onClick={() => setScrollSpeed('fast')}
@@ -413,12 +417,12 @@ export function FacebookEventsTracker() {
                   scrollSpeed === 'fast' ? 'bg-emerald-800 text-amber-300' : 'text-stone-400 hover:text-stone-200'
                 }`}
               >
-                Fast
+                {s.fast}
               </button>
             </div>
 
             {/* Manual Navigation Arrows */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1" dir="ltr">
               <button
                 onClick={() => handleManualScroll('left')}
                 className="p-2 rounded-xl bg-[#043329] hover:bg-[#064739] border border-emerald-700 text-stone-300 hover:text-white transition-colors"
@@ -450,16 +454,16 @@ export function FacebookEventsTracker() {
 
         {/* Filter Category Tabs */}
         <div className="flex flex-wrap items-center gap-2 mb-4 pb-2 border-b border-emerald-800/60">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300 mr-2 flex items-center gap-1">
-            <Tag className="w-3 h-3" /> Filter 2026:
+          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300 me-2 flex items-center gap-1">
+            <Tag className="w-3 h-3" /> {s.filterLabel}
           </span>
           {[
-            { id: 'all', label: 'All 2026 Events' },
-            { id: 'academic', label: 'Academic & Board' },
-            { id: 'cultural', label: 'Cultural & Heritage' },
-            { id: 'sports', label: 'Sports & Athletics' },
-            { id: 'admissions', label: 'Admissions' },
-            { id: 'ceremony', label: 'Honors & Galas' }
+            { id: 'all', label: s.allTab },
+            { id: 'academic', label: s.academicTab },
+            { id: 'cultural', label: s.culturalTab },
+            { id: 'sports', label: s.sportsTab },
+            { id: 'admissions', label: s.admissionsTab },
+            { id: 'ceremony', label: s.ceremonyTab }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -473,14 +477,15 @@ export function FacebookEventsTracker() {
               {tab.label}
             </button>
           ))}
-          <span className="ml-auto text-[11px] text-stone-400 hidden sm:inline">
-            💡 Hover over any card to pause the scrolling window
+          <span className="ms-auto text-[11px] text-stone-400 hidden sm:inline">
+            {s.hoverHint}
           </span>
         </div>
 
-        {/* Scrolling Window Container (Smooth 60fps Seamless Marquee Auto-Tracker) */}
+        {/* Scrolling Window Container (Smooth 60fps Seamless Marquee Auto-Tracker, kept LTR for scroll math) */}
         <div
           ref={scrollContainerRef}
+          dir="ltr"
           onScroll={handleContainerScroll}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -511,14 +516,14 @@ export function FacebookEventsTracker() {
                       f
                     </span>
                     <span className="font-bold uppercase tracking-wider text-amber-300">
-                      2026 Event
+                      {s.eventBadge}
                     </span>
                   </div>
 
                   {ev.isLiveNow ? (
                     <span className="flex items-center gap-1.5 font-bold text-rose-400">
                       <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                      Live Now
+                      {s.liveNow}
                     </span>
                   ) : (
                     <span className="font-semibold text-emerald-200">
@@ -553,7 +558,7 @@ export function FacebookEventsTracker() {
               {/* Card Bottom Strip */}
               <div className="pt-4 mt-4 border-t border-emerald-800/80 flex items-center justify-between text-xs">
                 <span className="text-amber-300 group-hover:underline font-bold text-[11px] flex items-center gap-1">
-                  <span>View Details</span>
+                  <span>{s.viewDetails}</span>
                   <ExternalLink className="w-3 h-3" />
                 </span>
 
@@ -564,7 +569,7 @@ export function FacebookEventsTracker() {
                   onClick={(e) => e.stopPropagation()}
                   className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] shadow transition-colors flex items-center gap-1"
                 >
-                  <span>Facebook Post</span>
+                  <span>{s.fbPost}</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
@@ -576,7 +581,9 @@ export function FacebookEventsTracker() {
         <div className="mt-4 pt-3 border-t border-emerald-900/60 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-amber-200/90 font-medium">{lastSyncTime}</span>
+            <span className="text-amber-200/90 font-medium">
+              {lastSyncTime === 'Live Synced with Facebook' ? s.syncedLabel : lastSyncTime}
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -584,7 +591,7 @@ export function FacebookEventsTracker() {
               onClick={handleSyncWithFacebook}
               className="text-xs text-amber-300 hover:underline flex items-center gap-1"
             >
-              <span>Refresh 2026 Facebook Stream</span>
+              <span>{s.refreshStream}</span>
             </button>
             <span>·</span>
             <a
@@ -593,7 +600,7 @@ export function FacebookEventsTracker() {
               rel="noopener noreferrer"
               className="text-xs text-blue-400 hover:underline"
             >
-              Visit Govt Girls Zubaida College Facebook Page ↗
+              {s.visitFbPage}
             </a>
           </div>
         </div>
@@ -634,21 +641,21 @@ export function FacebookEventsTracker() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-[#021814] p-3.5 rounded-xl border border-emerald-800">
               <div className="flex items-center gap-2 text-stone-200">
                 <CalendarIcon className="w-4 h-4 text-amber-300 shrink-0" />
-                <span>Date: <strong className="text-white">{selectedEvent.displayDate}</strong></span>
+                <span>{s.dateLabel} <strong className="text-white">{selectedEvent.displayDate}</strong></span>
               </div>
               <div className="flex items-center gap-2 text-stone-200">
                 <Clock className="w-4 h-4 text-amber-300 shrink-0" />
-                <span>Time: <strong className="text-white">{selectedEvent.time}</strong></span>
+                <span>{s.timeLabel} <strong className="text-white">{selectedEvent.time}</strong></span>
               </div>
               <div className="flex items-center gap-2 text-stone-200 sm:col-span-2">
                 <MapPin className="w-4 h-4 text-amber-300 shrink-0" />
-                <span>Venue: <strong className="text-white">{selectedEvent.venue}</strong></span>
+                <span>{s.venueLabel} <strong className="text-white">{selectedEvent.venue}</strong></span>
               </div>
             </div>
 
             <div className="space-y-2 text-xs">
               <h5 className="font-bold text-amber-200 uppercase tracking-wider text-[11px]">
-                Event Summary &amp; Significance:
+                {s.summaryHeading}
               </h5>
               <p className="text-stone-200 leading-relaxed text-sm">
                 {selectedEvent.details}
@@ -662,7 +669,7 @@ export function FacebookEventsTracker() {
                 rel="noopener noreferrer"
                 className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5"
               >
-                <span>Open on Facebook Page ↗</span>
+                <span>{s.openFbBtn}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
 
@@ -670,7 +677,7 @@ export function FacebookEventsTracker() {
                 onClick={() => setSelectedEvent(null)}
                 className="px-4 py-2 border border-emerald-700 text-stone-300 hover:text-white text-xs rounded-xl"
               >
-                Close
+                {s.closeBtn}
               </button>
             </div>
           </div>

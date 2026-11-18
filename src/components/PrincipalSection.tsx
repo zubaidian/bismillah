@@ -1,8 +1,12 @@
 import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function PrincipalSection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.principal;
+
   return (
-    <section id="principal" className="py-16 sm:py-24 bg-[#042f28] text-white relative">
+    <section id="principal" dir={dir} className="py-16 sm:py-24 bg-[#042f28] text-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Principal's Photo Column */}
@@ -19,13 +23,13 @@ export function PrincipalSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-center">
                   <span className="block text-xs font-mono uppercase tracking-widest text-amber-300">
-                    Principal&rsquo;s Desk
+                    {s.deskLabel}
                   </span>
                   <h3 className="font-serif font-bold text-xl text-white mt-1">
-                    Prof. Yasmeen Panhwar
+                    {s.name}
                   </h3>
                   <span className="text-xs text-stone-300">
-                    Govt Girls Zubaida College Hyderabad
+                    {s.college}
                   </span>
                 </div>
               </div>
@@ -33,56 +37,50 @@ export function PrincipalSection() {
               {/* Photo Caption Strip */}
               <div className="mt-3 p-3 bg-[#03221c] rounded-lg border border-emerald-800 text-center text-xs">
                 <span className="block font-semibold text-amber-300 tracking-wider uppercase">
-                  Leadership · Learning · Service
+                  {s.tagline}
                 </span>
                 <span className="text-stone-300 text-[11px]">
-                  Fostering academic distinction and moral uprightness
+                  {s.subTagline}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Principal's Message Column */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-6 text-start">
             <div className="space-y-2">
               <p className="font-serif italic text-base text-amber-200">
                 بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
               </p>
               <p className="text-xs text-stone-300 uppercase tracking-widest font-semibold">
-                In the Name of Allah, the Most Beneficent, the Most Merciful
+                {s.bismillahSub}
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white pt-2">
-                Message from the <span className="text-amber-300 italic font-normal">Principal</span>
+                {s.headingBefore} <span className="text-amber-300 italic font-normal">{s.headingHighlight}</span>
               </h2>
             </div>
 
-            <div className="space-y-4 text-stone-200 text-base sm:text-lg leading-relaxed border-l-2 border-amber-400/40 pl-5">
+            <div className="space-y-4 text-stone-200 text-base sm:text-lg leading-relaxed border-s-2 border-amber-400/40 ps-5">
               <p>
-                <strong className="text-white">Welcome to Government Girls Zubaida College, Hyderabad.</strong>
+                <strong className="text-white">{s.welcomeLine}</strong>
               </p>
-              <p>
-                Since its establishment in 1953, this prestigious institution has been illuminating the daughters of Hyderabad with the sacred light of knowledge, faithfully upholding the golden principle of <span className="text-amber-300 font-serif italic">&ldquo;SERVICE ABOVE SELF&rdquo;</span>.
-              </p>
-              <p>
-                Our mission transcends merely conferring intermediate certificates and degree credentials. We are committed to nurturing daughters who are intellectually accomplished, virtuous, self-reliant, and confident citizens who will bring enduring honor to our province and nation.
-              </p>
-              <p>
-                Here, alongside modern scientific inquiry, digital literacy, and academic rigor, we place paramount emphasis on character building, Islamic values, and moral rectitude. My faculty colleagues, administrative staff, and I strive tirelessly to provide every student with a safe, dignified, inspiring, and positive learning sanctuary.
-              </p>
+              <p>{s.p1}</p>
+              <p>{s.p2}</p>
+              <p>{s.p3}</p>
               <p className="font-serif italic text-amber-200 pt-2">
-                May Allah the Almighty grant every student and daughter continuous success in both academic pursuits and life.
+                {s.closingPrayer}
               </p>
             </div>
 
             <div className="pt-4 border-t border-emerald-800/80">
               <h4 className="font-serif font-bold text-xl text-white">
-                Professor Yasmeen Panhwar
+                {s.signName}
               </h4>
               <p className="text-xs text-amber-300 font-semibold tracking-wider uppercase mt-0.5">
-                Principal, Government Girls Zubaida College, Hyderabad
+                {s.signRole}
               </p>
               <p className="text-xs text-stone-400 mt-1">
-                College Education Department · Government of Sindh
+                {s.signDept}
               </p>
             </div>
           </div>

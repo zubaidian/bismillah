@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { DEPARTMENTS_DATA, Department, DepartmentPhoto } from '../data/departmentsData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   Search,
   FlaskConical,
@@ -22,6 +23,8 @@ interface DepartmentsSectionProps {
 }
 
 export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
+  const { dir, t } = useLanguage();
+  const s = t.sections.departments;
   const [activeFaculty, setActiveFaculty] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
@@ -54,13 +57,13 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
   }, [customPhotos]);
 
   const faculties = [
-    { id: 'all', label: 'All Departments' },
-    { id: 'Sciences & Computing', label: 'Sciences & Computing' },
-    { id: 'Life Sciences', label: 'Life Sciences' },
-    { id: 'Commerce & Economics', label: 'Commerce & Economics' },
-    { id: 'Languages & Literature', label: 'Languages & Literature' },
-    { id: 'Humanities & Social Sciences', label: 'Humanities & Social Sciences' },
-    { id: 'Health & Physical Education', label: 'Health & Physical Education' }
+    { id: 'all', label: s.allTab },
+    { id: 'Sciences & Computing', label: s.faculties['Sciences & Computing'] || 'Sciences & Computing' },
+    { id: 'Life Sciences', label: s.faculties['Life Sciences'] || 'Life Sciences' },
+    { id: 'Commerce & Economics', label: s.faculties['Commerce & Economics'] || 'Commerce & Economics' },
+    { id: 'Languages & Literature', label: s.faculties['Languages & Literature'] || 'Languages & Literature' },
+    { id: 'Humanities & Social Sciences', label: s.faculties['Humanities & Social Sciences'] || 'Humanities & Social Sciences' },
+    { id: 'Health & Physical Education', label: s.faculties['Health & Physical Education'] || 'Health & Physical Education' }
   ];
 
   const filteredDepartments = useMemo(() => {
@@ -164,15 +167,15 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
   };
 
   return (
-    <section id="departments" className="py-16 sm:py-24 bg-[#fbfdfa] text-stone-900 relative border-t border-emerald-900/10">
+    <section id="departments" dir={dir} className="py-16 sm:py-24 bg-[#fbfdfa] text-stone-900 relative border-t border-emerald-900/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-10 sm:mb-12">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Academic Departments
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Dedicated faculties delivering specialized instruction across biological sciences, physical sciences, computing, commerce, regional languages, Islamic learning, and humanities since 1953.
+            {s.subtitle}
           </p>
         </div>
 
@@ -180,19 +183,19 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-10">
           <div className="bg-white rounded-xl p-4 border border-emerald-800/15 shadow-sm text-center">
             <div className="text-2xl sm:text-3xl font-serif font-bold text-[#064b36]">{DEPARTMENTS_DATA.length}</div>
-            <div className="text-xs text-stone-600 font-medium mt-0.5">Distinct Academic Departments</div>
+            <div className="text-xs text-stone-600 font-medium mt-0.5">{s.statDepts}</div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-emerald-800/15 shadow-sm text-center">
             <div className="text-2xl sm:text-3xl font-serif font-bold text-amber-600">8+</div>
-            <div className="text-xs text-stone-600 font-medium mt-0.5">Specialized Labs &amp; Suites</div>
+            <div className="text-xs text-stone-600 font-medium mt-0.5">{s.statLabs}</div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-emerald-800/15 shadow-sm text-center">
             <div className="text-2xl sm:text-3xl font-serif font-bold text-emerald-800">100%</div>
-            <div className="text-xs text-stone-600 font-medium mt-0.5">SPSC Merit Qualified Faculty</div>
+            <div className="text-xs text-stone-600 font-medium mt-0.5">{s.statFaculty}</div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-emerald-800/15 shadow-sm text-center">
             <div className="text-2xl sm:text-3xl font-serif font-bold text-[#064b36]">4-Yr &amp; 2-Yr</div>
-            <div className="text-xs text-stone-600 font-medium mt-0.5">University Degrees &amp; HSC</div>
+            <div className="text-xs text-stone-600 font-medium mt-0.5">{s.statDegrees}</div>
           </div>
         </div>
 
@@ -206,11 +209,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={
-                  import.meta.env.DEV
-                    ? 'Search departments (e.g., Computer Science, Mathematics, Botany, Zoology, Urdu, Sindhi, Physical Education)...'
-                    : 'Search departments...'
-                }
+                placeholder={s.searchPlaceholder}
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 text-stone-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-700 bg-stone-50"
               />
               {searchQuery && (
@@ -218,14 +217,14 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                   onClick={() => setSearchQuery('')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 text-xs font-semibold"
                 >
-                  Clear
+                  {s.clearBtn}
                 </button>
               )}
             </div>
 
             {/* Quick Result Count */}
             <div className="text-xs text-stone-500 font-medium shrink-0 self-center">
-              Showing <span className="font-bold text-[#064b36]">{filteredDepartments.length}</span> of {DEPARTMENTS_DATA.length} departments
+              {s.showingLabel} <span className="font-bold text-[#064b36]">{filteredDepartments.length}</span> {s.ofLabel} {DEPARTMENTS_DATA.length} {s.deptsLabel}
             </div>
           </div>
 
@@ -291,7 +290,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                   {/* Programs served */}
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider block mb-1 text-amber-200">
-                      Academic Streams Served:
+                      {s.streamsServed}
                     </span>
                     <p className="text-xs text-stone-200 leading-relaxed">
                       {dept.programsServed.join(' · ')}
@@ -301,13 +300,13 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                   {/* Key Courses Sample */}
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider block mb-1 text-amber-200">
-                      Key Curricular Subjects:
+                      {s.keySubjects}
                     </span>
                     <p className="text-xs text-emerald-100 leading-relaxed">
                       {dept.keyCourses.slice(0, 3).join(' · ')}
                       {dept.keyCourses.length > 3 && (
                         <span className="text-amber-300 font-semibold">
-                          {' '}· +{dept.keyCourses.length - 3} more
+                          {' '}· +{dept.keyCourses.length - 3} {s.moreLabel}
                         </span>
                       )}
                     </p>
@@ -326,8 +325,8 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                     <Camera className="w-3.5 h-3.5 text-amber-300" />
                     <span>
                       {totalPhotos > 0
-                        ? `Lab & Faculty Details (${totalPhotos} Photos)`
-                        : 'Lab & Faculty Details'}
+                        ? `${s.detailsBtn} (${totalPhotos} ${s.detailsWithPhotos})`
+                        : s.detailsBtn}
                     </span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
@@ -343,7 +342,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                     }}
                     className="text-[11px] px-3 py-1.5 rounded font-semibold bg-amber-400 hover:bg-amber-300 text-emerald-950 transition-colors shadow-sm"
                   >
-                    Inquire
+                    {s.inquireBtn}
                   </button>
                 </div>
               </div>
@@ -356,10 +355,10 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
           <div className="text-center py-12 bg-white rounded-2xl border border-stone-200 p-8 space-y-3">
             <Layers className="w-10 h-10 text-stone-400 mx-auto" />
             <h4 className="font-serif font-bold text-lg text-stone-800">
-              No matching departments found
+              {s.emptyTitle}
             </h4>
             <p className="text-xs text-stone-500 max-w-md mx-auto">
-              We couldn&rsquo;t find any department matching &ldquo;{searchQuery}&rdquo;. Try searching for general terms like &ldquo;Mathematics&rdquo;, &ldquo;Statistics&rdquo;, &ldquo;Botany&rdquo;, &ldquo;Zoology&rdquo;, &ldquo;Urdu&rdquo;, &ldquo;Sindhi&rdquo;, &ldquo;Physiology&rdquo;, or &ldquo;Economics&rdquo;.
+              {s.emptyDesc}
             </p>
             <button
               onClick={() => {
@@ -368,22 +367,22 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
               }}
               className="px-4 py-2 bg-[#064b36] text-white text-xs font-semibold rounded-lg"
             >
-              Reset Filters
+              {s.resetBtn}
             </button>
           </div>
         )}
 
         {/* Bottom Department Infrastructure Notice */}
         <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-[#064b36] via-[#053d2c] to-[#042f28] text-white border-2 border-amber-300/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1.5 text-center md:text-left">
+          <div className="space-y-1.5 text-center md:text-start">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
-              Sindh Public Service Commission Qualified Faculty
+              {s.bannerEyebrow}
             </span>
             <h3 className="font-serif text-xl sm:text-2xl font-bold">
-              Want to speak with a Department Head or Course Counselor?
+              {s.bannerTitle}
             </h3>
             <p className="text-xs sm:text-sm text-stone-200 max-w-2xl">
-              Faculty members are available during official college hours (8:00 AM – 2:00 PM PKT, Mon–Sat) for academic counseling, syllabus guidance, and stream selection.
+              {s.bannerDesc}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 shrink-0">
@@ -393,14 +392,14 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                 className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-xs shadow-md transition-all flex items-center gap-1.5"
               >
                 <GraduationCap className="w-4 h-4" />
-                <span>Contact Department</span>
+                <span>{s.contactBtn}</span>
               </button>
             )}
             <a
               href="#admissions"
               className="px-4 py-2.5 rounded-xl bg-[#03241e] hover:bg-[#021f19] border border-amber-400/40 text-amber-200 text-xs font-semibold transition-colors"
             >
-              SECCAP Guide
+              {s.seccapGuide}
             </a>
           </div>
         </div>
@@ -676,7 +675,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
             {/* Description */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-1">
-                Department Overview:
+                {s.modal.overview}
               </h4>
               <p className="text-sm text-stone-600 leading-relaxed">
                 {selectedDept.description}
@@ -687,11 +686,11 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-2 flex items-center gap-1.5">
                 <FlaskConical className="w-4 h-4 text-emerald-700" />
-                <span>Laboratories &amp; Technical Infrastructure:</span>
+                <span>{s.modal.labsHeading}</span>
               </h4>
               <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 mb-2">
                 <span className="text-xs font-bold text-[#064b36] block">
-                  Location / Suite: {selectedDept.labsAvailable}
+                  {s.modal.locationPrefix} {selectedDept.labsAvailable}
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -711,7 +710,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-2 flex items-center gap-1.5">
                 <BookOpen className="w-4 h-4 text-emerald-700" />
-                <span>Curricular Subjects &amp; Practical Modules:</span>
+                <span>{s.modal.coursesHeading}</span>
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {selectedDept.keyCourses.map((course) => (
@@ -729,7 +728,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
             {/* Academic Programs Served */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-1">
-                Academic Programs &amp; Streams Served:
+                {s.modal.streamsHeading}
               </h4>
               <p className="text-xs font-semibold text-stone-800">
                 {selectedDept.programsServed.join(' · ')}
@@ -739,7 +738,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
             {/* Achievements */}
             <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950">
               <span className="font-bold block text-emerald-900 mb-0.5">
-                Institutional Distinctions &amp; Records:
+                {s.modal.honorsHeading}
               </span>
               <span>{selectedDept.achievements}</span>
             </div>
@@ -755,7 +754,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                 className="px-5 py-2.5 bg-[#064b36] hover:bg-[#042f28] text-white rounded-lg text-xs font-bold flex items-center gap-1.5"
               >
                 <GraduationCap className="w-4 h-4 text-amber-300" />
-                <span>Submit Department Inquiry</span>
+                <span>{s.modal.submitInquiry}</span>
               </button>
 
               <button
@@ -765,7 +764,7 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
                 }}
                 className="px-4 py-2 border border-stone-300 text-stone-700 rounded-lg text-xs font-medium"
               >
-                Close
+                {s.modal.close}
               </button>
             </div>
           </div>

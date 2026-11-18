@@ -8,6 +8,7 @@ import {
   TourFacility
 } from '../data/campusTourData';
 import { FacilityGraphic } from './FacilityGraphic';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   buildAutoRoutePath,
   CampusMapCanvas,
@@ -45,7 +46,7 @@ import {
   Search
 } from 'lucide-react';
 
-const TOUR_STORAGE_KEY = 'ggzc_campus_tour_map_stops_v33';
+const TOUR_STORAGE_KEY = 'ggzc_campus_tour_map_stops_v41';
 
 const EAST_STAIRS_STOP_IDS = new Set([
   'general-staff-room',
@@ -53,8 +54,27 @@ const EAST_STAIRS_STOP_IDS = new Set([
   'english-dept',
   'statistics-mathematics',
   'mathematics-dept',
-  'physics-lab-darkroom'
+  'physics-lab-darkroom',
+  'muslim-history-dept',
+  'political-science-dept',
+  'physics-office',
+  'physics-dark-room'
 ]);
+
+const NORTH_ROW_STOP_IDS = new Set([
+  'prayer-room-wing',
+  'botanical-greenhouse',
+  'karate-club',
+  'greenhouse-prayer-ground',
+  'zoology-botany-labs',
+  'botany-dept-lab'
+]);
+
+function isNorthZoneStop(pt: { x: number; y: number }, stopId?: string): boolean {
+  if (stopId && NORTH_ROW_STOP_IDS.has(stopId)) return true;
+  if (pt.y <= 35) return true;
+  return pt.x >= 44 && pt.y <= 41.5;
+}
 
 function buildWalkRouteBetween(
   fromPos: { x: number; y: number },
@@ -72,111 +92,192 @@ function buildWalkRouteBetween(
   const dest = { x: targetStop.mapX, y: targetStop.mapY };
   const waypoints: { x: number; y: number }[] = [fromPos];
 
-  const isNorthEastStop =
-    dest.x >= 72 ||
-    targetStop.id === 'botany-dept-lab' ||
-    targetStop.id === 'zoology-botany-labs' ||
-    targetStop.id === 'greenhouse-prayer-ground';
-  const isNorthEastFrom =
-    fromPos.x >= 72 || (fromPos.y <= 12 && fromPos.x >= 45);
+  const isNorthFrom = isNorthZoneStop(fromPos);
+  const isNorthDest = isNorthZoneStop(dest, targetStop.id);
 
-  // If moving between west-wing stops (Tennis & Volleyball, Hostel, Small Garden, Computer Dept, Pak Studies, Urdu, Physical Education, Commerce by Stairs)
-  if (fromPos.x < 45 && dest.x < 45 && fromPos.y < 80 && dest.y < 80) {
-    if (fromPos.y < 10 && targetStop.id !== 'commerce-dept-library') {
-      waypoints.push({ x: 44.3, y: 7.1 });
-      waypoints.push({ x: 44.3, y: 20.5 });
+  // 1. Moving between West-Wing stops (Tennis & Volleyball, Hostel, Small Garden, Computer Dept, Pak Studies, Urdu, Physical Education, Commerce by Stairs)
+  if (
+    fromPos.x < 43.5 &&
+    dest.x < 43.5 &&
+    fromPos.y >= 36 &&
+    fromPos.y <= 78 &&
+    dest.y >= 36 &&
+    dest.y <= 78
+  ) {
+    if (fromPos.y < 41 && targetStop.id !== 'commerce-dept-library') {
+      waypoints.push({ x: 42.7, y: 38.6 });
+      waypoints.push({ x: 42.7, y: 47.4 });
+      waypoints.push({ x: 41.0, y: 47.4 });
+      waypoints.push({ x: 41.0, y: 53.9 });
     }
     if (targetStop.id === 'commerce-dept-library') {
       if (fromPos.x < 15) {
-        waypoints.push({ x: 18.5, y: 30.4 });
+        waypoints.push({ x: 10.8, y: 53.9 });
+      } else if (fromPos.y > 57) {
+        waypoints.push({ x: 29.8, y: 62.0 });
+        waypoints.push({ x: 29.8, y: 53.9 });
       }
-      waypoints.push({ x: 44.3, y: Math.max(20.5, Math.min(30.4, fromPos.y)) });
-      waypoints.push({ x: 44.3, y: 20.5 });
-      waypoints.push({ x: 44.3, y: 7.1 });
+      waypoints.push({ x: 41.0, y: 53.9 });
+      waypoints.push({ x: 41.0, y: 47.4 });
+      waypoints.push({ x: 42.7, y: 47.4 });
+      waypoints.push({ x: 42.7, y: 38.6 });
       waypoints.push(dest);
     } else if (targetStop.id === 'tennis-volleyball-grounds') {
-      waypoints.push({ x: fromPos.x, y: 30.4 });
-      waypoints.push({ x: 10.8, y: 30.4 });
+      waypoints.push({ x: fromPos.x, y: 53.9 });
+      waypoints.push({ x: 10.8, y: 53.9 });
       waypoints.push(dest);
-    } else if (targetStop.id === 'hostel-computer-lab' || targetStop.id === 'small-garden-computer-lab' || fromPos.y > 46) {
-      waypoints.push({ x: 24.1, y: 39.5 });
-      waypoints.push(dest);
+    } else if (
+      targetStop.id === 'hostel-computer-lab' ||
+      targetStop.id === 'small-garden-computer-lab' ||
+      targetStop.id === 'historical-graveyard-mazar' ||
+      fromPos.y > 65
+    ) {
+      waypoints.push({ x: 27.7, y: 60.5 });
+      if (targetStop.id === 'hostel-computer-lab') {
+        waypoints.push({ x: 17.1, y: 70.5 });
+      } else {
+        waypoints.push(dest);
+      }
     } else {
       if (fromPos.x < 16) {
-        waypoints.push({ x: 10.8, y: 30.4 });
+        waypoints.push({ x: 10.8, y: 53.9 });
       }
-      waypoints.push({ x: 30.6, y: Math.min(30.4, fromPos.y) });
-      waypoints.push({ x: 30.6, y: dest.y });
+      waypoints.push({ x: 29.8, y: Math.min(53.9, fromPos.y) });
+      waypoints.push({ x: 29.8, y: dest.y });
       waypoints.push(dest);
     }
   } else if (
+    // 2. Principal's Office (x=56.8) <-> Stairs (x=63.0) <-> Enlarged By-Stairs 1st Floor (y=45.4..51.5) <-> Separate Auditorium Way (x=68.1, y=56.9 -> 92.2, 49.1) <-> Inline Chemistry Wing (x=75.8, 84.0, 92.3 at y=62.0)
     fromPos.x >= 52 &&
     dest.x >= 52 &&
-    fromPos.y >= 16 &&
-    fromPos.y <= 46 &&
-    dest.y >= 16 &&
-    dest.y <= 46 &&
-    fromPos.x < 75.5 &&
-    dest.x < 75.5
+    fromPos.y >= 43 &&
+    fromPos.y <= 67 &&
+    dest.y >= 43 &&
+    dest.y <= 67 &&
+    fromPos.x <= 95 &&
+    dest.x <= 95
   ) {
-    // Direct walking along Principal's Office <-> Stairs (x=65.7) <-> By-Stairs 1st Floor / Auditorium Hall path (x=73.2)
-    if (Math.abs(fromPos.y - 41.9) < 3 && targetStop.id === 'auditorium-hall') {
-      waypoints.push({ x: 73.2, y: 41.9 });
+    const isFromAuditorium = Math.abs(fromPos.x - 92.2) < 2 && fromPos.y < 56;
+    const isDestAuditorium = targetStop.id === 'auditorium-hall';
+
+    if (fromPos.y >= 57.5 && dest.y >= 57.5 && !isDestAuditorium) {
+      waypoints.push({ x: fromPos.x, y: 62.0 });
+      waypoints.push({ x: dest.x, y: 62.0 });
       waypoints.push(dest);
-    } else {
-      if (fromPos.y < 36) {
-        waypoints.push({ x: 65.7, y: fromPos.y });
-        waypoints.push({ x: 65.7, y: 41.9 });
+    } else if (fromPos.y < 56 && dest.y < 56 && !isFromAuditorium && !isDestAuditorium) {
+      if (Math.abs(fromPos.y - dest.y) < 3.5) {
+        const tierY = fromPos.y < 47.5 ? 45.4 : 51.5;
+        waypoints.push({ x: fromPos.x, y: tierY });
+        waypoints.push({ x: dest.x, y: tierY });
+        waypoints.push(dest);
       } else {
-        waypoints.push({ x: 65.7, y: 41.9 });
+        waypoints.push({ x: 63.0, y: fromPos.y });
+        waypoints.push({ x: 63.0, y: dest.y });
+        waypoints.push(dest);
       }
-      if (targetStop.id === 'auditorium-hall') {
-        waypoints.push({ x: 73.2, y: 41.9 });
+    } else {
+      if (isFromAuditorium) {
+        waypoints.push({ x: 92.2, y: 56.9 });
+        waypoints.push({ x: 68.1, y: 56.9 });
+        waypoints.push({ x: 68.1, y: 62.0 });
+      } else if (fromPos.y < 56) {
+        waypoints.push({ x: 63.0, y: fromPos.y });
+        waypoints.push({ x: 63.0, y: 62.0 });
+      } else {
+        waypoints.push({ x: fromPos.x, y: 62.0 });
+      }
+
+      if (isDestAuditorium) {
+        waypoints.push({ x: 68.1, y: 62.0 });
+        waypoints.push({ x: 68.1, y: 56.9 });
+        waypoints.push({ x: 92.2, y: 56.9 });
         waypoints.push(dest);
-      } else if (dest.y < 36) {
-        waypoints.push({ x: 65.7, y: dest.y });
+      } else if (dest.y < 56) {
+        waypoints.push({ x: 63.0, y: 62.0 });
+        waypoints.push({ x: 63.0, y: dest.y });
         waypoints.push(dest);
       } else {
+        waypoints.push({ x: dest.x, y: 62.0 });
         waypoints.push(dest);
       }
     }
-  } else if (isNorthEastFrom && isNorthEastStop && fromPos.y <= 76 && dest.y <= 76) {
-    // Direct walk along Assembly -> Zoology -> Botany Path -> Very Big Ground -> Garden -> Corridor (x=77.5)
-    if (fromPos.y > 35 && dest.y > 35) {
-      waypoints.push({ x: 77.5, y: fromPos.y });
-      waypoints.push({ x: 77.5, y: dest.y });
-      waypoints.push(dest);
-    } else if (fromPos.y > 35) {
-      waypoints.push({ x: 77.5, y: fromPos.y });
-      waypoints.push({ x: 77.5, y: 38.3 });
-      waypoints.push({ x: 86.8, y: 32.5 });
-      if (dest.y < 25) {
-        waypoints.push({ x: 86.8, y: 7.6 });
+  } else if (isNorthFrom && isNorthDest) {
+    // 3. Direct North Passage (x=60.3 between Karate Club & Flag Hoisting Ground) <-> Very Big Ground (y=27.8..32.7) <-> Long Walk Spine (x=50.0) <-> Garden (y=15.9) <-> North Wing (y=12.6 -> 7.9)
+    const stepFromRow = (pt: { x: number; y: number }) => {
+      if (pt.y <= 11.5) {
+        waypoints.push({ x: pt.x, y: 12.6 });
+        waypoints.push({ x: 50.0, y: 12.6 });
+      } else if (pt.y <= 21) {
+        waypoints.push({ x: 50.0, y: pt.y });
+      } else if (pt.y <= 35) {
+        if (Math.abs(pt.y - 28.1) < 2) {
+          waypoints.push({ x: pt.x, y: 32.7 });
+        }
+        waypoints.push({ x: 50.0, y: 32.7 });
+      } else {
+        waypoints.push({ x: pt.x, y: 41.8 });
+        waypoints.push({ x: 60.3, y: 41.8 });
+        waypoints.push({ x: 60.3, y: 35.0 });
+        waypoints.push({ x: 50.0, y: 32.7 });
       }
+    };
+
+    if (fromPos.y <= 11.5 && dest.y <= 11.5) {
+      waypoints.push({ x: fromPos.x, y: 12.6 });
+      waypoints.push({ x: dest.x, y: 12.6 });
       waypoints.push(dest);
-    } else if (dest.y > 35) {
-      if (fromPos.y < 25) {
-        waypoints.push({ x: 86.8, y: 7.6 });
-      }
-      waypoints.push({ x: 86.8, y: 32.5 });
-      waypoints.push({ x: 77.5, y: 38.3 });
-      waypoints.push({ x: 77.5, y: dest.y });
+    } else if (fromPos.y > 22 && fromPos.y <= 35 && dest.y > 22 && dest.y <= 35) {
+      waypoints.push({ x: fromPos.x, y: 32.7 });
+      waypoints.push({ x: dest.x, y: 32.7 });
+      waypoints.push(dest);
+    } else if (fromPos.y > 35 && dest.y > 35) {
+      waypoints.push({ x: fromPos.x, y: 41.8 });
+      waypoints.push({ x: dest.x, y: 41.8 });
       waypoints.push(dest);
     } else {
-      if (fromPos.y <= 12 && dest.y > 12) {
-        waypoints.push({ x: 86.8, y: 7.6 });
-      } else if (fromPos.y > 12 && dest.y <= 12) {
-        waypoints.push({ x: 86.8, y: 7.6 });
+      stepFromRow(fromPos);
+      if (dest.y <= 11.5) {
+        waypoints.push({ x: 50.0, y: 12.6 });
+        waypoints.push({ x: dest.x, y: 12.6 });
+      } else if (dest.y <= 21) {
+        waypoints.push({ x: 50.0, y: 15.9 });
+      } else if (dest.y <= 35) {
+        waypoints.push({ x: 50.0, y: 32.7 });
+        if (Math.abs(dest.y - 28.1) < 2) {
+          waypoints.push({ x: dest.x, y: 32.7 });
+        }
+      } else {
+        waypoints.push({ x: 50.0, y: 32.7 });
+        waypoints.push({ x: 60.3, y: 35.0 });
+        waypoints.push({ x: 60.3, y: 41.8 });
+        waypoints.push({ x: dest.x, y: 41.8 });
       }
       waypoints.push(dest);
     }
   } else {
-    const spineYFrom = Math.max(18, Math.min(91, fromPos.y));
-    const spineEntry = gateRoute[1] || { x: 50, y: Math.max(18, Math.min(91, dest.y)) };
+    // 4. Cross-campus fallback via central twin-grill spine (x=50)
+    const spineYFrom = Math.max(38, Math.min(94, fromPos.y));
+    const spineEntry = gateRoute[1] || { x: 50, y: Math.max(38, Math.min(94, dest.y)) };
 
-    if (Math.abs(fromPos.x - 50) > 1.5) {
+    if (fromPos.y <= 11.5) {
+      waypoints.push({ x: fromPos.x, y: 12.6 });
+      waypoints.push({ x: 50.0, y: 12.6 });
+      waypoints.push({ x: 50.0, y: 32.7 });
+      waypoints.push({ x: 60.3, y: 35.0 });
+      waypoints.push({ x: 60.3, y: 41.8 });
+      waypoints.push({ x: 50.0, y: 41.8 });
+      waypoints.push({ x: 50.0, y: 50.4 });
+    } else if (fromPos.y <= 35) {
+      waypoints.push({ x: fromPos.x, y: 32.7 });
+      waypoints.push({ x: 50.0, y: 32.7 });
+      waypoints.push({ x: 60.3, y: 35.0 });
+      waypoints.push({ x: 60.3, y: 41.8 });
+      waypoints.push({ x: 50.0, y: 41.8 });
+      waypoints.push({ x: 50.0, y: 50.4 });
+    } else if (Math.abs(fromPos.x - 50) > 1.5) {
       waypoints.push({ x: 50, y: spineYFrom });
     }
+
     waypoints.push(spineEntry);
 
     for (let i = 2; i < gateRoute.length; i++) {
@@ -219,9 +320,9 @@ function interpolateWalkerOnRoute(
   for (let i = 0; i < route.length - 1; i++) {
     const start = route[i];
     const end = route[i + 1];
-    // Scale to 1200x840 SVG aspect ratio for natural walking speed & heading
+    // Scale to 1200x1270 SVG aspect ratio for natural walking speed & heading
     const dxSvg = (end.x - start.x) * 12;
-    const dySvg = (end.y - start.y) * 8.4;
+    const dySvg = (end.y - start.y) * 12.7;
     const len = Math.hypot(dxSvg, dySvg);
     if (len > 0.01) {
       const angleDeg = (Math.atan2(dxSvg, -dySvg) * 180) / Math.PI;
@@ -281,7 +382,7 @@ function getSurroundingsAtCoord(
     };
   }
 
-  if (y >= 82 && Math.abs(x - 50) <= 12) {
+  if (y >= 88 && Math.abs(x - 50) <= 12) {
     return {
       stageLabel: 'Entering Main College Gate (Golden Boundary Wall)',
       leftView: 'Security Post & Visitor Waiting Room (First on Left)',
@@ -299,9 +400,9 @@ function getSurroundingsAtCoord(
           : '';
     return {
       stageLabel: `${stairNote}Arrived at ${targetStop.shortName || targetStop.name}`,
-      leftView: targetStop.mapX < 45 ? `${targetStop.shortName || targetStop.name}` : 'Central Courtyard · Small Garden before Computer Lab · Hostel',
+      leftView: targetStop.mapX < 45 ? `${targetStop.shortName || targetStop.name}` : 'Central Courtyard · Historical Graveyard & Mazar beside Small Garden before Computer Lab · Hostel · West North Wing',
       aheadView: targetStop.locationNote,
-      rightView: targetStop.mapX > 55 ? `${targetStop.shortName || targetStop.name}` : 'Big Clerk Office Corridor, Garden (after Clerk), Principal’s Office → Path to Auditorium Hall · By Stairs: Staff Room, English, Physics, Statistics (before Dark Room), Maths, Islamiat'
+      rightView: targetStop.mapX > 55 ? `${targetStop.shortName || targetStop.name}` : 'Big Clerk Office Corridor, Garden (after Clerk), Principal’s Office → Chemistry Wing in Line → Corner Auditorium Hall'
     };
   }
 
@@ -313,30 +414,50 @@ function getSurroundingsAtCoord(
     return {
       stageLabel: isCommerce
         ? `Using Stairs ↑ to 1st Floor ${targetStop.shortName || targetStop.name}`
-        : `Going By Stairs ↑ to 1st Floor ${targetStop.shortName || targetStop.name}`,
+        : `Going By Stairs ↑ to Enlarged 1st Floor ${targetStop.shortName || targetStop.name}`,
       leftView: isCommerce
-        ? 'Small Garden, Computer Department (Computer Lab & Big Multimedia), Pak Studies, Urdu & Physical Education below'
-        : 'Principal’s Office below · General Staff Room & English Classes on 1st Floor',
+        ? 'Historical Graveyard & Mazar beside Small Garden, Computer Department (Computer Lab & Big Multimedia), Pak Studies, Urdu & Physical Education below'
+        : 'Principal’s Office below · General Staff Room, English, Islamiat, Muslim History & Political Science on 1st Floor',
       aheadView: isCommerce
         ? 'Climbing Commerce Stairs ↑ directly to 1st Floor Commerce & Commerce Library'
-        : `Climbing Central Stairs ↑ directly to ${targetStop.shortName || targetStop.name} (Statistics right before Dark Room)`,
+        : `Climbing Central Stairs ↑ to ${targetStop.shortName || targetStop.name} (Largest Physics Wing, Statistics & Dark Room)`,
       rightView: isCommerce
-        ? 'Assembly, Zoology & Botany → Very Big Ground (Car Parking, Old Bus, Sports Gymnasium) → Garden'
-        : 'Physics Optics Dark Room, Auditorium Hall & East Corridor (Economics, Physiology, Psychology, Sindhi, Geography, Chemistry Office & Labs 1–2)'
+        ? 'Central North Spine ↑ → Very Big Ground (Old Bus, Car Parking, Sports Gymnasium) → Garden · Assembly, Zoology & Botany Labs'
+        : 'Largest Physics Lab & Office, Statistics before Dark Room, Separate Auditorium Way (Outside Chemistry) & Chemistry Wing below'
+    };
+  }
+
+  if (y <= 35) {
+    return {
+      stageLabel: `Walking North Toward ${targetStop.shortName || targetStop.name}`,
+      leftView:
+        y <= 14
+          ? 'Economics · Sindhi · Physiology Departments & Classes'
+          : y <= 23
+            ? 'Long Walking Distance & Flowering Garden (West Side Trees)'
+            : 'Old Bus & Car Parking Area inside Very Big Ground',
+      aheadView:
+        y <= 14
+          ? `${targetStop.shortName || targetStop.name} (North Wing in Front of Garden)`
+          : 'Long Walking Distance ↑ → Garden → Economics, Sindhi, Physiology, Psychology, Geography, Classes & General Staff Room (For Arts)',
+      rightView:
+        y <= 14
+          ? 'Psychology · Geography · General Staff Room (For Arts) & Classes'
+          : 'Sports Gymnasium inside Very Big Ground (North of Botany Lab)'
     };
   }
 
   return {
     stageLabel: `Walking toward ${targetStop.shortName || targetStop.name}`,
     leftView:
-      y < 52 && y > 36
-        ? 'Central Courtyard Promenade · Small Garden before Computer Lab & Big Hostel'
+      y < 76 && y > 58
+        ? 'Central Courtyard Promenade · Historical Graveyard & Mazar beside Small Garden before Computer Lab & Hostel'
         : x < 45
           ? `${targetStop.shortName || targetStop.name}`
-          : 'Waiting Room, West Garden Lawn, Big Hostel, Small Garden & Left 2-Grill Path to Computer Dept.',
+          : 'Waiting Room, West Garden Lawn, Big Hostel, Small Garden, Graveyard & Mazar & Left 2-Grill Path to Computer Dept.',
     aheadView: `${targetStop.shortName || targetStop.name} (${targetStop.gateDirections.turn})`,
     rightView:
-      y < 82 && y > 58
+      y < 90 && y > 72
         ? 'Canteen & Central Library passed · Big Clerk Office Corridor before Garden & Gardeners'
         : x > 55
           ? `${targetStop.shortName || targetStop.name}`
@@ -393,6 +514,14 @@ export function VirtualCampusTour() {
       localStorage.removeItem('ggzc_campus_tour_map_stops_v30');
       localStorage.removeItem('ggzc_campus_tour_map_stops_v31');
       localStorage.removeItem('ggzc_campus_tour_map_stops_v32');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v33');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v34');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v35');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v36');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v37');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v38');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v39');
+      localStorage.removeItem('ggzc_campus_tour_map_stops_v40');
       const saved = localStorage.getItem(TOUR_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -484,10 +613,10 @@ export function VirtualCampusTour() {
     if (simTarget === 'guided-principal') {
       return (
         principalStop?.gateDirections?.routePath || [
-          { x: 50, y: 91 },
-          { x: 50, y: 62 },
-          { x: 50, y: 49 },
-          { x: 59, y: 49 }
+          { x: 50, y: 95.1 },
+          { x: 50, y: 69.3 },
+          { x: 50, y: 62.0 },
+          { x: 56.8, y: 62.0 }
         ]
       );
     }
@@ -997,8 +1126,11 @@ export function VirtualCampusTour() {
     }
   };
 
+  const { t, dir } = useLanguage();
+  const s = t.sections.campusTour;
+
   return (
-    <section id="campus-tour" className="py-16 sm:py-24 bg-[#042f28] text-white relative overflow-hidden">
+    <section id="campus-tour" dir={dir} className="scroll-mt-20 py-16 sm:py-24 bg-[#042f28] text-white relative overflow-hidden">
       {/* Subtle Ambient Accent Gradients */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -1007,12 +1139,10 @@ export function VirtualCampusTour() {
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-10 sm:mb-12">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white text-balance">
-            Interactive Campus Map &amp; Gate-Entry Tour
+            {s.title}
           </h2>
           <p className="text-stone-300 text-base sm:text-lg">
-            {import.meta.env.DEV
-              ? 'Start right as you enter the Main College Gate on Pathan Colony Road—click any point on the campus map for step-by-step walking directions, or insert new campus points and custom routes.'
-              : 'Start right as you enter the Main College Gate on Pathan Colony Road—click any point on the campus map for step-by-step walking directions to each wing, office, and laboratory.'}
+            {s.subtitle}
           </p>
         </div>
 
@@ -1020,21 +1150,21 @@ export function VirtualCampusTour() {
         <div className="max-w-3xl mx-auto mb-6">
           <form onSubmit={handleSearchWalkSubmit} className="relative flex items-center gap-2">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 text-amber-300 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-amber-300 absolute start-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search any spot (e.g. Car Parking, Old Bus, Sports Gymnasium, Very Big Ground, Garden, Economics, Physiology, Psychology, Sindhi, Geography, Chemistry Office, Chemistry Lab 1, Chemistry Lab 2)..."
-                aria-label="Search department or campus location"
-                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-[#021914] border border-emerald-600/80 text-sm font-semibold text-white placeholder-stone-400 focus:outline-none focus:border-amber-300 shadow-lg"
+                placeholder={s.searchPlaceholder}
+                aria-label={s.searchPlaceholder}
+                className="w-full ps-10 pe-9 py-2.5 rounded-xl bg-[#021914] border border-emerald-600/80 text-sm font-semibold text-white placeholder-stone-400 focus:outline-none focus:border-amber-300 shadow-lg"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
                   aria-label="Clear department search"
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-stone-400 hover:text-white"
+                  className="absolute end-2.5 top-1/2 -translate-y-1/2 p-1 text-stone-400 hover:text-white"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1046,7 +1176,7 @@ export function VirtualCampusTour() {
               className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 disabled:opacity-50 text-emerald-950 font-extrabold text-xs sm:text-sm whitespace-nowrap shrink-0 flex items-center gap-1.5 shadow-lg transition-colors"
             >
               <Footprints className="w-4 h-4" />
-              <span>Walk Visitor</span>
+              <span>{s.walkBtn}</span>
             </button>
           </form>
 
@@ -1084,7 +1214,7 @@ export function VirtualCampusTour() {
                 </>
               ) : (
                 <p className="text-xs font-semibold text-amber-200 px-1">
-                  No department or room matched &ldquo;{searchQuery}&rdquo;. Try Car Parking, Old Bus, Sports Gymnasium, Very Big Ground, Garden, Economics, Physiology, Psychology, Sindhi, Geography, Chemistry Office, Chemistry Lab 1, Chemistry Lab 2, or Physics.
+                  No department or room matched &ldquo;{searchQuery}&rdquo;. Try Car Parking, Garden, Small Garden, Graveyard &amp; Mazar, Computer Lab, Big Multimedia, Very Big Ground, Economics, Sindhi, Chemistry Office, or Physics.
                 </p>
               )}
             </div>
@@ -1128,7 +1258,7 @@ export function VirtualCampusTour() {
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2 text-xs text-stone-300">
                 <span className="text-amber-300 font-bold uppercase tracking-wider tabular-nums">
-                  Point {currentFacility.stopNumber} of {String(stops.length).padStart(2, '0')}
+                  {s.pointLabel} {currentFacility.stopNumber} {s.ofLabel} {String(stops.length).padStart(2, '0')}
                 </span>
                 <span aria-hidden="true">·</span>
                 <span className="text-emerald-200 font-medium">{currentFacility.category}</span>
@@ -1149,7 +1279,7 @@ export function VirtualCampusTour() {
                   }`}
                 >
                   <MapIcon className="w-3.5 h-3.5" />
-                  <span>Campus Map</span>
+                  <span>{s.mapTab}</span>
                 </button>
                 <button
                   onClick={() => {
@@ -1163,7 +1293,7 @@ export function VirtualCampusTour() {
                   }`}
                 >
                   <Eye className="w-3.5 h-3.5" />
-                  <span>Facility View</span>
+                  <span>{s.facilityTab}</span>
                 </button>
               </div>
             </div>
@@ -1229,13 +1359,13 @@ export function VirtualCampusTour() {
                 }`}
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-                <span>{isPlaying ? 'Pause Tour' : 'Auto Tour'}</span>
+                <span>{isPlaying ? s.pauseTour : s.autoPlay}</span>
               </button>
 
               <button
                 onClick={handlePrev}
                 className="p-2 rounded-lg bg-[#063f35] hover:bg-emerald-800 text-amber-200 border border-emerald-700 transition-colors"
-                aria-label="Previous stop"
+                aria-label={s.prevStop}
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -1243,7 +1373,7 @@ export function VirtualCampusTour() {
               <button
                 onClick={handleNext}
                 className="p-2 rounded-lg bg-[#063f35] hover:bg-emerald-800 text-amber-200 border border-emerald-700 transition-colors"
-                aria-label="Next stop"
+                aria-label={s.nextStop}
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -1467,23 +1597,27 @@ export function VirtualCampusTour() {
           {/* Full-Width Spacious Interactive Map + Two-Column Walk Simulator & Details Below */}
           <div className="space-y-8">
             {activeView === 'map' ? (
-              <CampusMapCanvas
-                stops={stops}
-                selectedIndex={safeIndex}
-                onSelectStop={handleSelectFacility}
-                mapMode={mapMode}
-                onMapCoordinatePick={handleMapCoordinatePick}
-                draftPinCoords={draftPinCoords}
-                walker={walkerState}
-                customRoutePath={simActive ? simulationRoute : null}
-              />
+              <div dir="ltr">
+                <CampusMapCanvas
+                  stops={stops}
+                  selectedIndex={safeIndex}
+                  onSelectStop={handleSelectFacility}
+                  mapMode={mapMode}
+                  onMapCoordinatePick={handleMapCoordinatePick}
+                  draftPinCoords={draftPinCoords}
+                  walker={walkerState}
+                  customRoutePath={simActive ? simulationRoute : null}
+                />
+              </div>
             ) : (
               <div>
-                <FacilityGraphic
-                  facility={currentFacility}
-                  activeHotspot={activeHotspot}
-                  onSelectHotspot={setActiveHotspot}
-                />
+                <div dir="ltr">
+                  <FacilityGraphic
+                    facility={currentFacility}
+                    activeHotspot={activeHotspot}
+                    onSelectHotspot={setActiveHotspot}
+                  />
+                </div>
                 <div className="mt-3 flex items-center justify-between text-xs text-stone-400 px-1">
                   <span>Click info pins on the graphic to inspect facility features</span>
                   <button
@@ -1491,7 +1625,7 @@ export function VirtualCampusTour() {
                     className="text-amber-300 hover:text-amber-200 font-semibold flex items-center gap-1"
                   >
                     <MapIcon className="w-3.5 h-3.5" />
-                    <span>Back to Campus Map</span>
+                    <span>{s.mapTab}</span>
                   </button>
                 </div>
               </div>
@@ -1500,7 +1634,7 @@ export function VirtualCampusTour() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Left 6 Columns: Virtual Visitor Walk Simulator Bar & Live Horizon Viewfinder */}
               <div className="lg:col-span-6 space-y-4">
-                  <div className="bg-[#021914] border border-emerald-700/70 rounded-2xl p-4 sm:p-5 space-y-4 text-left">
+                  <div className="bg-[#021914] border border-emerald-700/70 rounded-2xl p-4 sm:p-5 space-y-4 text-start">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-lg bg-sky-500/20 border border-sky-400/50 flex items-center justify-center text-sky-300 shrink-0">
@@ -1704,7 +1838,7 @@ export function VirtualCampusTour() {
               </div>
 
               {/* Right 6 Columns: Selected Stop + Gate-Entry Walking Directions */}
-              <div className="lg:col-span-6 space-y-5 text-left">
+              <div className="lg:col-span-6 space-y-5 text-start">
               {(() => {
                 const activeTheme = getStopColorTheme(currentFacility.id, safeIndex);
                 return (
@@ -1731,7 +1865,7 @@ export function VirtualCampusTour() {
                   <div className="flex items-center gap-2">
                     <DirectionIcon turn={currentFacility.gateDirections.turn} />
                     <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                      Directions From Main Gate
+                      {s.gateDirectionsTitle}
                     </span>
                   </div>
                   <span className="text-xs font-mono tabular-nums text-emerald-100">
@@ -1757,27 +1891,32 @@ export function VirtualCampusTour() {
               </p>
 
               {/* Key Specs Grid */}
-              <div className="grid grid-cols-2 gap-2.5">
-                {currentFacility.keySpecs.map((spec, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-xl bg-[#063f35] border border-emerald-700/60"
-                  >
-                    <span className="text-[10px] font-semibold text-emerald-300 uppercase tracking-wider block">
-                      {spec.label}
-                    </span>
-                    <span className="font-serif font-bold text-sm text-white block mt-0.5">
-                      {spec.value}
-                    </span>
-                  </div>
-                ))}
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-amber-300 uppercase tracking-wider block">
+                  {s.specsTitle}
+                </span>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {currentFacility.keySpecs.map((spec, i) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-xl bg-[#063f35] border border-emerald-700/60"
+                    >
+                      <span className="text-[10px] font-semibold text-emerald-300 uppercase tracking-wider block">
+                        {spec.label}
+                      </span>
+                      <span className="font-serif font-bold text-sm text-white block mt-0.5">
+                        {spec.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Highlights */}
               {currentFacility.highlights.length > 0 && (
                 <div className="space-y-2 pt-2 border-t border-emerald-800/80">
                   <span className="text-xs font-bold text-amber-300 uppercase tracking-wider block">
-                    Facility Highlights
+                    {s.highlightsTitle}
                   </span>
                   <div className="space-y-1.5">
                     {currentFacility.highlights.slice(0, 4).map((hl, index) => (
@@ -1807,12 +1946,12 @@ export function VirtualCampusTour() {
                     {activeView === 'map' ? (
                       <>
                         <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect Facility</span>
+                        <span>{s.facilityTab}</span>
                       </>
                     ) : (
                       <>
                         <Navigation className="w-3.5 h-3.5" />
-                        <span>Show on Map</span>
+                        <span>{s.mapTab}</span>
                       </>
                     )}
                   </button>
@@ -1821,7 +1960,7 @@ export function VirtualCampusTour() {
                     onClick={handleNext}
                     className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-xs rounded-lg shadow transition-all flex items-center gap-1 whitespace-nowrap shrink-0"
                   >
-                    <span>Next Point</span>
+                    <span>{s.nextStop}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>

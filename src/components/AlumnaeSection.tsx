@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ALUMNAE_PROFILES, ALUMNAE_IMPACT_METRICS, AlumnaProfile } from '../data/alumnaeData';
+import { ALUMNAE_PROFILES, AlumnaProfile } from '../data/alumnaeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   ArrowRight,
   X,
@@ -17,6 +18,8 @@ import {
 const DEV_ALUMNAE_STORAGE_KEY = 'zubaida_dev_custom_alumnae_v1';
 
 export function AlumnaeSection() {
+  const { t, dir } = useLanguage();
+  const s = t.sections.alumnae;
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedAlumna, setSelectedAlumna] = useState<AlumnaProfile | null>(null);
 
@@ -56,12 +59,19 @@ export function AlumnaeSection() {
     }
   }, [devAlumnae]);
 
+  const categoryLabelMap: Record<AlumnaProfile['category'], string> = {
+    'Public Service & Media': s.categoryLabels.publicService,
+    'Law Enforcement & Administration': s.categoryLabels.lawEnforcement,
+    'Academia & Literature': s.categoryLabels.academia,
+    'Poetry & Human Rights': s.categoryLabels.poetry
+  };
+
   const categories = [
-    { id: 'all', label: 'All Distinguished Alumnae' },
-    { id: 'Public Service & Media', label: 'Public Service & Media' },
-    { id: 'Law Enforcement & Administration', label: 'Law Enforcement & Rights' },
-    { id: 'Academia & Literature', label: 'Academia & Literature' },
-    { id: 'Poetry & Human Rights', label: 'Poetry & Human Rights' }
+    { id: 'all', label: s.allTab },
+    { id: 'Public Service & Media', label: s.categoryLabels.publicService },
+    { id: 'Law Enforcement & Administration', label: s.categoryLabels.lawEnforcement },
+    { id: 'Academia & Literature', label: s.categoryLabels.academia },
+    { id: 'Poetry & Human Rights', label: s.categoryLabels.poetry }
   ];
 
   const allVisibleAlumnae = import.meta.env.DEV
@@ -177,15 +187,15 @@ export function AlumnaeSection() {
   };
 
   return (
-    <section id="alumnae" className="py-16 sm:py-24 bg-white text-stone-900 relative">
+    <section id="alumnae" dir={dir} className="py-16 sm:py-24 bg-white text-stone-900 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-12 sm:mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Distinguished Alumnae
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Celebrating iconic graduates of Government Girls Zubaida College Hyderabad whose achievements shaped Pakistani literature, higher education, broadcasting, and parliamentary leadership.
+            {s.subtitle}
           </p>
         </div>
 
@@ -233,7 +243,7 @@ export function AlumnaeSection() {
                 </div>
 
                 {/* Card Body */}
-                <div className="p-6 space-y-3.5 text-left">
+                <div className="p-6 space-y-3.5 text-start">
                   <div>
                     {isDevDraft && (
                       <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block mb-0.5">
@@ -241,7 +251,7 @@ export function AlumnaeSection() {
                       </span>
                     )}
                     <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
-                      {alumna.category} · {alumna.stream}
+                      {categoryLabelMap[alumna.category] || alumna.category} · {alumna.stream}
                     </span>
                     <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#064b36] mt-0.5 leading-snug">
                       {alumna.name}
@@ -256,7 +266,7 @@ export function AlumnaeSection() {
                   {/* Documented Attendance Badge */}
                   <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block mb-0.5">
-                      College Attendance Documented
+                      {s.attendanceLabel}
                     </span>
                     <span>{alumna.documentedAttendance}</span>
                   </div>
@@ -290,8 +300,8 @@ export function AlumnaeSection() {
                   onClick={() => setSelectedAlumna(alumna)}
                   className="text-xs font-bold text-[#064b36] hover:text-emerald-700 flex items-center gap-1.5 group/btn"
                 >
-                  <span>Biography &amp; Achievements</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                  <span>{s.bioBtn}</span>
+                  <ArrowRight className={`w-3.5 h-3.5 transition-transform ${dir === 'rtl' ? 'rotate-180 group-hover/btn:-translate-x-1' : 'group-hover/btn:translate-x-1'}`} />
                 </button>
                 <div className="flex items-center gap-2">
                   {isDevDraft && (
@@ -325,7 +335,7 @@ export function AlumnaeSection() {
                       rel="noopener noreferrer"
                       className="text-[11px] font-semibold text-stone-500 hover:text-[#064b36] flex items-center gap-1"
                     >
-                      <span>Profile</span>
+                      <span>{s.profileLink}</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
@@ -366,9 +376,9 @@ export function AlumnaeSection() {
 
         {/* Researched Alumnae Career Fields & Verified Institutional Impact */}
         <div className="mt-16 p-6 sm:p-8 rounded-2xl bg-[#042f28] text-white border-2 border-amber-300/40 shadow-xl">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left divide-y sm:divide-y-0 lg:divide-x divide-emerald-800/80">
-            {ALUMNAE_IMPACT_METRICS.map((metric, idx) => (
-              <div key={idx} className={idx !== 0 ? 'pt-4 sm:pt-0 lg:pl-6' : ''}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-start divide-y sm:divide-y-0 lg:divide-x divide-emerald-800/80">
+            {s.metrics.map((metric, idx) => (
+              <div key={idx} className={idx !== 0 ? 'pt-4 sm:pt-0 lg:ps-6' : ''}>
                 <div className="font-serif font-bold text-xl sm:text-2xl text-amber-300 tabular-nums">
                   {metric.value}
                 </div>
@@ -391,7 +401,7 @@ export function AlumnaeSection() {
           onClick={() => setSelectedAlumna(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl text-left border border-stone-200 max-h-[90vh] overflow-y-auto space-y-6"
+            className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl text-start border border-stone-200 max-h-[90vh] overflow-y-auto space-y-6"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header with Photo */}
@@ -442,7 +452,7 @@ export function AlumnaeSection() {
             {/* Documented Attendance */}
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
               <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block">
-                College Attendance Documented:
+                {s.attendanceLabel}:
               </span>
               <p className="text-sm font-semibold text-[#064b36]">
                 {selectedAlumna.documentedAttendance}
@@ -452,7 +462,7 @@ export function AlumnaeSection() {
             {/* Biography */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-2">
-                Biography &amp; Achievements:
+                {s.biographyHeading}
               </h4>
               <p className="text-sm text-stone-700 leading-relaxed">
                 {selectedAlumna.story}
@@ -462,7 +472,7 @@ export function AlumnaeSection() {
             {/* Career Milestones */}
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-2">
-                Key Highlights &amp; Public Contributions:
+                {s.highlightsHeading}
               </h4>
               <div className="space-y-2">
                 {selectedAlumna.keyCareerHighlights.map((hl, idx) => (
@@ -478,7 +488,7 @@ export function AlumnaeSection() {
             <div className="p-4 rounded-xl bg-amber-50/80 border border-amber-200">
               <div className="flex items-center gap-1.5 text-amber-900 font-bold text-xs uppercase tracking-wider mb-1">
                 <BookOpen className="w-4 h-4 text-amber-700" />
-                <span>National Recognition &amp; Legacy:</span>
+                <span>{s.legacyHeading}</span>
               </div>
               <p className="text-xs text-stone-800 leading-relaxed font-medium">
                 {selectedAlumna.legacyNote}
@@ -505,7 +515,7 @@ export function AlumnaeSection() {
                 onClick={() => setSelectedAlumna(null)}
                 className="px-4 py-2 bg-[#064b36] hover:bg-[#042f28] text-white rounded-lg font-semibold"
               >
-                Close Profile
+                {s.closeProfile}
               </button>
             </div>
           </div>

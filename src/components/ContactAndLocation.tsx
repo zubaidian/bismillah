@@ -3,6 +3,7 @@ import { COLLEGE_INFO } from '../data/collegeData';
 import { useOfficeStatus } from '../hooks/useOfficeStatus';
 import { FAQAccordion } from './FAQAccordion';
 import { submitInquiry } from '../services/collegeSubmissions';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   MapPin,
   Mail,
@@ -24,6 +25,7 @@ export function ContactAndLocation({
   isOpenEnquiryModal = false,
   onCloseEnquiryModal
 }: ContactAndLocationProps) {
+  const { dir, t } = useLanguage();
   const { isOpen, statusText, subText, karachiTime } = useOfficeStatus();
 
   // Form State
@@ -81,15 +83,15 @@ export function ContactAndLocation({
   )}`;
 
   return (
-    <section id="contact" className="py-16 sm:py-24 bg-white text-stone-900 relative">
+    <section id="contact" dir={dir} className="py-16 sm:py-24 bg-white text-stone-900 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-12 sm:mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Location &amp; Contact Us
+            {t.contact.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            We welcome students, parents, and visitors to our campus. Reach out to our admission officers or visit us during listed office hours.
+            {t.contact.subtitle}
           </p>
         </div>
 
@@ -102,22 +104,26 @@ export function ContactAndLocation({
             </div>
             <div>
               <span className="text-xs font-bold text-amber-900 uppercase tracking-wider block">
-                Official Phone No.
+                {t.contact.phoneEyebrow}
               </span>
               <h3 className="font-serif font-bold text-base text-stone-900 mt-0.5">
-                College Landline
+                {t.contact.phoneTitle}
               </h3>
               <a
                 href={`tel:${COLLEGE_INFO.phoneRaw}`}
-                className="inline-block text-sm font-mono font-bold text-[#064b36] hover:underline mt-1"
+                dir="ltr"
+                className="inline-block text-sm font-mono font-bold text-[#064b36] hover:underline mt-1 tabular-nums"
               >
                 {COLLEGE_INFO.phone}
               </a>
               <div className="mt-2 pt-2 border-t border-stone-200 text-xs">
-                <span className="text-[10px] text-stone-500 uppercase font-semibold block">Admission Helpline:</span>
+                <span className="text-[10px] text-stone-500 uppercase font-semibold block">
+                  {t.contact.helplineLabel}
+                </span>
                 <a
                   href={`tel:${COLLEGE_INFO.helplineRaw}`}
-                  className="font-mono font-semibold text-emerald-800 hover:underline"
+                  dir="ltr"
+                  className="font-mono font-semibold text-emerald-800 hover:underline tabular-nums"
                 >
                   {COLLEGE_INFO.helpline}
                 </a>
@@ -132,10 +138,10 @@ export function ContactAndLocation({
             </div>
             <div>
               <span className="text-xs font-bold text-[#064b36] uppercase tracking-wider block">
-                Campus Location
+                {t.contact.locationEyebrow}
               </span>
               <h3 className="font-serif font-bold text-base text-stone-900 mt-0.5">
-                Visit Our Campus
+                {t.contact.locationTitle}
               </h3>
               <p className="text-xs text-stone-600 mt-1 leading-relaxed">
                 {COLLEGE_INFO.location}
@@ -146,7 +152,7 @@ export function ContactAndLocation({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-xs font-bold text-[#064b36] hover:underline mt-2"
               >
-                <span>Google Maps ↗</span>
+                <span>{t.contact.mapsLink}</span>
               </a>
             </div>
           </div>
@@ -158,16 +164,17 @@ export function ContactAndLocation({
             </div>
             <div>
               <span className="text-xs font-bold text-amber-900 uppercase tracking-wider block">
-                Official Email
+                {t.contact.emailEyebrow}
               </span>
               <h3 className="font-serif font-bold text-base text-stone-900 mt-0.5">
-                Send Inquiries
+                {t.contact.emailTitle}
               </h3>
               <p className="text-xs text-stone-600 mt-1">
-                For administrative &amp; verification queries:
+                {t.contact.emailDesc}
               </p>
               <a
                 href={`mailto:${COLLEGE_INFO.email}`}
+                dir="ltr"
                 className="inline-block text-xs font-mono font-bold text-[#064b36] hover:underline mt-2 break-all"
               >
                 {COLLEGE_INFO.email}
@@ -182,12 +189,12 @@ export function ContactAndLocation({
             </div>
             <div>
               <span className="text-xs font-bold text-[#064b36] uppercase tracking-wider block">
-                Office Hours
+                {t.contact.hoursEyebrow}
               </span>
               <div className="flex items-center gap-2 mt-0.5">
                 <span
                   className={`inline-block w-2.5 h-2.5 rounded-full ${
-                    isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'
+                    isOpen ? 'bg-emerald-500' : 'bg-rose-500'
                   }`}
                 />
                 <h3 className="font-serif font-bold text-base text-stone-900">
@@ -197,7 +204,7 @@ export function ContactAndLocation({
               <p className="text-xs text-stone-600 mt-1">
                 {subText}
               </p>
-              <span className="inline-block text-[11px] font-mono text-stone-500 mt-2">
+              <span dir="ltr" className="inline-block text-[11px] font-mono text-stone-500 mt-2 tabular-nums">
                 PKT: {karachiTime}
               </span>
             </div>
@@ -210,13 +217,13 @@ export function ContactAndLocation({
           <div id="enquiryFormContainer" className="lg:col-span-6 bg-stone-50 border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm">
             <div className="mb-6 space-y-1">
               <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
-                Direct Contact
+                {t.contact.formEyebrow}
               </span>
               <h3 className="font-serif text-2xl font-bold text-[#064b36]">
-                Submit an Online Enquiry
+                {t.contact.formTitle}
               </h3>
               <p className="text-xs text-stone-600">
-                Submit your question and our administration desk will review your inquiry.
+                {t.contact.formDesc}
               </p>
             </div>
 
@@ -234,7 +241,7 @@ export function ContactAndLocation({
                   </p>
                 </div>
 
-                <div className="p-3 rounded-lg bg-white border border-emerald-200 text-left text-xs font-mono text-stone-700 space-y-1">
+                <div dir="ltr" className="p-3 rounded-lg bg-white border border-emerald-200 text-left text-xs font-mono text-stone-700 space-y-1">
                   <div><strong>To:</strong> {COLLEGE_INFO.email}</div>
                   <div><strong>From:</strong> {email}</div>
                   <div><strong>Subject:</strong> [{subject}] Inquiry from {name}</div>
@@ -257,11 +264,11 @@ export function ContactAndLocation({
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 text-left">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Your Full Name *
+                      {t.contact.nameLabel}
                     </label>
                     <input
                       type="text"
@@ -275,7 +282,7 @@ export function ContactAndLocation({
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Email Address *
+                      {t.contact.emailLabel}
                     </label>
                     <input
                       type="email"
@@ -291,7 +298,7 @@ export function ContactAndLocation({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Phone Number (Optional)
+                      {t.contact.phoneLabel}
                     </label>
                     <input
                       type="tel"
@@ -304,7 +311,7 @@ export function ContactAndLocation({
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Enquiry Category *
+                      {t.contact.categoryLabel}
                     </label>
                     <select
                       value={subject}
@@ -323,7 +330,7 @@ export function ContactAndLocation({
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Your Message *
+                    {t.contact.messageLabel}
                   </label>
                   <textarea
                     rows={4}
@@ -344,10 +351,10 @@ export function ContactAndLocation({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3 bg-[#064b36] hover:bg-[#042f28] text-white rounded-lg font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-60"
+                  className="w-full py-3 bg-[#064b36] hover:bg-[#042f28] text-white rounded-lg font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-60 cursor-pointer"
                 >
                   <Send className="w-4 h-4 text-amber-300" />
-                  <span>{submitting ? 'Submitting Inquiry...' : 'Submit Inquiry'}</span>
+                  <span>{submitting ? t.contact.submittingBtn : t.contact.submitBtn}</span>
                 </button>
               </form>
             )}
@@ -359,7 +366,7 @@ export function ContactAndLocation({
             <div className="rounded-2xl overflow-hidden border border-stone-200 shadow-sm bg-white">
               <div className="p-4 bg-stone-100 border-b border-stone-200 flex items-center justify-between">
                 <span className="font-bold text-xs text-[#064b36] uppercase tracking-wider">
-                  Campus Navigation Map
+                  {t.contact.mapTitle}
                 </span>
                 <a
                   href="https://www.google.com/maps/search/?api=1&query=Govt+Girls+Zubaida+College+Pathan+Colony+Hirabad+Hyderabad+Sindh"
@@ -367,7 +374,7 @@ export function ContactAndLocation({
                   rel="noopener noreferrer"
                   className="text-xs font-semibold text-[#064b36] hover:underline flex items-center gap-1"
                 >
-                  <span>Open Full Directions ↗</span>
+                  <span>{t.contact.openDirections}</span>
                 </a>
               </div>
               <iframe
@@ -394,13 +401,13 @@ export function ContactAndLocation({
               />
               <div className="space-y-1">
                 <span className="text-xs font-bold text-emerald-800 uppercase tracking-widest block">
-                  Scan With Smartphone Camera
+                  {t.contact.qrEyebrow}
                 </span>
                 <h4 className="font-serif font-bold text-base text-stone-900">
-                  Instant Google Maps Navigation
+                  {t.contact.qrTitle}
                 </h4>
                 <p className="text-xs text-stone-600 leading-relaxed">
-                  Point your smartphone camera at this QR code to instantly launch GPS turn-by-turn directions directly to Govt Girls Zubaida College located opposite Hyderabad Central Jail in Pathan Colony, Hirabad, Hyderabad.
+                  {t.contact.qrDesc}
                 </p>
               </div>
             </div>

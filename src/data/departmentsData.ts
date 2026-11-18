@@ -417,23 +417,23 @@ export const DEPARTMENTS_DATA: Department[] = [
     faculty: 'Commerce & Economics',
     headOrLead: 'Senior Commerce & Accounting Faculty',
     badge: 'I.Com + 2-Yr AD Commerce',
-    description: 'Provides rigorous education in financial accounting, corporate governance, auditing, business taxation, and banking practices.',
+    description: 'Provides rigorous education in Principles of Accounting (XI, XII), Principles of Commerce (XI), Banking and Money (XII), Economics & Commercial Geography (XI, XII), and degree-level financial studies.',
     facilities: [
       'Business computing workstations and accounting software setups',
       'Commercial simulated accounting office and ledger practice tables',
-      'Corporate law and taxation reference collection'
+      'Corporate law, banking, and commercial geography reference collection'
     ],
     programsServed: [
-      'Intermediate Commerce (I.Com)',
+      'Intermediate Commerce (I.Com · Class XI & XII)',
       'Associate Degree in Commerce (AD Commerce / ADC)',
       'Professional CA & ACCA Foundation'
     ],
     keyCourses: [
-      'Principles of Accounting & Financial Reporting',
-      'Cost & Managerial Accounting',
-      'Principles of Commerce & Commercial Geography',
-      'Business Taxation, Mercantile Law & Auditing',
-      'Banking Practice & Corporate Governance'
+      'Principles of Accounting (XI, XII)',
+      'Principles of Commerce (XI) & Banking and Money (XII)',
+      'Economics / Commercial Geography (XI, XII)',
+      'English (XI, XII), Islamiyat (XI) & Pakistan Studies (XII)',
+      'Corporate Finance, Cost Accounting & Auditing (AD Commerce)'
     ],
     labsAvailable: 'Commerce Resource & Financial Practice Suite',
     achievements: 'Smooth transition for students into 5th-semester BS Commerce, BBA, and CA firms.',

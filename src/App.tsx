@@ -3,7 +3,9 @@ import { TopUtilityBar } from './components/TopUtilityBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { FloatingCallWidget } from './components/FloatingCallWidget';
+import { FloatingQuickAccess } from './components/FloatingQuickAccess';
 import { FirebaseProvider } from './contexts/FirebaseContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const BoardHonorsSection = lazy(() =>
   import('./components/BoardHonorsSection').then((m) => ({ default: m.BoardHonorsSection }))
@@ -49,11 +51,21 @@ const DigitalLibrarySection = lazy(() =>
     default: m.DigitalLibrarySection,
   }))
 );
+const ExamPrepSection = lazy(() =>
+  import('./components/ExamPrepSection').then((m) => ({
+    default: m.ExamPrepSection,
+  }))
+);
 const AlumnaeSection = lazy(() =>
   import('./components/AlumnaeSection').then((m) => ({ default: m.AlumnaeSection }))
 );
 const AdmissionsSection = lazy(() =>
   import('./components/AdmissionsSection').then((m) => ({ default: m.AdmissionsSection }))
+);
+const AcademicCalendarSection = lazy(() =>
+  import('./components/AcademicCalendarSection').then((m) => ({
+    default: m.AcademicCalendarSection,
+  }))
 );
 const StudentResourcesSection = lazy(() =>
   import('./components/StudentResourcesSection').then((m) => ({
@@ -95,8 +107,9 @@ export default function App() {
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
 
   return (
-    <FirebaseProvider>
-      <div className="min-h-screen flex flex-col bg-stone-50 text-stone-900 selection:bg-amber-200 selection:text-emerald-950">
+    <LanguageProvider>
+      <FirebaseProvider>
+        <div className="min-h-screen flex flex-col bg-stone-50 text-stone-900 selection:bg-amber-200 selection:text-emerald-950">
         {/* Top Utility Bar with Live PKT Time & Office Status */}
         <TopUtilityBar />
 
@@ -105,6 +118,9 @@ export default function App() {
 
         {/* Quick Floating Call Helpline Widget */}
         <FloatingCallWidget />
+
+        {/* Right-Side Floating Quick Access Navigation Menu */}
+        <FloatingQuickAccess />
 
         {/* Main Page Sections */}
         <main className="flex-1">
@@ -171,6 +187,11 @@ export default function App() {
             <DigitalLibrarySection />
           </Suspense>
 
+          {/* Dynamic Past Papers & Examination Prep Hub */}
+          <Suspense fallback={<SectionPlaceholder id="exam-prep" />}>
+            <ExamPrepSection />
+          </Suspense>
+
           {/* Alumnae Success Stories */}
           <Suspense fallback={<SectionPlaceholder id="alumnae" />}>
             <AlumnaeSection />
@@ -179,6 +200,11 @@ export default function App() {
           {/* SECCAP Centralized Admissions Guide */}
           <Suspense fallback={<SectionPlaceholder id="admissions" />}>
             <AdmissionsSection />
+          </Suspense>
+
+          {/* Academic Calendar (2026–2027 Key Dates & Examinations) */}
+          <Suspense fallback={<SectionPlaceholder id="academic-calendar" />}>
+            <AcademicCalendarSection />
           </Suspense>
 
           {/* Student Resources: Downloadable Forms, Enrollment Slips & Registration Guides */}
@@ -230,7 +256,8 @@ export default function App() {
             />
           </Suspense>
         )}
-      </div>
-    </FirebaseProvider>
+        </div>
+      </FirebaseProvider>
+    </LanguageProvider>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { COLLEGE_LABS, CollegeLabInfo, LabPhotoItem, LabSlug } from '../data/collegeLabsData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   Camera,
   CheckCircle2,
@@ -16,6 +17,8 @@ import {
 const STORAGE_KEY = 'ggzc_college_lab_photos';
 
 export function CollegeLabsSection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.labs;
   const [activeLabFilter, setActiveLabFilter] = useState<'all' | LabSlug>('all');
   const [labPhotos, setLabPhotos] = useState<LabPhotoItem[]>(() => {
     try {
@@ -144,16 +147,17 @@ export function CollegeLabsSection() {
   return (
     <section
       id="college-labs"
+      dir={dir}
       className="py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative border-t border-stone-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            College Laboratories &amp; Practical Wings
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Dedicated practical halls for Physics, Computer Science, Chemistry, Zoology, Botany, and Psychology—supporting BISE Hyderabad Board and University degree experiments.
+            {s.subtitle}
           </p>
         </div>
 
@@ -169,7 +173,7 @@ export function CollegeLabsSection() {
                   : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
               }`}
             >
-              All {COLLEGE_LABS.length} Labs
+              {s.allLabsTab} ({COLLEGE_LABS.length})
             </button>
             {COLLEGE_LABS.map((lab) => (
               <button
@@ -267,7 +271,7 @@ export function CollegeLabsSection() {
                       <div className="flex items-center justify-between text-xs mb-2.5">
                         <span className="font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
                           <FlaskConical className="w-3.5 h-3.5" />
-                          <span>Lab Photos ({photosForLab.length})</span>
+                          <span>{s.labPhotosLabel} ({photosForLab.length})</span>
                         </span>
                       </div>
 
@@ -305,7 +309,7 @@ export function CollegeLabsSection() {
                                   className="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/75 text-amber-200 text-[10px] font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
                                   <Maximize2 className="w-3 h-3" />
-                                  <span>View</span>
+                                  <span>{s.viewBtn}</span>
                                 </button>
                                 {import.meta.env.DEV && (
                                   <button

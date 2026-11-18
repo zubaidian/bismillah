@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
 import { ArrowUp, ShieldCheck, Mail, MapPin, Phone, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { subscribeNewsletter } from '../services/collegeSubmissions';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface FooterProps {
   onOpenAdmin?: () => void;
 }
 
 export function Footer({ onOpenAdmin }: FooterProps) {
+  const { dir, t } = useLanguage();
   // Newsletter Form State
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -60,7 +62,7 @@ export function Footer({ onOpenAdmin }: FooterProps) {
   };
 
   return (
-    <footer className="bg-[#03241e] text-stone-300 border-t-2 border-amber-400/40 pt-16 pb-8 text-xs">
+    <footer dir={dir} className="bg-[#03241e] text-stone-300 border-t-2 border-amber-400/40 pt-16 pb-8 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Newsletter Subscription Banner Section */}
         <div className="mb-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#064b36] via-[#053d2c] to-[#042f28] border-2 border-amber-300/40 shadow-2xl relative overflow-hidden">
@@ -68,17 +70,17 @@ export function Footer({ onOpenAdmin }: FooterProps) {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* Newsletter Copy */}
-            <div className="lg:col-span-6 space-y-2 text-left">
+            <div className="lg:col-span-6 space-y-2">
               <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
-                Subscribe for College News &amp; Upcoming Events
+                {t.footer.newsletterTitle}
               </h3>
               <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                Receive verified updates on SECCAP admissions, BISE board examination results, holidays, and campus assemblies directly in your inbox.
+                {t.footer.newsletterDesc}
               </p>
             </div>
 
             {/* Newsletter Form & State Handling */}
-            <div className="lg:col-span-6 text-left">
+            <div className="lg:col-span-6">
               {newsletterStatus === 'success' ? (
                 <div className="p-4 sm:p-5 rounded-2xl bg-[#04241d] border border-amber-300/60 shadow-inner flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn">
                   <div className="flex items-start gap-3">
@@ -125,14 +127,14 @@ export function Footer({ onOpenAdmin }: FooterProps) {
                     <button
                       type="submit"
                       disabled={newsletterStatus === 'loading'}
-                      className="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-1.5 shrink-0 active:scale-95 disabled:opacity-50"
+                      className="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-1.5 shrink-0 active:scale-95 disabled:opacity-50 cursor-pointer"
                     >
                       {newsletterStatus === 'loading' ? (
-                        <span>Subscribing...</span>
+                        <span>{t.footer.subscribingBtn}</span>
                       ) : (
                         <>
                           <Send className="w-3.5 h-3.5 text-emerald-950" />
-                          <span>Subscribe</span>
+                          <span>{t.footer.subscribeBtn}</span>
                         </>
                       )}
                     </button>
@@ -148,8 +150,8 @@ export function Footer({ onOpenAdmin }: FooterProps) {
 
                   {/* Privacy & Cadence Disclaimer */}
                   <div className="flex items-center justify-between text-[11px] text-stone-400">
-                    <span>🔒 Official college bulletins only. Zero spam.</span>
-                    <span className="text-amber-200/80">Monthly Gazette &amp; Alerts</span>
+                    <span>{t.footer.privacyNote}</span>
+                    <span className="text-amber-200/80">{t.footer.gazetteNote}</span>
                   </div>
                 </form>
               )}
@@ -160,7 +162,7 @@ export function Footer({ onOpenAdmin }: FooterProps) {
         {/* Directory Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-emerald-900/60">
           {/* Identity & Motto */}
-          <div className="lg:col-span-4 space-y-4 text-left">
+          <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
               <img
                 src={COLLEGE_INFO.images.logo}
@@ -169,57 +171,62 @@ export function Footer({ onOpenAdmin }: FooterProps) {
               />
               <div>
                 <h3 className="font-serif font-bold text-base sm:text-lg text-amber-300 leading-tight">
-                  Government Girls Zubaida College
+                  {t.hero.crestName}
                 </h3>
                 <span className="text-xs text-emerald-200">
-                  Hyderabad, Sindh, Pakistan
+                  {t.hero.crestEstd}
                 </span>
               </div>
             </div>
 
             <p className="text-stone-300 leading-relaxed text-xs">
-              Sindh&rsquo;s premier public collegiate institution for women since 1953. Currently educating over 2,000 enrolled students across intermediate HSC, 4-year BS, and 2-year associate degree faculties.
+              {t.footer.aboutSummary}
             </p>
 
             <div className="pt-2 text-xs text-amber-200 font-serif italic">
-              &ldquo;SERVICE ABOVE SELF&rdquo;
+              {t.hero.mottoQuote}
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="lg:col-span-2 space-y-3 text-left">
+          <div className="lg:col-span-2 space-y-3">
             <h4 className="font-serif font-bold text-sm text-white uppercase tracking-wider">
-              Navigation
+              {t.footer.navHeading}
             </h4>
             <ul className="space-y-2">
               <li>
                 <a href="#home" className="hover:text-amber-300 transition-colors">
-                  Overview
+                  {t.nav.overview}
                 </a>
               </li>
               <li>
                 <a href="#about" className="hover:text-amber-300 transition-colors">
-                  About &amp; History
+                  {t.nav.about}
                 </a>
               </li>
               <li>
                 <a href="#principal" className="hover:text-amber-300 transition-colors">
-                  Principal&rsquo;s Desk
+                  {t.nav.principal}
                 </a>
               </li>
               <li>
                 <a href="#events" className="hover:text-amber-300 transition-colors">
-                  Live 2026 Events Tracker
+                  {t.nav.events}
                 </a>
               </li>
               <li>
                 <a href="#academics" className="hover:text-amber-300 transition-colors">
-                  Academics
+                  {t.nav.academics}
+                </a>
+              </li>
+              <li>
+                <a href="#exam-prep" className="hover:text-amber-300 transition-colors text-amber-200">
+                  {t.nav.examPrep}
                 </a>
               </li>
               <li>
                 <a href="#departments" className="hover:text-amber-300 transition-colors">
-                  Academic Departments
+                  {t.nav.departments}
                 </a>
               </li>
               <li>
@@ -235,76 +242,81 @@ export function Footer({ onOpenAdmin }: FooterProps) {
                   }}
                   className="hover:text-amber-300 transition-colors"
                 >
-                  Virtual Campus Tour
+                  {t.nav.campusTour}
                 </a>
               </li>
               <li>
                 <a href="#college-library" className="hover:text-amber-300 transition-colors">
-                  College Library
+                  {t.nav.collegeLibrary}
                 </a>
               </li>
               <li>
                 <a href="#college-labs" className="hover:text-amber-300 transition-colors">
-                  College Labs
+                  {t.nav.collegeLabs}
                 </a>
               </li>
               <li>
                 <a href="#digital-library" className="hover:text-amber-300 transition-colors">
-                  Digital Library &amp; Syllabus
+                  {t.nav.digitalLibrary}
                 </a>
               </li>
               <li>
                 <a href="#board-results" className="hover:text-amber-300 transition-colors">
-                  2026 Board Honors
+                  {t.nav.boardResults}
                 </a>
               </li>
               <li>
                 <a href="#student-achievements" className="hover:text-amber-300 transition-colors">
-                  Student Achievements
+                  {t.nav.achievements}
                 </a>
               </li>
               <li>
                 <a href="#alumnae" className="hover:text-amber-300 transition-colors">
-                  Alumnae Success Stories
+                  {t.nav.alumnae}
                 </a>
               </li>
               <li>
                 <a href="#admissions" className="hover:text-amber-300 transition-colors">
-                  SECCAP Admissions
+                  {t.nav.admissions}
+                </a>
+              </li>
+              <li>
+                <a href="#academic-calendar" className="hover:text-amber-300 transition-colors">
+                  {t.nav.calendar}
                 </a>
               </li>
               <li>
                 <a href="#student-resources" className="hover:text-amber-300 transition-colors">
-                  Student Resources (PDFs)
+                  {t.nav.resources}
                 </a>
               </li>
               <li>
                 <a href="#cemis-attendance" className="hover:text-amber-300 transition-colors">
-                  Faculty CEMIS Portal
+                  {t.nav.cemis}
                 </a>
               </li>
               <li>
                 <a href="#gallery" className="hover:text-amber-300 transition-colors">
-                  Campus Gallery
+                  {t.nav.gallery}
                 </a>
               </li>
               <li>
                 <a href="#contact" className="hover:text-amber-300 transition-colors">
-                  Find Us &amp; Contact
+                  {t.nav.contact}
                 </a>
               </li>
               <li>
                 <a href="#faq" className="hover:text-amber-300 transition-colors">
-                  Admissions, Uniforms &amp; Document FAQs
+                  {t.nav.faqs}
                 </a>
               </li>
             </ul>
           </div>
 
           {/* Academic Streams */}
-          <div className="lg:col-span-3 space-y-3 text-left">
+          <div className="lg:col-span-3 space-y-3">
             <h4 className="font-serif font-bold text-sm text-white uppercase tracking-wider">
-              Study Pathways
+              {t.footer.pathwaysHeading}
             </h4>
             <ul className="space-y-2">
               <li>
@@ -356,35 +368,46 @@ export function Footer({ onOpenAdmin }: FooterProps) {
           </div>
 
           {/* Affiliation & Official Inquiries */}
-          <div className="lg:col-span-3 space-y-3 text-left">
+          <div className="lg:col-span-3 space-y-3">
             <h4 className="font-serif font-bold text-sm text-white uppercase tracking-wider">
-              Affiliation &amp; Campus
+              {t.footer.affiliationHeading}
             </h4>
             <div className="space-y-2 text-stone-300 text-xs">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
-                <span>Opposite Hyderabad Central Jail, Pathan Colony, Hirabad, Hyderabad, Sindh, Pakistan</span>
+                <span>{t.hero.crestAddress}</span>
               </div>
               <div className="flex items-start gap-2">
                 <Phone className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
                 <div>
-                  <a href={`tel:${COLLEGE_INFO.phoneRaw}`} className="text-amber-300 hover:underline font-mono font-semibold block">
+                  <a
+                    href={`tel:${COLLEGE_INFO.phoneRaw}`}
+                    dir="ltr"
+                    className="text-amber-300 hover:underline font-mono font-semibold block tabular-nums"
+                  >
                     {COLLEGE_INFO.phone}
                   </a>
                   <span className="text-[10px] text-stone-400">
-                    Helpline: <a href={`tel:${COLLEGE_INFO.helplineRaw}`} className="text-stone-300 hover:text-white">{COLLEGE_INFO.helpline}</a>
+                    {t.contact.helplineLabel}{' '}
+                    <a
+                      href={`tel:${COLLEGE_INFO.helplineRaw}`}
+                      dir="ltr"
+                      className="text-stone-300 hover:text-white tabular-nums"
+                    >
+                      {COLLEGE_INFO.helpline}
+                    </a>
                   </span>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
-                <a href={`mailto:${COLLEGE_INFO.email}`} className="text-amber-300 hover:underline">
+                <a href={`mailto:${COLLEGE_INFO.email}`} dir="ltr" className="text-amber-300 hover:underline">
                   {COLLEGE_INFO.email}
                 </a>
               </div>
               <div className="flex items-start gap-2">
                 <ShieldCheck className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
-                <span>Affiliated with BISE Hyderabad &amp; University of Sindh Jamshoro</span>
+                <span>{t.hero.crestAffiliationValue}</span>
               </div>
             </div>
 
@@ -395,7 +418,7 @@ export function Footer({ onOpenAdmin }: FooterProps) {
                 rel="noopener noreferrer"
                 className="inline-block px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px]"
               >
-                Official Facebook Channel ↗
+                {t.topBar.facebook} ↗
               </a>
             </div>
           </div>
@@ -404,7 +427,7 @@ export function Footer({ onOpenAdmin }: FooterProps) {
         {/* Bottom Strip */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-stone-400 text-[11px]">
           <div>
-            &copy; {new Date().getFullYear()} Government Girls Zubaida College, Hyderabad. All Rights Reserved.
+            &copy; {new Date().getFullYear()} {t.footer.rights}
           </div>
 
           <div className="flex items-center gap-4">
@@ -413,17 +436,17 @@ export function Footer({ onOpenAdmin }: FooterProps) {
               <button
                 type="button"
                 onClick={onOpenAdmin}
-                className="text-stone-300 hover:text-amber-300 underline transition-colors"
+                className="text-stone-300 hover:text-amber-300 underline transition-colors cursor-pointer"
               >
-                Admin Inbox
+                {t.footer.adminInbox}
               </button>
             )}
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-full bg-[#064b36] hover:bg-emerald-700 text-amber-300 transition-colors flex items-center gap-1 px-3"
-              aria-label="Back to top"
+              className="p-2 rounded-full bg-[#064b36] hover:bg-emerald-700 text-amber-300 transition-colors flex items-center gap-1 px-3 cursor-pointer"
+              aria-label={t.footer.backToTop}
             >
-              <span>Back to Top</span>
+              <span>{t.footer.backToTop}</span>
               <ArrowUp className="w-3.5 h-3.5" />
             </button>
           </div>

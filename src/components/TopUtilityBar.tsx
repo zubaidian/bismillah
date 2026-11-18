@@ -1,20 +1,32 @@
 import { useOfficeStatus } from '../hooks/useOfficeStatus';
 import { COLLEGE_INFO } from '../data/collegeData';
-import { Clock, ExternalLink, Phone } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { PortalLanguage } from '../data/translations';
+import { Clock, ExternalLink, Globe, Phone } from 'lucide-react';
+
+const LANG_OPTIONS: { id: PortalLanguage; label: string }[] = [
+  { id: 'en', label: 'EN' },
+  { id: 'ur', label: 'اردو' },
+  { id: 'sd', label: 'سنڌي' },
+];
 
 export function TopUtilityBar() {
   const { isOpen, karachiTime } = useOfficeStatus();
+  const { language, setLanguage, dir, t } = useLanguage();
 
   return (
     <div className="bg-[#042f28] text-[#d4af37] text-xs font-medium border-b border-[#064b36] py-2 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-center md:text-left">
+        <div
+          dir={dir}
+          className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-center md:text-left"
+        >
           <span className="font-semibold tracking-wider uppercase text-[11px] sm:text-xs text-amber-200">
-            Government Girls Zubaida College · Hyderabad, Sindh
+            {t.topBar.collegeLine}
           </span>
           <span className="hidden lg:inline text-emerald-600">|</span>
           <span className="hidden lg:inline text-amber-100/80 font-serif italic tracking-wide">
-            &ldquo;Service Above Self&rdquo; · Estd. 1953
+            {t.topBar.mottoYear}
           </span>
         </div>
 
@@ -26,7 +38,7 @@ export function TopUtilityBar() {
             title="Call Govt Girls Zubaida College Office"
           >
             <Phone className="w-3 h-3 text-amber-300" />
-            <span>{COLLEGE_INFO.phone}</span>
+            <span className="tabular-nums">{COLLEGE_INFO.phone}</span>
           </a>
 
           {/* Live PKT Clock */}
@@ -36,15 +48,15 @@ export function TopUtilityBar() {
             <span className="text-[10px] text-amber-200 font-semibold">PKT</span>
           </div>
 
-          {/* Office Status Badge */}
-          <div className="flex items-center gap-1.5">
+          {/* Office Status */}
+          <div className="flex items-center gap-1.5" dir={dir}>
             <span
               className={`inline-block w-2 h-2 rounded-full ${
                 isOpen ? 'bg-emerald-400' : 'bg-rose-400'
               }`}
             />
             <span className="text-stone-200">
-              {isOpen ? 'Office Open' : 'Office Closed'}
+              {isOpen ? t.topBar.officeOpen : t.topBar.officeClosed}
             </span>
           </div>
 
@@ -57,7 +69,7 @@ export function TopUtilityBar() {
             rel="noopener noreferrer"
             className="text-amber-300 hover:text-white transition-colors flex items-center gap-1"
           >
-            <span>SECCAP</span>
+            <span>{t.topBar.seccap}</span>
             <ExternalLink className="w-3 h-3" />
           </a>
 
@@ -67,9 +79,33 @@ export function TopUtilityBar() {
             rel="noopener noreferrer"
             className="text-amber-300 hover:text-white transition-colors flex items-center gap-1"
           >
-            <span>Facebook Page</span>
+            <span>{t.topBar.facebook}</span>
             <ExternalLink className="w-3 h-3" />
           </a>
+
+          {/* Compact Multilingual Switcher */}
+          <div
+            role="group"
+            aria-label={t.topBar.languageLabel}
+            className="inline-flex items-center gap-0.5 bg-[#02201b] border border-emerald-700/80 rounded-lg p-0.5"
+          >
+            <Globe className="w-3 h-3 text-amber-300 mx-1 hidden sm:inline" aria-hidden="true" />
+            {LANG_OPTIONS.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setLanguage(opt.id)}
+                aria-pressed={language === opt.id}
+                className={`px-2 py-0.5 rounded-md text-[11px] font-bold transition-colors whitespace-nowrap cursor-pointer ${
+                  language === opt.id
+                    ? 'bg-amber-400 text-emerald-950'
+                    : 'text-stone-200 hover:text-amber-200'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

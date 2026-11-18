@@ -1,14 +1,23 @@
 import { useState, useEffect } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
+import { PortalLanguage } from '../data/translations';
 import { Menu, X, ChevronRight, Phone } from 'lucide-react';
 
 interface NavbarProps {
   onOpenEnquiry: () => void;
 }
 
+const MOBILE_LANGS: { id: PortalLanguage; label: string }[] = [
+  { id: 'en', label: 'English' },
+  { id: 'ur', label: 'اردو' },
+  { id: 'sd', label: 'سنڌي' },
+];
+
 export function Navbar({ onOpenEnquiry }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { language, setLanguage, dir, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,26 +28,28 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
   }, []);
 
   const navLinks = [
-    { label: 'Overview', href: '#home' },
-    { label: 'About & History', href: '#about' },
-    { label: 'Principal’s Desk', href: '#principal' },
-    { label: 'Events', href: '#events' },
-    { label: 'Academics', href: '#academics' },
-    { label: 'Departments', href: '#departments' },
-    { label: 'Campus Tour', href: '#campus-tour' },
-    { label: 'College Library', href: '#college-library' },
-    { label: 'College Labs', href: '#college-labs' },
-    { label: 'Digital Library', href: '#digital-library' },
-    { label: 'Board Honors', href: '#board-results' },
-    { label: 'Student Achievements', href: '#student-achievements' },
-    { label: 'Distinguished Alumnae', href: '#alumnae' },
-    { label: 'Facebook Live', href: '#facebook-updates' },
-    { label: 'Admissions & SECCAP', href: '#admissions' },
-    { label: 'Student Resources', href: '#student-resources' },
-    { label: 'Faculty CEMIS', href: '#cemis-attendance' },
-    { label: 'Campus Gallery', href: '#gallery' },
-    { label: 'Location & Contact', href: '#contact' },
-    { label: 'FAQs', href: '#faq' }
+    { label: t.nav.overview, href: '#home' },
+    { label: t.nav.about, href: '#about' },
+    { label: t.nav.principal, href: '#principal' },
+    { label: t.nav.events, href: '#events' },
+    { label: t.nav.academics, href: '#academics' },
+    { label: t.nav.examPrep, href: '#exam-prep' },
+    { label: t.nav.departments, href: '#departments' },
+    { label: t.nav.campusTour, href: '#campus-tour' },
+    { label: t.nav.collegeLibrary, href: '#college-library' },
+    { label: t.nav.collegeLabs, href: '#college-labs' },
+    { label: t.nav.digitalLibrary, href: '#digital-library' },
+    { label: t.nav.boardResults, href: '#board-results' },
+    { label: t.nav.achievements, href: '#student-achievements' },
+    { label: t.nav.alumnae, href: '#alumnae' },
+    { label: t.nav.facebookLive, href: '#facebook-updates' },
+    { label: t.nav.admissions, href: '#admissions' },
+    { label: t.nav.calendar, href: '#academic-calendar' },
+    { label: t.nav.resources, href: '#student-resources' },
+    { label: t.nav.cemis, href: '#cemis-attendance' },
+    { label: t.nav.gallery, href: '#gallery' },
+    { label: t.nav.contact, href: '#contact' },
+    { label: t.nav.faqs, href: '#faq' },
   ];
 
   const handleNavClick = (href: string) => {
@@ -69,11 +80,12 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
         attempts += 1;
         window.dispatchEvent(new CustomEvent('campus-tour:open-map'));
         if (scrollToMap('smooth')) {
-          window.setTimeout(() => scrollToMap('smooth'), 300);
+          window.setTimeout(() => scrollMapFallback(), 300);
         } else if (attempts < 30) {
           window.setTimeout(pollForMap, 80);
         }
       };
+      const scrollMapFallback = () => scrollToMap('smooth');
       window.setTimeout(pollForMap, 80);
       return;
     }
@@ -129,10 +141,13 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
           </a>
 
           {/* Menu Bar Inline Next to Logo (wraps cleanly so all links stay visible) */}
-          <nav className="hidden lg:flex flex-1 min-w-0 flex-wrap items-center justify-center gap-x-3.5 xl:gap-x-4 gap-y-1 text-[13px] font-medium text-emerald-100">
+          <nav
+            dir={dir}
+            className="hidden lg:flex flex-1 min-w-0 flex-wrap items-center justify-center gap-x-3.5 xl:gap-x-4 gap-y-1 text-[13px] font-medium text-emerald-100"
+          >
             {navLinks.map((link) => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 onClick={(e) => {
                   e.preventDefault();
@@ -159,7 +174,7 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
               onClick={onOpenEnquiry}
               className="sm:hidden px-2.5 py-1.5 text-xs font-semibold text-emerald-950 bg-amber-300 rounded shadow-sm"
             >
-              Enquire
+              {t.nav.enquire}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -173,14 +188,40 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-3 pt-3 border-t border-emerald-800 bg-[#053d2c] rounded-lg p-4 shadow-xl max-h-[75vh] overflow-y-auto">
+          <div
+            dir={dir}
+            className="lg:hidden mt-3 pt-3 border-t border-emerald-800 bg-[#053d2c] rounded-lg p-4 shadow-xl max-h-[75vh] overflow-y-auto"
+          >
+            {/* Mobile Language Selector */}
+            <div className="mb-3 pb-3 border-b border-emerald-800 flex items-center justify-between gap-2 px-1">
+              <span className="text-[11px] font-bold text-amber-200 uppercase tracking-wider">
+                {t.topBar.languageLabel}
+              </span>
+              <div className="flex items-center gap-1">
+                {MOBILE_LANGS.map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setLanguage(opt.id)}
+                    className={`px-2.5 py-1 rounded text-xs font-bold ${
+                      language === opt.id
+                        ? 'bg-amber-400 text-emerald-950'
+                        : 'bg-[#03241e] text-stone-200 border border-emerald-800'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Quick Call Row on Mobile */}
             <div className="mb-3 pb-3 border-b border-emerald-800 flex items-center justify-between px-1">
               <div>
                 <span className="text-[10px] text-amber-200 uppercase tracking-widest block font-bold">
-                  College Office Phone
+                  {t.nav.officePhone}
                 </span>
-                <span className="text-sm font-mono font-bold text-white">
+                <span className="text-sm font-mono font-bold text-white tabular-nums">
                   {COLLEGE_INFO.phone}
                 </span>
               </div>
@@ -189,14 +230,14 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
                 className="px-3 py-1.5 bg-amber-300 hover:bg-amber-200 text-emerald-950 text-xs font-bold rounded flex items-center gap-1 shadow"
               >
                 <Phone className="w-3.5 h-3.5" />
-                <span>Call Now</span>
+                <span>{t.nav.callNow}</span>
               </a>
             </div>
 
             <nav className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <a
-                  key={link.label}
+                  key={link.href}
                   href={link.href}
                   onClick={(e) => {
                     e.preventDefault();
@@ -216,14 +257,16 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
                   }}
                   className="w-full py-2.5 px-4 text-sm font-bold text-center text-emerald-950 bg-amber-300 hover:bg-amber-200 rounded shadow"
                 >
-                  Send Admission Enquiry
+                  {t.nav.sendEnquiry}
                 </button>
                 <a
                   href={`tel:${COLLEGE_INFO.helplineRaw}`}
                   className="w-full py-2 px-4 text-xs font-semibold text-center text-amber-200 bg-[#03241e] border border-amber-400/40 rounded flex items-center justify-center gap-1.5"
                 >
                   <Phone className="w-3 h-3 text-amber-300" />
-                  <span>Admission Helpline: {COLLEGE_INFO.helpline}</span>
+                  <span>
+                    {t.nav.helpline}: {COLLEGE_INFO.helpline}
+                  </span>
                 </a>
                 <a
                   href={COLLEGE_INFO.seccapUrl}
@@ -231,7 +274,7 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
                   rel="noopener noreferrer"
                   className="w-full py-2.5 px-4 text-sm font-semibold text-center text-white bg-[#03241e] border border-amber-300/40 rounded"
                 >
-                  Visit Official SECCAP Portal ↗
+                  {t.nav.visitSeccap}
                 </a>
               </div>
             </nav>

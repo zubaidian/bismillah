@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { COLLEGE_INFO, BOARD_HONORS } from '../data/collegeData';
+import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Award, CheckCircle2, Maximize2, X, Sparkles } from 'lucide-react';
 
 export function BoardHonorsSection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.boardHonors;
   const [activeModalImage, setActiveModalImage] = useState<string | null>(null);
   const [activeModalTitle, setActiveModalTitle] = useState<string>('');
 
@@ -12,15 +15,15 @@ export function BoardHonorsSection() {
   };
 
   return (
-    <section id="board-results" className="py-16 sm:py-24 bg-[#f4f7f4] text-stone-900 relative">
+    <section id="board-results" dir={dir} className="py-16 sm:py-24 bg-[#f4f7f4] text-stone-900 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-12 sm:mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Outstanding Board Results
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Celebrating the extraordinary success of our students in the Higher Secondary Certificate (HSC Part-II) Annual Examination, securing provincial top honors for Government Girls Zubaida College.
+            {s.subtitle}
           </p>
         </div>
 
@@ -52,14 +55,14 @@ export function BoardHonorsSection() {
                 className="absolute bottom-4 right-4 bg-[#064b36] hover:bg-[#042f28] text-white p-2.5 rounded-full shadow-lg flex items-center gap-1.5 text-xs font-semibold px-3"
               >
                 <Maximize2 className="w-3.5 h-3.5" />
-                <span>View Full Banner</span>
+                <span>{s.viewBanner}</span>
               </button>
             </div>
 
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 flex items-start gap-2.5">
               <Sparkles className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
               <div>
-                <strong>Official Felicitation:</strong> Heartiest congratulations from Principal Prof. Yasmeen Panhwar and faculty members to all successful students and the Computer Science Department.
+                <strong>{s.felicitationLabel}</strong> {s.felicitationDesc}
               </div>
             </div>
           </div>
@@ -72,45 +75,45 @@ export function BoardHonorsSection() {
 
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-700/80 pb-4 mb-4">
                 <span className="text-amber-300 text-xs font-bold uppercase tracking-wider">
-                  2nd Position in BISE Hyderabad Board
+                  {s.positionHeader}
                 </span>
                 <span className="text-amber-200 text-xs font-mono">
-                  Roll No: 79256
+                  {s.rollNoLabel}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
                 <div className="sm:col-span-2 space-y-2">
                   <span className="text-xs font-semibold text-emerald-200 uppercase tracking-widest block">
-                    Position Holder
+                    {s.positionHolderLabel}
                   </span>
                   <h3 className="font-serif text-2xl sm:text-3xl font-bold text-amber-300">
-                    Maryam Bibi
+                    {s.studentName}
                   </h3>
                   <p className="text-stone-200 text-sm">
-                    Daughter of <strong className="text-white">Muhammad Aslam</strong>
+                    {s.daughterOfPrefix} <strong className="text-white">{s.fatherName}</strong>
                   </p>
                   <p className="text-emerald-100 text-xs">
-                    Institution: <span className="font-semibold text-white">1080. Govt Girls College Hyderabad (Zubaida)</span>
+                    {s.institutionLabel} <span className="font-semibold text-white">{s.institutionValue}</span>
                   </p>
                   <p className="text-xs text-stone-300 pt-1">
-                    HSC Part-II (Class XII) Computer Science Annual Examination
+                    {s.examLine}
                   </p>
                 </div>
 
                 <div className="bg-[#042f28] p-4 rounded-xl border border-amber-300/40 text-center">
-                  <span className="text-[11px] text-stone-300 block uppercase">Marks Obtained</span>
+                  <span className="text-[11px] text-stone-300 block uppercase">{s.marksObtained}</span>
                   <div className="font-serif font-bold text-3xl sm:text-4xl text-amber-300 my-1 tabular-nums">
                     916
                   </div>
-                  <span className="text-xs text-emerald-200">Out of 1100</span>
+                  <span className="text-xs text-emerald-200">{s.outOfLabel}</span>
                 </div>
               </div>
 
               <div className="mt-5 pt-4 border-t border-emerald-700/80 flex flex-wrap items-center justify-between gap-3 text-xs">
                 <span className="text-emerald-100 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-amber-300" />
-                  Official Board Position Gazetted
+                  {s.gazettedBadge}
                 </span>
                 <button
                   onClick={() =>
@@ -121,7 +124,7 @@ export function BoardHonorsSection() {
                   }
                   className="text-amber-300 hover:text-white font-semibold underline underline-offset-4 flex items-center gap-1"
                 >
-                  View Official Board Gazette Photo ↗
+                  {s.viewGazetteBtn}
                 </button>
               </div>
             </div>
@@ -129,27 +132,27 @@ export function BoardHonorsSection() {
             {/* Department Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-4 rounded-xl bg-white border border-stone-200 shadow-sm text-center">
-                <span className="text-xs text-stone-500 font-medium block">Board Standings</span>
+                <span className="text-xs text-stone-500 font-medium block">{s.standingsLabel}</span>
                 <div className="font-serif font-bold text-2xl text-[#064b36] my-1">
-                  2nd &amp; 4th
+                  {s.standingsValue}
                 </div>
-                <p className="text-xs text-stone-600">Top positions across all colleges in BISE Hyderabad.</p>
+                <p className="text-xs text-stone-600">{s.standingsDesc}</p>
               </div>
 
               <div className="p-4 rounded-xl bg-white border border-stone-200 shadow-sm text-center">
-                <span className="text-xs text-stone-500 font-medium block">Grade Distribution</span>
+                <span className="text-xs text-stone-500 font-medium block">{s.gradesLabel}</span>
                 <div className="font-serif font-bold text-2xl text-[#064b36] my-1">
-                  Majority A1 &amp; A
+                  {s.gradesValue}
                 </div>
-                <p className="text-xs text-stone-600">Only 1 B-grade &amp; 1 C-grade across the cohort.</p>
+                <p className="text-xs text-stone-600">{s.gradesDesc}</p>
               </div>
 
               <div className="p-4 rounded-xl bg-white border border-stone-200 shadow-sm text-center">
-                <span className="text-xs text-stone-500 font-medium block">Pass Record</span>
+                <span className="text-xs text-stone-500 font-medium block">{s.passLabel}</span>
                 <div className="font-serif font-bold text-2xl text-emerald-700 my-1">
-                  No Failures
+                  {s.passValue}
                 </div>
-                <p className="text-xs text-stone-600">100% success rate under dedicated faculty mentorship.</p>
+                <p className="text-xs text-stone-600">{s.passDesc}</p>
               </div>
             </div>
 
@@ -168,12 +171,12 @@ export function BoardHonorsSection() {
                   )
                 }
               />
-              <div className="space-y-1 text-center sm:text-left">
+              <div className="space-y-1 text-center sm:text-start">
                 <h4 className="font-bold text-sm text-stone-900">
-                  Board of Intermediate &amp; Secondary Education Hyderabad
+                  {s.boardName}
                 </h4>
                 <p className="text-xs text-stone-600">
-                  Official gazette notification confirming top three position holders in the Computer Science Group Annual Examination.
+                  {s.boardDesc}
                 </p>
                 <button
                   onClick={() =>
@@ -184,7 +187,7 @@ export function BoardHonorsSection() {
                   }
                   className="text-xs font-semibold text-[#064b36] hover:text-emerald-700 underline"
                 >
-                  Click to inspect the verified gazette document
+                  {s.inspectGazette}
                 </button>
               </div>
             </div>
@@ -232,7 +235,7 @@ export function BoardHonorsSection() {
                 onClick={() => setActiveModalImage(null)}
                 className="px-4 py-1.5 bg-stone-800 hover:bg-stone-700 text-white rounded font-medium"
               >
-                Close View
+                {s.closeView}
               </button>
             </div>
           </div>

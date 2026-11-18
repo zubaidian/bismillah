@@ -142,8 +142,16 @@ export const ACADEMIC_PROGRAMS: AcademicProgram[] = [
     title: "Commerce Group (I.Com)",
     duration: "2 Years (Class XI & XII)",
     department: "Department of Commerce & Accounting",
-    overview: "Comprehensive grounding in business mathematics, accounting, commercial geography, and economic principles.",
-    subjects: ["Principles of Accounting", "Principles of Commerce", "Principles of Economics", "Business Mathematics", "English & Urdu", "Pak Studies"],
+    overview: "Comprehensive intermediate commerce curriculum spanning Principles of Accounting (XI, XII), Principles of Commerce (XI), Banking and Money (XII), Economics & Commercial Geography (XI, XII), English (XI, XII), Islamiyat (XI), and Pakistan Studies (XII).",
+    subjects: [
+      "Principles of Accounting (XI, XII)",
+      "Principles of Commerce (XI)",
+      "Banking and Money (XII)",
+      "Economics / Commercial Geography (XI, XII)",
+      "English (XI, XII)",
+      "Islamiyat (XI)",
+      "Pakistan Studies (XII)"
+    ],
     eligibility: "SSC Matriculation in any stream with aptitude for business and finance.",
     futureProspects: ["BBA / BS Accounting & Finance", "Chartered Accountancy (CA / ACCA)", "Banking & Corporate Finance", "Public Administration"]
   },

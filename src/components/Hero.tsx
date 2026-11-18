@@ -3,6 +3,7 @@ import {
   ArrowUpRight,
   Award,
   BookOpen,
+  FileSpreadsheet,
   ShieldCheck,
   Sparkles,
   Users,
@@ -10,12 +11,14 @@ import {
   Check
 } from 'lucide-react';
 import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeroProps {
   onOpenEnquiry: () => void;
 }
 
 export function Hero({ onOpenEnquiry }: HeroProps) {
+  const { dir, t } = useLanguage();
   // Video player modal state
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
@@ -58,31 +61,42 @@ export function Hero({ onOpenEnquiry }: HeroProps) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/15 via-transparent to-transparent pointer-events-none" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-28">
+      <div dir={dir} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Main Hero Copy */}
-          <div className="lg:col-span-8 text-left space-y-6">
+          <div className="lg:col-span-8 space-y-6">
             {/* Display Headline - Enhanced with subtle text shadow for high legibility */}
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight text-white drop-shadow-md">
-              Knowledge that empowers.{' '}
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.18] tracking-tight text-white drop-shadow-md">
+              {t.hero.headlineLine1}{' '}
               <span className="block italic font-normal text-amber-300 mt-1 drop-shadow">
-                Education that transforms.
+                {t.hero.headlineLine2}
               </span>
             </h1>
 
             {/* Subtitle / Paragraph */}
             <p className="text-stone-100 text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-2xl drop-shadow-sm">
-              Welcome to <strong className="text-white font-semibold">Government Girls Zubaida College, Hyderabad</strong> — A distinguished home for learning, intellectual discovery, and student achievement for over seven decades under our guiding light: <span className="text-amber-200 font-serif italic">&ldquo;Service Above Self&rdquo;</span>.
+              {t.hero.welcomeBefore}{' '}
+              <strong className="text-white font-semibold">{t.hero.collegeNameBold}</strong>{' '}
+              {t.hero.welcomeMiddle}{' '}
+              <span className="text-amber-200 font-serif italic">{t.hero.mottoQuote}</span>.
             </p>
 
-            {/* Action Buttons including Watch Campus Video */}
+            {/* Action Buttons including Past Papers & Exam Prep */}
             <div className="pt-2 flex flex-wrap items-center gap-3.5">
               <a
                 href="#admissions"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-amber-400 hover:bg-amber-300 text-emerald-950 font-bold text-sm shadow-lg shadow-black/20 hover:shadow-amber-400/20 transition-all active:scale-95"
               >
-                <span>SECCAP Admissions 2026</span>
+                <span>{t.hero.ctaAdmissions}</span>
                 <ArrowUpRight className="w-4 h-4 text-emerald-950" />
+              </a>
+
+              <a
+                href="#exam-prep"
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-[#064b36] hover:bg-[#085f45] border border-amber-300/60 text-amber-200 font-semibold text-sm shadow-md transition-all"
+              >
+                <FileSpreadsheet className="w-4 h-4 text-amber-300" />
+                <span>{t.hero.ctaExamPrep}</span>
               </a>
 
               <a
@@ -90,30 +104,36 @@ export function Hero({ onOpenEnquiry }: HeroProps) {
                 className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-[#073d32]/90 hover:bg-[#094c3f] border border-amber-300/50 text-amber-200 font-semibold text-sm shadow-md transition-all"
               >
                 <Award className="w-4 h-4 text-amber-300" />
-                <span>Board Honors (2nd &amp; 4th)</span>
+                <span>{t.hero.ctaHonors}</span>
               </a>
 
               <button
                 onClick={onOpenEnquiry}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-white/15 hover:bg-white/25 text-white font-medium text-sm backdrop-blur-sm transition-all"
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-white/15 hover:bg-white/25 text-white font-medium text-sm backdrop-blur-sm transition-all cursor-pointer"
               >
-                <span>Online Enquiry</span>
+                <span>{t.hero.ctaEnquiry}</span>
               </button>
             </div>
 
             {/* Core Values / Triad */}
-            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-emerald-800/80 max-w-xl text-left">
+            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-emerald-800/80 max-w-xl">
               <div>
-                <span className="block font-serif font-bold text-base sm:text-lg text-amber-200 drop-shadow-sm">Curiosity</span>
-                <span className="block text-xs text-stone-200">Ask boldly. Discover truth.</span>
+                <span className="block font-serif font-bold text-base sm:text-lg text-amber-200 drop-shadow-sm">
+                  {t.hero.triad1Title}
+                </span>
+                <span className="block text-xs text-stone-200">{t.hero.triad1Desc}</span>
               </div>
               <div>
-                <span className="block font-serif font-bold text-base sm:text-lg text-amber-200 drop-shadow-sm">Confidence</span>
-                <span className="block text-xs text-stone-200">Believe in your capabilities.</span>
+                <span className="block font-serif font-bold text-base sm:text-lg text-amber-200 drop-shadow-sm">
+                  {t.hero.triad2Title}
+                </span>
+                <span className="block text-xs text-stone-200">{t.hero.triad2Desc}</span>
               </div>
               <div>
-                <span className="block font-serif font-bold text-base sm:text-lg text-amber-200 drop-shadow-sm">Community</span>
-                <span className="block text-xs text-stone-200">Service above self, always.</span>
+                <span className="block font-serif font-bold text-base sm:text-lg text-amber-200 drop-shadow-sm">
+                  {t.hero.triad3Title}
+                </span>
+                <span className="block text-xs text-stone-200">{t.hero.triad3Desc}</span>
               </div>
             </div>
           </div>
@@ -131,36 +151,44 @@ export function Hero({ onOpenEnquiry }: HeroProps) {
 
               <div className="mt-4">
                 <span className="text-[11px] font-bold uppercase tracking-widest text-amber-300">
-                  Government College
+                  {t.hero.crestBadge}
                 </span>
                 <h2 className="font-serif text-xl sm:text-2xl font-bold text-white mt-1">
-                  Govt Girls Zubaida College
+                  {t.hero.crestName}
                 </h2>
                 <p className="text-xs text-emerald-200 mt-1">
-                  Opposite Central Jail, Pathan Colony, Hirabad, Hyderabad
+                  {t.hero.crestAddress}
                 </p>
               </div>
 
               <div className="my-4 py-3 border-y border-amber-300/30">
-                <span className="block text-xs uppercase tracking-wider text-stone-300">College Motto</span>
-                <span className="font-serif italic font-bold text-base text-amber-200">
-                  &ldquo;Service Above Self&rdquo;
+                <span className="block text-xs uppercase tracking-wider text-stone-300">
+                  {t.hero.crestMottoLabel}
                 </span>
-                <span className="block text-[11px] text-emerald-300 mt-0.5">Established 1953 · Sindh, Pakistan</span>
+                <span className="font-serif italic font-bold text-base text-amber-200">
+                  {t.hero.mottoQuote}
+                </span>
+                <span className="block text-[11px] text-emerald-300 mt-0.5">
+                  {t.hero.crestEstd}
+                </span>
               </div>
 
-              <div className="bg-[#021f19] p-3 rounded-lg border border-emerald-800 text-left text-xs space-y-1.5">
-                <div className="flex items-center justify-between text-stone-300">
-                  <span>Affiliation:</span>
-                  <span className="text-amber-200 font-semibold">BISE Hyderabad &amp; Univ. of Sindh</span>
+              <div className="bg-[#021f19] p-3 rounded-lg border border-emerald-800 text-xs space-y-1.5">
+                <div className="flex items-center justify-between gap-2 text-stone-300">
+                  <span>{t.hero.crestAffiliationLabel}</span>
+                  <span className="text-amber-200 font-semibold">{t.hero.crestAffiliationValue}</span>
                 </div>
-                <div className="flex items-center justify-between text-stone-300">
-                  <span>Admission Mode:</span>
-                  <span className="text-emerald-300 font-semibold">SECCAP Centralized</span>
+                <div className="flex items-center justify-between gap-2 text-stone-300">
+                  <span>{t.hero.crestModeLabel}</span>
+                  <span className="text-emerald-300 font-semibold">{t.hero.crestModeValue}</span>
                 </div>
-                <div className="flex items-center justify-between text-stone-300 pt-1 border-t border-emerald-800/80">
-                  <span>Official Phone:</span>
-                  <a href={`tel:${COLLEGE_INFO.phoneRaw}`} className="text-amber-300 font-mono font-bold hover:underline">
+                <div className="flex items-center justify-between gap-2 text-stone-300 pt-1 border-t border-emerald-800/80">
+                  <span>{t.hero.crestPhoneLabel}</span>
+                  <a
+                    href={`tel:${COLLEGE_INFO.phoneRaw}`}
+                    dir="ltr"
+                    className="text-amber-300 font-mono font-bold hover:underline tabular-nums"
+                  >
                     {COLLEGE_INFO.phone}
                   </a>
                 </div>
@@ -195,69 +223,69 @@ export function Hero({ onOpenEnquiry }: HeroProps) {
         </div>
 
         {/* 5 Quantitative Institutional Milestone Cards */}
-        <div className="mt-14 pt-8 border-t border-emerald-800/80 grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-5 text-left">
+        <div className="mt-14 pt-8 border-t border-emerald-800/80 grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-5">
           <div className="p-4 rounded-xl bg-[#063f33]/85 border border-emerald-700/60 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-1">
               <ShieldCheck className="w-4 h-4 text-amber-300" />
-              <span>Established</span>
+              <span>{t.hero.stat1Label}</span>
             </div>
             <div className="text-2xl sm:text-3xl font-serif font-bold text-white tabular-nums">
               1953
             </div>
             <p className="text-xs text-stone-200 mt-1">
-              Over 70 years serving the daughters of Hyderabad.
+              {t.hero.stat1Desc}
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-[#063f33]/85 border border-amber-400/50 backdrop-blur-sm shadow-md">
             <div className="flex items-center gap-2 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-1">
               <Users className="w-4 h-4 text-amber-400" />
-              <span>Total Students</span>
+              <span>{t.hero.stat2Label}</span>
             </div>
             <div className="text-2xl sm:text-3xl font-serif font-bold text-amber-300 tabular-nums">
               {COLLEGE_INFO.totalStudentsFormatted}
             </div>
             <p className="text-xs text-stone-200 mt-1">
-              Total enrolled students across HSC &amp; Degree programs.
+              {t.hero.stat2Desc}
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-[#063f33]/85 border border-emerald-700/60 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-1">
               <Award className="w-4 h-4 text-amber-300" />
-              <span>Board Honors</span>
+              <span>{t.hero.stat3Label}</span>
             </div>
             <div className="text-2xl sm:text-3xl font-serif font-bold text-amber-300 tabular-nums">
-              2nd &amp; 4th
+              {t.hero.stat3Value}
             </div>
             <p className="text-xs text-stone-200 mt-1">
-              Top Board Positions in Computer Science Group.
+              {t.hero.stat3Desc}
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-[#063f33]/85 border border-emerald-700/60 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-1">
               <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>Standard</span>
+              <span>{t.hero.stat4Label}</span>
             </div>
             <div className="text-2xl sm:text-3xl font-serif font-bold text-white tabular-nums">
               100%
             </div>
             <p className="text-xs text-stone-200 mt-1">
-              Pass rate with predominant A1 &amp; A grades.
+              {t.hero.stat4Desc}
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-[#063f33]/85 border border-emerald-700/60 backdrop-blur-sm col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-1">
               <BookOpen className="w-4 h-4 text-amber-300" />
-              <span>Admissions</span>
+              <span>{t.hero.stat5Label}</span>
             </div>
             <div className="text-2xl sm:text-3xl font-serif font-bold text-emerald-300">
               SECCAP
             </div>
             <p className="text-xs text-stone-200 mt-1">
-              Sindh Govt centralized free education policy.
+              {t.hero.stat5Desc}
             </p>
           </div>
         </div>

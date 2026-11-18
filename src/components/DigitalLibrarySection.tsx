@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { SYLLABUS_BOOKS, SyllabusBookItem } from '../data/digitalLibraryData';
+import { useLanguage } from '../contexts/LanguageContext';
 import { ExternalLink, Maximize2, X } from 'lucide-react';
 
 export function DigitalLibrarySection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.digitalLibrary;
   const [filterLevel, setFilterLevel] = useState<'all' | 'intermediate' | 'degree'>('all');
   const [previewBook, setPreviewBook] = useState<SyllabusBookItem | null>(null);
 
@@ -21,15 +24,15 @@ export function DigitalLibrarySection() {
       : SYLLABUS_BOOKS.filter((item) => item.level === filterLevel);
 
   return (
-    <section id="digital-library" className="py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative">
+    <section id="digital-library" dir={dir} className="py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-10 sm:mb-12">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Syllabus Book Photos &amp; Internet Links
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Direct official internet links to Sindh Textbook Board eBooks, BISE Hyderabad intermediate curricula, and University of Sindh / HEC degree syllabi.
+            {s.subtitle}
           </p>
         </div>
 
@@ -43,7 +46,7 @@ export function DigitalLibrarySection() {
                 : 'bg-white text-stone-700 hover:bg-stone-200 border border-stone-200'
             }`}
           >
-            All Syllabus Books ({SYLLABUS_BOOKS.length})
+            {s.allTab} ({SYLLABUS_BOOKS.length})
           </button>
           <button
             onClick={() => setFilterLevel('intermediate')}
@@ -53,7 +56,7 @@ export function DigitalLibrarySection() {
                 : 'bg-white text-stone-700 hover:bg-stone-200 border border-stone-200'
             }`}
           >
-            Intermediate (XI &amp; XII)
+            {s.interTab}
           </button>
           <button
             onClick={() => setFilterLevel('degree')}
@@ -63,7 +66,7 @@ export function DigitalLibrarySection() {
                 : 'bg-white text-stone-700 hover:bg-stone-200 border border-stone-200'
             }`}
           >
-            BS Zoology &amp; Associate Degrees
+            {s.degreeTab}
           </button>
         </div>
 
@@ -72,7 +75,7 @@ export function DigitalLibrarySection() {
           {filteredBooks.map((book) => (
             <div
               key={book.id}
-              className="rounded-2xl bg-white border border-stone-200 hover:border-emerald-400 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group text-left"
+              className="rounded-2xl bg-white border border-stone-200 hover:border-emerald-400 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group text-start"
             >
               <div>
                 {/* Syllabus Book Cover Photo */}

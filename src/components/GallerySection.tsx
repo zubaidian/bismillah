@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GALLERY_PHOTOS, GalleryPhoto } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   Maximize2,
   X,
@@ -11,6 +12,8 @@ import {
 } from 'lucide-react';
 
 export function GallerySection() {
+  const { t, dir } = useLanguage();
+  const s = t.sections.gallery;
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'campus' | 'honors' | 'faculty'>('all');
   const [activePhoto, setActivePhoto] = useState<GalleryPhoto | null>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -33,10 +36,16 @@ export function GallerySection() {
     : GALLERY_PHOTOS.filter((p) => p.category === selectedCategory);
 
   const categoryLabels: Record<GalleryPhoto['category'], string> = {
-    campus: 'Campus',
-    honors: 'Board Honors',
-    academics: 'Academics',
-    faculty: 'Leadership'
+    campus: s.categoryLabels.campus,
+    honors: s.categoryLabels.honors,
+    academics: s.categoryLabels.academics,
+    faculty: s.categoryLabels.faculty
+  };
+
+  const speedLabels: Record<'slow' | 'normal' | 'fast', string> = {
+    slow: s.slow,
+    normal: s.normal,
+    fast: s.fast
   };
 
   // Reset scroll to start when category filter changes
@@ -79,15 +88,15 @@ export function GallerySection() {
   };
 
   return (
-    <section id="gallery" className="py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative">
+    <section id="gallery" dir={dir} className="py-16 sm:py-24 bg-[#f8faf7] text-stone-900 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-10 sm:mb-12">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Life at Zubaida College
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            A visual chronicle of our historic campus, high-achieving scholars, leadership addresses, and academic pride.
+            {s.subtitle}
           </p>
         </div>
 
@@ -103,7 +112,7 @@ export function GallerySection() {
                   : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
               }`}
             >
-              All Photos ({GALLERY_PHOTOS.length})
+              {s.allTab} ({GALLERY_PHOTOS.length})
             </button>
             <button
               onClick={() => setSelectedCategory('honors')}
@@ -113,7 +122,7 @@ export function GallerySection() {
                   : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
               }`}
             >
-              Board Honors &amp; Results
+              {s.honorsTab}
             </button>
             <button
               onClick={() => setSelectedCategory('campus')}
@@ -123,7 +132,7 @@ export function GallerySection() {
                   : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
               }`}
             >
-              Campus Grounds &amp; Emblem
+              {s.campusTab}
             </button>
             <button
               onClick={() => setSelectedCategory('faculty')}
@@ -133,15 +142,15 @@ export function GallerySection() {
                   : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
               }`}
             >
-              Leadership &amp; Assemblies
+              {s.facultyTab}
             </button>
           </div>
 
           {/* Tracker Playback & Scroll Controls */}
           <div className="flex flex-wrap items-center justify-center gap-2.5">
-            <span className="text-xs font-semibold text-stone-500 hidden sm:inline-flex items-center gap-1.5 mr-1">
+            <span className="text-xs font-semibold text-stone-500 hidden sm:inline-flex items-center gap-1.5 me-1">
               <Images className="w-3.5 h-3.5 text-[#064b36]" />
-              {filteredPhotos.length} {filteredPhotos.length === 1 ? 'Photo' : 'Photos'}
+              {filteredPhotos.length} {filteredPhotos.length === 1 ? s.photosSingular : s.photosPlural}
             </span>
 
             {/* Play / Pause & Speed */}
@@ -171,7 +180,7 @@ export function GallerySection() {
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
                   }`}
                 >
-                  {speed}
+                  {speedLabels[speed]}
                 </button>
               ))}
             </div>
@@ -198,9 +207,10 @@ export function GallerySection() {
           </div>
         </div>
 
-        {/* Horizontal Scroll Bar / Photo Tracker Window */}
+        {/* Horizontal Scroll Bar / Photo Tracker Window (forced LTR so scrollLeft loop math stays consistent) */}
         <div
           ref={scrollContainerRef}
+          dir="ltr"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           className="flex items-stretch gap-5 sm:gap-6 overflow-x-auto pb-5 pt-1 cursor-grab active:cursor-grabbing select-none"
@@ -212,8 +222,9 @@ export function GallerySection() {
             return (
               <div
                 key={photo.id}
+                dir={dir}
                 onClick={() => setActivePhoto(photo)}
-                className="w-72 sm:w-80 lg:w-[340px] shrink-0 group rounded-2xl bg-white border border-stone-200 hover:border-emerald-400 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer flex flex-col justify-between text-left"
+                className="w-72 sm:w-80 lg:w-[340px] shrink-0 group rounded-2xl bg-white border border-stone-200 hover:border-emerald-400 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer flex flex-col justify-between text-start"
               >
                 {/* Card Image */}
                 <div
@@ -239,7 +250,7 @@ export function GallerySection() {
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/95 text-[#064b36] text-xs font-bold shadow-lg">
                       <Maximize2 className="w-3.5 h-3.5" />
-                      <span>View Full Photo</span>
+                      <span>{s.viewFull}</span>
                     </span>
                   </div>
                 </div>
@@ -264,10 +275,10 @@ export function GallerySection() {
         {/* Footer Scroll Hint */}
         <div className="mt-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-500">
           <span>
-            Hover over any photo to pause the scrolling showcase, drag the scrollbar, or click a photo to expand.
+            {s.hoverHint}
           </span>
           <span className="font-medium text-[#064b36]">
-            {isPaused ? 'Auto-scroll paused' : isHovered ? 'Paused on hover' : `Auto-scrolling (${scrollSpeed})`}
+            {isPaused ? s.pausedLabel : isHovered ? s.pausedHoverLabel : `${s.autoScrollLabel} (${speedLabels[scrollSpeed]})`}
           </span>
         </div>
       </div>
@@ -279,13 +290,13 @@ export function GallerySection() {
           onClick={() => setActivePhoto(null)}
         >
           <div
-            className="bg-stone-900 border border-stone-700 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl text-left"
+            className="bg-stone-900 border border-stone-700 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl text-start"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-stone-800">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
-                  Govt Girls Zubaida College Gallery
+                  {s.modalEyebrow}
                 </span>
                 <h3 className="font-serif text-lg sm:text-xl font-bold text-white mt-0.5">
                   {activePhoto.title}
@@ -315,7 +326,7 @@ export function GallerySection() {
                 onClick={() => setActivePhoto(null)}
                 className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-white rounded-lg font-medium shrink-0"
               >
-                Close View
+                {s.closeView}
               </button>
             </div>
           </div>

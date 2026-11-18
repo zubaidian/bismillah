@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { ACADEMIC_PROGRAMS, AcademicProgram } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
 export function AcademicsSection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.academics;
   const [activeCategory, setActiveCategory] = useState<'all' | 'intermediate' | 'degree' | 'associate'>('all');
   const [selectedProgram, setSelectedProgram] = useState<AcademicProgram | null>(null);
 
@@ -11,15 +14,15 @@ export function AcademicsSection() {
     : ACADEMIC_PROGRAMS.filter(p => p.category === activeCategory);
 
   return (
-    <section id="academics" className="py-16 sm:py-24 bg-white text-stone-900 relative">
+    <section id="academics" dir={dir} className="py-16 sm:py-24 bg-white text-stone-900 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-12 sm:mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Explore Our Academic Programs
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Empowering students through rigorous curriculum, modern scientific laboratories, experienced faculty, and recognized university degree affiliations.
+            {s.subtitle}
           </p>
         </div>
 
@@ -33,7 +36,7 @@ export function AcademicsSection() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
             }`}
           >
-            All Programs ({ACADEMIC_PROGRAMS.length})
+            {s.allTab} ({ACADEMIC_PROGRAMS.length})
           </button>
           <button
             onClick={() => setActiveCategory('intermediate')}
@@ -43,7 +46,7 @@ export function AcademicsSection() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
             }`}
           >
-            Intermediate / Higher Secondary (HSC)
+            {s.interTab}
           </button>
           <button
             onClick={() => setActiveCategory('degree')}
@@ -53,7 +56,7 @@ export function AcademicsSection() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
             }`}
           >
-            4-Year BS Zoology (Univ. of Sindh)
+            {s.degreeTab}
           </button>
           <button
             onClick={() => setActiveCategory('associate')}
@@ -63,7 +66,7 @@ export function AcademicsSection() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
             }`}
           >
-            2-Year Associate Degrees (Physics, Chemistry, Botany, Zoology, Commerce, Science)
+            {s.assocTab}
           </button>
         </div>
 
@@ -81,7 +84,7 @@ export function AcademicsSection() {
                   </span>
                   {program.id === 'computer-science' && (
                     <span className="text-[11px] font-semibold text-emerald-200">
-                      Board 2nd &amp; 4th
+                      {s.boardHonorTag}
                     </span>
                   )}
                 </div>
@@ -91,7 +94,7 @@ export function AcademicsSection() {
                     {program.title}
                   </h3>
                   <span className="text-xs block mt-1 font-medium text-emerald-200">
-                    Duration: {program.duration}
+                    {s.durationLabel} {program.duration}
                   </span>
                 </div>
 
@@ -102,13 +105,13 @@ export function AcademicsSection() {
                 {/* Key Subjects */}
                 <div className="pt-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider block mb-1 text-amber-200">
-                    Core Disciplines:
+                    {s.coreDisciplines}
                   </span>
                   <p className="text-xs text-stone-200 leading-relaxed">
                     {program.subjects.slice(0, 4).join(' · ')}
                     {program.subjects.length > 4 && (
                       <span className="text-amber-300 font-semibold">
-                        {' '}· +{program.subjects.length - 4} more
+                        {' '}· +{program.subjects.length - 4} {s.moreLabel}
                       </span>
                     )}
                   </p>
@@ -121,7 +124,7 @@ export function AcademicsSection() {
                   onClick={() => setSelectedProgram(program)}
                   className="text-xs font-bold flex items-center gap-1 transition-colors text-amber-300 hover:text-white"
                 >
-                  <span>View Full Curriculum &amp; Career</span>
+                  <span>{s.viewDetails}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
 
@@ -129,7 +132,7 @@ export function AcademicsSection() {
                   href="#admissions"
                   className="text-[11px] px-3 py-1.5 rounded font-semibold bg-amber-400 hover:bg-amber-300 text-emerald-950 transition-colors shadow-sm"
                 >
-                  Apply
+                  {s.applyBtn}
                 </a>
               </div>
             </div>
@@ -138,42 +141,23 @@ export function AcademicsSection() {
 
         {/* Academic Infrastructure Callout */}
         <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-[#f8faf7] border border-stone-300 shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center sm:text-left">
-            <div className="space-y-1 border-b sm:border-b-0 sm:border-r border-stone-300 pb-4 sm:pb-0 sm:pr-6">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#064b36]">
-                Modern Laboratories
-              </span>
-              <h4 className="font-serif font-bold text-lg text-stone-900">
-                Science &amp; Computing Labs
-              </h4>
-              <p className="text-xs text-stone-600">
-                Equipped with modern high-speed workstations, physics apparatus, biology specimens, and chemical analysis tools.
-              </p>
-            </div>
-
-            <div className="space-y-1 border-b sm:border-b-0 sm:border-r border-stone-300 pb-4 sm:pb-0 sm:pr-6">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#064b36]">
-                Academic Library
-              </span>
-              <h4 className="font-serif font-bold text-lg text-stone-900">
-                Extensive Book &amp; Periodical Collection
-              </h4>
-              <p className="text-xs text-stone-600">
-                Thousands of reference volumes, textbooks, past examination papers, Urdu &amp; Sindhi literature, and digital resources.
-              </p>
-            </div>
-
-            <div className="space-y-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#064b36]">
-                Qualified Faculty
-              </span>
-              <h4 className="font-serif font-bold text-lg text-stone-900">
-                Mentorship &amp; Board Excellence
-              </h4>
-              <p className="text-xs text-stone-600">
-                Subject specialists and professors selected through the Sindh Public Service Commission guiding girls to top Board ranks.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center sm:text-start">
+            {s.infra.map((item, idx) => (
+              <div
+                key={item.title}
+                className={`space-y-1 ${
+                  idx < 2 ? 'border-b sm:border-b-0 sm:border-e border-stone-300 pb-4 sm:pb-0 sm:pe-6' : ''
+                }`}
+              >
+                <span className="text-xs font-bold uppercase tracking-wider text-[#064b36]">
+                  {item.eyebrow}
+                </span>
+                <h4 className="font-serif font-bold text-lg text-stone-900">
+                  {item.title}
+                </h4>
+                <p className="text-xs text-stone-600">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -207,7 +191,7 @@ export function AcademicsSection() {
 
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-1">
-                Program Overview:
+                {s.modal.overview}
               </h4>
               <p className="text-sm text-stone-600 leading-relaxed">
                 {selectedProgram.overview}
@@ -216,7 +200,7 @@ export function AcademicsSection() {
 
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-2">
-                Subjects &amp; Curriculum Breakdown:
+                {s.modal.curriculum}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {selectedProgram.subjects.map((sub) => (
@@ -233,7 +217,7 @@ export function AcademicsSection() {
 
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-1">
-                Eligibility Criteria:
+                {s.modal.eligibility}
               </h4>
               <p className="text-xs text-stone-600 bg-emerald-50 p-3 rounded-lg border border-emerald-200">
                 {selectedProgram.eligibility}
@@ -242,7 +226,7 @@ export function AcademicsSection() {
 
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-stone-700 mb-2">
-                Future Academic &amp; Career Pathways:
+                {s.modal.prospects}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {selectedProgram.futureProspects.map((path) => (
@@ -263,13 +247,13 @@ export function AcademicsSection() {
                 onClick={() => setSelectedProgram(null)}
                 className="px-5 py-2.5 bg-[#064b36] hover:bg-[#042f28] text-white rounded-lg text-xs font-bold"
               >
-                Proceed to Admissions Guide
+                {s.modal.proceedBtn}
               </a>
               <button
                 onClick={() => setSelectedProgram(null)}
                 className="px-4 py-2 border border-stone-300 text-stone-700 rounded-lg text-xs font-medium"
               >
-                Close
+                {s.modal.closeBtn}
               </button>
             </div>
           </div>

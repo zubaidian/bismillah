@@ -5,6 +5,7 @@ import {
   StudentAchievementItem,
 } from '../data/studentAchievementsData';
 import { useFirebase } from '../contexts/FirebaseContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import {
   createStudentAchievement,
   deleteStudentAchievement,
@@ -31,6 +32,8 @@ const CATEGORIES: ('All' | AchievementCategory)[] = [
 ];
 
 export function StudentAchievementsSection() {
+  const { dir, t } = useLanguage();
+  const s = t.sections.achievements;
   const { isAdmin, user, signInWithGoogle } = useFirebase();
   const [activeCategory, setActiveCategory] = useState<'All' | AchievementCategory>('All');
   const [firestoreRecords, setFirestoreRecords] = useState<StudentAchievementRecord[]>([]);
@@ -142,19 +145,28 @@ export function StudentAchievementsSection() {
     }
   };
 
+  const categoryLabelMap: Record<'All' | AchievementCategory, string> = {
+    All: `${s.allTab} (${allAchievements.length})`,
+    'Board & Academic': s.boardAcademic,
+    'Co-Curricular & Religious': s.coCurricular,
+    'Science & Computing': s.scienceComputing,
+    'Sports & Leadership': s.sportsLeadership,
+  };
+
   return (
     <section
       id="student-achievements"
+      dir={dir}
       className="py-16 sm:py-24 bg-white text-stone-900 relative border-t border-stone-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-10 sm:mb-12">
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#064b36]">
-            Student Achievements &amp; Roll of Honor
+            {s.title}
           </h2>
           <p className="text-stone-600 text-base sm:text-lg">
-            Celebrating the academic distinctions, board positions, and district-level competitions won by students of Government Girls Zubaida College, Hyderabad.
+            {s.subtitle}
           </p>
         </div>
 
@@ -170,7 +182,7 @@ export function StudentAchievementsSection() {
                   : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
               }`}
             >
-              {cat === 'All' ? `All Achievements (${allAchievements.length})` : cat}
+              {categoryLabelMap[cat]}
             </button>
           ))}
         </div>
@@ -180,7 +192,7 @@ export function StudentAchievementsSection() {
           {filteredAchievements.map((item) => (
             <article
               key={item.id}
-              className="rounded-2xl bg-[#042f28] text-white border-2 border-amber-300/40 shadow-xl overflow-hidden flex flex-col justify-between p-6 sm:p-8 text-left"
+              className="rounded-2xl bg-[#042f28] text-white border-2 border-amber-300/40 shadow-xl overflow-hidden flex flex-col justify-between p-6 sm:p-8 text-start"
             >
               <div className="space-y-4">
                 {/* Top Metadata Row (Plain Text, Zero Badges) */}
@@ -228,7 +240,7 @@ export function StudentAchievementsSection() {
                   {item.metric && (
                     <div className="bg-[#021f19] px-4 py-3 rounded-xl border border-amber-300/30 text-center shrink-0">
                       <span className="text-[10px] uppercase tracking-wider text-stone-300 block">
-                        Distinction
+                        {s.distinctionLabel}
                       </span>
                       <span className="font-serif font-bold text-lg text-amber-300 block mt-0.5">
                         {item.metric}
@@ -256,7 +268,7 @@ export function StudentAchievementsSection() {
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 hover:text-white underline underline-offset-4"
                     >
                       <Maximize2 className="w-3.5 h-3.5" />
-                      <span>View Official Result Banner</span>
+                      <span>{s.viewBanner}</span>
                     </button>
 
                     {item.secondaryImage && (
@@ -271,7 +283,7 @@ export function StudentAchievementsSection() {
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-200 hover:text-white underline underline-offset-4"
                       >
                         <Award className="w-3.5 h-3.5 text-amber-300" />
-                        <span>Inspect Official Board Gazette</span>
+                        <span>{s.inspectGazette}</span>
                       </button>
                     )}
                   </div>
@@ -280,7 +292,7 @@ export function StudentAchievementsSection() {
 
               <div className="mt-5 pt-3 border-t border-emerald-800/80 flex items-center gap-2 text-xs text-emerald-200">
                 <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" />
-                <span>Verified Student Honor · Govt Girls Zubaida College Hyderabad</span>
+                <span>{s.verifiedFooter}</span>
               </div>
             </article>
           ))}
