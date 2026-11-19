@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ALUMNAE_PROFILES, AlumnaProfile } from '../data/alumnaeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   ArrowRight,
   X,
@@ -197,6 +198,9 @@ export function AlumnaeSection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Category Filters */}

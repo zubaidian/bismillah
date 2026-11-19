@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
-import { DETAILED_FAQS, FAQItem } from '../data/faqData';
+import { getLocalizedFaqs } from '../data/faqData';
+import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   HelpCircle,
   Search,
@@ -10,7 +12,6 @@ import {
   Shirt,
   GraduationCap,
   Clock,
-  Sparkles,
   ArrowUpRight
 } from 'lucide-react';
 import { COLLEGE_INFO } from '../data/collegeData';
@@ -20,20 +21,24 @@ interface FAQAccordionProps {
 }
 
 export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
+  const { language, dir, t } = useLanguage();
+  const f = t.faq;
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openIds, setOpenIds] = useState<Set<string>>(new Set(['faq-seccap-process', 'faq-uniform-daily']));
 
+  const localizedFaqs = useMemo(() => getLocalizedFaqs(language), [language]);
+
   const categories = [
-    { id: 'all', label: 'All Queries', icon: HelpCircle },
-    { id: 'admissions', label: 'Admissions & SECCAP', icon: GraduationCap },
-    { id: 'uniform', label: 'Uniform & Dress Code', icon: Shirt },
-    { id: 'documents', label: 'Documentation Checklist', icon: FileCheck },
-    { id: 'campus', label: 'Timings & Campus Life', icon: Clock }
+    { id: 'all', label: f.allQueries, icon: HelpCircle },
+    { id: 'admissions', label: f.admissionsCat, icon: GraduationCap },
+    { id: 'uniform', label: f.uniformCat, icon: Shirt },
+    { id: 'documents', label: f.documentsCat, icon: FileCheck },
+    { id: 'campus', label: f.campusCat, icon: Clock }
   ];
 
   const filteredFaqs = useMemo(() => {
-    return DETAILED_FAQS.filter((item) => {
+    return localizedFaqs.filter((item) => {
       const matchCat = activeCategory === 'all' || item.category === activeCategory;
       const q = searchQuery.toLowerCase().trim();
       const matchSearch =
@@ -46,7 +51,7 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
 
       return matchCat && matchSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [localizedFaqs, activeCategory, searchQuery]);
 
   const toggleItem = (id: string) => {
     setOpenIds((prev) => {
@@ -61,7 +66,7 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
   };
 
   const handleExpandAll = () => {
-    setOpenIds(new Set(filteredFaqs.map((f) => f.id)));
+    setOpenIds(new Set(filteredFaqs.map((item) => item.id)));
   };
 
   const handleCollapseAll = () => {
@@ -69,44 +74,43 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
   };
 
   return (
-    <div id="faq" className="mt-20 pt-16 border-t border-stone-200">
+    <div id="faq" dir={dir} className="mt-20 pt-16 border-t border-stone-200">
       {/* Section Header */}
       <div className="max-w-3xl mx-auto text-center space-y-3 mb-10">
         <h3 className="font-serif text-3xl sm:text-4xl font-bold text-[#064b36]">
-          Frequently Asked Questions
+          {f.title}
         </h3>
         <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
-          Clear answers and official guidelines regarding admissions, mandatory daily &amp; winter uniforms, required verification documents, and campus regulations.
+          {f.subtitle}
         </p>
+        <div className="pt-1 flex justify-center">
+          <LanguageSwitcher variant="light" />
+        </div>
       </div>
 
       {/* Interactive Controls Bar: Category Tabs + Live Search + Expand/Collapse */}
       <div className="bg-stone-50 p-4 sm:p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4 mb-8">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="w-4 h-4 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-stone-400 absolute start-4 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={
-              import.meta.env.DEV
-                ? 'Search FAQs by topic (e.g. uniform, white qameez, documents, B-Form, marksheet, fee, timings)...'
-                : 'Search FAQs by topic...'
-            }
-            className="w-full pl-11 pr-10 py-3 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#064b36] bg-white"
+            placeholder={f.searchPlaceholder}
+            className="w-full ps-11 pe-10 py-3 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#064b36] bg-white"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 text-xs"
+              className="absolute end-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 text-xs"
             >
               ✕
             </button>
           )}
         </div>
 
-        {/* Category Pills & Expand Toggles */}
+        {/* Category Tabs & Expand Toggles */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2 border-t border-stone-200">
           <div className="flex flex-wrap items-center gap-1.5">
             {categories.map((cat) => {
@@ -134,14 +138,14 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
               onClick={handleExpandAll}
               className="hover:text-[#064b36] hover:underline font-semibold"
             >
-              Expand All
+              {f.expandAll}
             </button>
             <span>·</span>
             <button
               onClick={handleCollapseAll}
               className="hover:text-[#064b36] hover:underline font-semibold"
             >
-              Collapse All
+              {f.collapseAll}
             </button>
           </div>
         </div>
@@ -151,9 +155,11 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
       {filteredFaqs.length === 0 ? (
         <div className="p-8 text-center bg-stone-50 rounded-2xl border border-stone-200 text-stone-600 space-y-2">
           <HelpCircle className="w-10 h-10 text-stone-400 mx-auto" />
-          <h4 className="font-bold text-sm text-stone-800">No matching questions found</h4>
+          <h4 className="font-bold text-sm text-stone-800">{f.noMatchTitle}</h4>
           <p className="text-xs text-stone-500">
-            We couldn&rsquo;t find an answer matching &ldquo;{searchQuery}&rdquo;. Try another keyword or submit an inquiry using our online form above.
+            {f.noMatchDescPrefix}
+            {searchQuery}
+            {f.noMatchDescSuffix}
           </p>
           <button
             onClick={() => {
@@ -162,7 +168,7 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
             }}
             className="mt-2 px-3 py-1.5 bg-[#064b36] text-white text-xs font-semibold rounded-lg"
           >
-            Reset Filters
+            {f.resetFilters}
           </button>
         </div>
       ) : (
@@ -182,7 +188,7 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
                 <button
                   onClick={() => toggleItem(faq.id)}
                   aria-expanded={isOpen}
-                  className="w-full p-4 sm:p-5 text-left flex items-start justify-between gap-4 transition-colors"
+                  className="w-full p-4 sm:p-5 text-start flex items-start justify-between gap-4 transition-colors"
                 >
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">
@@ -213,7 +219,7 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
                     {faq.keyPoints && faq.keyPoints.length > 0 && (
                       <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 space-y-2">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-[#064b36] block">
-                          Key Instructions &amp; Requirements:
+                          {f.keyInstructions}
                         </span>
                         <div className="space-y-1.5">
                           {faq.keyPoints.map((pt, i) => (
@@ -231,7 +237,7 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
                       <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-950 flex items-start gap-2">
                         <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                         <div>
-                          <strong>Official Notice:</strong> {faq.importantNotice}
+                          <strong>{f.officialNotice}</strong> {faq.importantNotice}
                         </div>
                       </div>
                     )}
@@ -243,7 +249,9 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
                           onClick={() => onQuickInquire(faq.categoryLabel)}
                           className="text-xs font-semibold text-[#064b36] hover:underline flex items-center gap-1"
                         >
-                          <span>Ask a question about {faq.categoryLabel.toLowerCase()}</span>
+                          <span>
+                            {f.askAboutPrefix} {faq.categoryLabel}
+                          </span>
                           <ArrowUpRight className="w-3 h-3" />
                         </button>
                       </div>
@@ -257,13 +265,13 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
       )}
 
       {/* Still Have Questions? Banner */}
-      <div className="mt-10 p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-stone-100 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div className="mt-10 p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-stone-100 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-start">
         <div>
           <h4 className="font-serif font-bold text-base text-[#064b36]">
-            Can&rsquo;t find your question answered here?
+            {f.stillQuestionsTitle}
           </h4>
           <p className="text-xs text-stone-600 mt-0.5">
-            Our admission officers and administrative staff are here to assist you during college working hours.
+            {f.stillQuestionsDesc}
           </p>
         </div>
 
@@ -272,13 +280,13 @@ export function FAQAccordion({ onQuickInquire }: FAQAccordionProps) {
             href={`mailto:${COLLEGE_INFO.email}`}
             className="px-4 py-2 bg-[#064b36] hover:bg-[#042f28] text-white text-xs font-bold rounded-lg shadow-sm"
           >
-            Email Administration
+            {f.emailAdmin}
           </a>
           <a
             href="#contact"
             className="px-4 py-2 bg-white hover:bg-stone-200 text-stone-800 text-xs font-semibold rounded-lg border border-stone-300"
           >
-            Submit Enquiry Form
+            {f.submitEnquiry}
           </a>
         </div>
       </div>

@@ -6,6 +6,7 @@ import {
 } from '../data/studentAchievementsData';
 import { useFirebase } from '../contexts/FirebaseContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   createStudentAchievement,
   deleteStudentAchievement,
@@ -168,6 +169,9 @@ export function StudentAchievementsSection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Filter Tabs */}

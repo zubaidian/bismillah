@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { Award, CheckCircle2, Maximize2, X, Sparkles } from 'lucide-react';
 
 export function BoardHonorsSection() {
@@ -25,6 +26,9 @@ export function BoardHonorsSection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Highlight Grid */}

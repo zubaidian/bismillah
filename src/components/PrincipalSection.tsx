@@ -1,5 +1,6 @@
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function PrincipalSection() {
   const { dir, t } = useLanguage();
@@ -49,6 +50,9 @@ export function PrincipalSection() {
           {/* Principal's Message Column */}
           <div className="lg:col-span-7 space-y-6 text-start">
             <div className="space-y-2">
+              <div className="pb-2">
+                <LanguageSwitcher variant="dark" />
+              </div>
               <p className="font-serif italic text-base text-amber-200">
                 بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
               </p>

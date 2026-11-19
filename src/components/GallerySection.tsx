@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { GALLERY_PHOTOS, GalleryPhoto } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   Maximize2,
   X,
@@ -98,6 +99,9 @@ export function GallerySection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Category Filters & Scroll Tracker Controls */}

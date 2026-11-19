@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { DEPARTMENTS_DATA, Department, DepartmentPhoto } from '../data/departmentsData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   Search,
   FlaskConical,
@@ -177,6 +178,9 @@ export function DepartmentsSection({ onOpenEnquiry }: DepartmentsSectionProps) {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Quick Highlights Strip */}

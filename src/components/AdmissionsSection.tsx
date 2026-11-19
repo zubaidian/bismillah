@@ -1,6 +1,7 @@
 import { ExternalLink, CheckSquare, FileText, Smartphone } from 'lucide-react';
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function AdmissionsSection() {
   const { dir, t } = useLanguage();
@@ -21,6 +22,9 @@ export function AdmissionsSection() {
           <p className="text-stone-300 text-base sm:text-lg">
             {copy.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="dark" />
+          </div>
         </div>
 
         {/* Free Admission Banner */}

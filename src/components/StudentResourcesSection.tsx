@@ -5,6 +5,7 @@ import {
   StudentResourceDoc,
 } from '../data/studentResourcesData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   CheckCircle2,
   Download,
@@ -74,6 +75,9 @@ export function StudentResourcesSection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {t.resources.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Category Filter Tabs & Quick Search */}

@@ -3,6 +3,7 @@ import { COLLEGE_INFO } from '../data/collegeData';
 import { ArrowUp, ShieldCheck, Mail, MapPin, Phone, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { subscribeNewsletter } from '../services/collegeSubmissions';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface FooterProps {
   onOpenAdmin?: () => void;
@@ -430,7 +431,8 @@ export function Footer({ onOpenAdmin }: FooterProps) {
             &copy; {new Date().getFullYear()} {t.footer.rights}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <LanguageSwitcher variant="dark" compact />
             <span className="text-amber-300/80">College Education Department · Govt of Sindh</span>
             {onOpenAdmin && (
               <button

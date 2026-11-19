@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NOTICES, Notice } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { Calendar, X, ChevronRight } from 'lucide-react';
 
 export function NoticesSection() {
@@ -28,10 +29,11 @@ export function NoticesSection() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-          <div>
+          <div className="space-y-2.5">
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#064b36]">
               {t.notices.title}
             </h2>
+            <LanguageSwitcher variant="light" />
           </div>
 
           {/* Filter Tabs */}

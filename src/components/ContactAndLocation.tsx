@@ -4,6 +4,7 @@ import { useOfficeStatus } from '../hooks/useOfficeStatus';
 import { FAQAccordion } from './FAQAccordion';
 import { submitInquiry } from '../services/collegeSubmissions';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   MapPin,
   Mail,
@@ -54,11 +55,7 @@ export function ContactAndLocation({
       });
       setSubmitted(true);
     } catch {
-      setSubmitError(
-        'Could not save your enquiry right now. Please try again or email ' +
-          COLLEGE_INFO.email +
-          ' directly.'
-      );
+      setSubmitError(`${t.contactExtra.submitError} (${COLLEGE_INFO.email})`);
     } finally {
       setSubmitting(false);
     }
@@ -93,6 +90,9 @@ export function ContactAndLocation({
           <p className="text-stone-600 text-base sm:text-lg">
             {t.contact.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Top 4 Official Contact Cards */}
@@ -234,17 +234,17 @@ export function ContactAndLocation({
                 </div>
                 <div>
                   <h4 className="font-serif text-xl font-bold text-emerald-950">
-                    Thank You, {name}!
+                    {t.contactExtra.thankYouPrefix} {name}!
                   </h4>
                   <p className="text-xs text-emerald-800 mt-1 leading-relaxed">
-                    Your enquiry regarding <strong>{subject}</strong> has been prepared and logged. You can also send this inquiry directly to our official college inbox:
+                    {t.contactExtra.submittedDescPrefix} <strong>{subject}</strong> {t.contactExtra.submittedDescSuffix}
                   </p>
                 </div>
 
                 <div dir="ltr" className="p-3 rounded-lg bg-white border border-emerald-200 text-left text-xs font-mono text-stone-700 space-y-1">
-                  <div><strong>To:</strong> {COLLEGE_INFO.email}</div>
-                  <div><strong>From:</strong> {email}</div>
-                  <div><strong>Subject:</strong> [{subject}] Inquiry from {name}</div>
+                  <div><strong>{t.contactExtra.toLabel}</strong> {COLLEGE_INFO.email}</div>
+                  <div><strong>{t.contactExtra.fromLabel}</strong> {email}</div>
+                  <div><strong>{t.contactExtra.subjectLabel}</strong> [{subject}] Inquiry from {name}</div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
@@ -252,14 +252,14 @@ export function ContactAndLocation({
                     href={mailtoUrl}
                     className="w-full sm:w-auto px-5 py-2.5 bg-[#064b36] hover:bg-[#042f28] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5"
                   >
-                    <span>Launch in Mail Client</span>
+                    <span>{t.contactExtra.launchMailBtn}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                   <button
                     onClick={handleResetForm}
                     className="w-full sm:w-auto px-4 py-2.5 bg-stone-200 hover:bg-stone-300 text-stone-800 rounded-lg text-xs font-semibold"
                   >
-                    Send Another Message
+                    {t.contactExtra.sendAnotherBtn}
                   </button>
                 </div>
               </div>
@@ -318,12 +318,11 @@ export function ContactAndLocation({
                       onChange={(e) => setSubject(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#064b36] bg-white"
                     >
-                      <option value="Admissions">Intermediate Class XI Admission (SECCAP)</option>
-                      <option value="BS Zoology">BS Zoology (4 Years Degree)</option>
-                      <option value="AD Commerce">Associate Degree in Commerce (AD Commerce / ADC)</option>
-                      <option value="Associate Degree Science/Arts">Associate Degree in Science / Arts (ADS / ADA)</option>
-                      <option value="Academic Verification">Marksheet &amp; Document Verification</option>
-                      <option value="General Inquiry">General College Inquiry</option>
+                      {t.contactExtra.subjectOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

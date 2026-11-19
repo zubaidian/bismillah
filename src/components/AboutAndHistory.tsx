@@ -1,5 +1,6 @@
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { Quote, Play } from 'lucide-react';
 
 export function AboutAndHistory() {
@@ -12,6 +13,9 @@ export function AboutAndHistory() {
         {/* Section Lead */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 space-y-6">
+            <div className="flex">
+              <LanguageSwitcher variant="dark" />
+            </div>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-white">
               {s.headingBefore} <span className="italic font-normal text-amber-300">{s.headingHighlight}</span>
             </h2>

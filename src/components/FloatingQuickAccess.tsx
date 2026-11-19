@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface QuickShortcut {
   id: string;
@@ -234,6 +235,11 @@ export function FloatingQuickAccess() {
               </button>
             </div>
 
+            {/* Instant Language Switcher */}
+            <div className="px-2 pt-2 pb-1">
+              <LanguageSwitcher variant="floating" compact />
+            </div>
+
             {/* Shortcut Links */}
             <ul className="p-1.5 space-y-1">
               {shortcuts.map((item) => {
@@ -320,6 +326,10 @@ export function FloatingQuickAccess() {
               >
                 <X className="w-4 h-4" />
               </button>
+            </div>
+
+            <div className="px-2 pt-2 pb-1">
+              <LanguageSwitcher variant="floating" compact />
             </div>
 
             <ul className="p-2 space-y-1">

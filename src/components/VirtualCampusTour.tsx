@@ -9,6 +9,7 @@ import {
 } from '../data/campusTourData';
 import { FacilityGraphic } from './FacilityGraphic';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   buildAutoRoutePath,
   CampusMapCanvas,
@@ -43,7 +44,9 @@ import {
   Save,
   Footprints,
   Square,
-  Search
+  Search,
+  Globe,
+  ExternalLink
 } from 'lucide-react';
 
 const TOUR_STORAGE_KEY = 'ggzc_campus_tour_map_stops_v41';
@@ -537,7 +540,8 @@ export function VirtualCampusTour() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeView, setActiveView] = useState<'map' | 'interior'>('map');
+  const [activeView, setActiveView] = useState<'map' | 'interior' | 'earth'>('map');
+  const [earthLayer, setEarthLayer] = useState<'k' | 'm'>('k');
   const [activeHotspot, setActiveHotspot] = useState<FacilityHotspot | null>(null);
 
   // Map Editor States
@@ -1128,6 +1132,7 @@ export function VirtualCampusTour() {
 
   const { t, dir } = useLanguage();
   const s = t.sections.campusTour;
+  const cx = t.campusTourExtra;
 
   return (
     <section id="campus-tour" dir={dir} className="scroll-mt-20 py-16 sm:py-24 bg-[#042f28] text-white relative overflow-hidden">
@@ -1144,6 +1149,9 @@ export function VirtualCampusTour() {
           <p className="text-stone-300 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="dark" />
+          </div>
         </div>
 
         {/* Department & Facility Search-to-Walk Bar */}
@@ -1182,11 +1190,11 @@ export function VirtualCampusTour() {
 
           {/* Instant Filtered Search Results */}
           {searchQuery.trim().length > 0 && (
-            <div className="mt-2.5 p-3 rounded-xl bg-[#021914]/95 border border-emerald-700/80 shadow-xl space-y-2 text-left">
+            <div className="mt-2.5 p-3 rounded-xl bg-[#021914]/95 border border-emerald-700/80 shadow-xl space-y-2 text-start">
               {searchMatches.length > 0 ? (
                 <>
                   <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-300 px-1">
-                    Click any matching department to walk visitor directly from current spot:
+                    {cx.searchSelectPrompt}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {searchMatches.map(({ stop, idx }) => {
@@ -1214,7 +1222,9 @@ export function VirtualCampusTour() {
                 </>
               ) : (
                 <p className="text-xs font-semibold text-amber-200 px-1">
-                  No department or room matched &ldquo;{searchQuery}&rdquo;. Try Car Parking, Garden, Small Garden, Graveyard &amp; Mazar, Computer Lab, Big Multimedia, Very Big Ground, Economics, Sindhi, Chemistry Office, or Physics.
+                  {cx.searchNoMatchPrefix}
+                  {searchQuery}
+                  {cx.searchNoMatchSuffix}
                 </p>
               )}
             </div>
@@ -1268,8 +1278,8 @@ export function VirtualCampusTour() {
                 </span>
               </div>
 
-              {/* View Tabs: Campus Map vs Facility Interior */}
-              <div className="flex items-center gap-1 p-1 bg-[#021914] rounded-xl border border-emerald-800/80">
+              {/* View Tabs: Campus Map vs Facility Interior vs Free Google Map & Earth */}
+              <div className="flex flex-wrap items-center gap-1 p-1 bg-[#021914] rounded-xl border border-emerald-800/80">
                 <button
                   onClick={() => setActiveView('map')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 flex items-center gap-1.5 transition-colors ${
@@ -1294,6 +1304,20 @@ export function VirtualCampusTour() {
                 >
                   <Eye className="w-3.5 h-3.5" />
                   <span>{s.facilityTab}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveView('earth');
+                    setMapMode('browse');
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 flex items-center gap-1.5 transition-colors ${
+                    activeView === 'earth'
+                      ? 'bg-amber-400 text-emerald-950 font-bold shadow-sm'
+                      : 'text-stone-300 hover:text-white'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>{cx.googleMapTab}</span>
                 </button>
               </div>
             </div>
@@ -1597,17 +1621,119 @@ export function VirtualCampusTour() {
           {/* Full-Width Spacious Interactive Map + Two-Column Walk Simulator & Details Below */}
           <div className="space-y-8">
             {activeView === 'map' ? (
-              <div dir="ltr">
-                <CampusMapCanvas
-                  stops={stops}
-                  selectedIndex={safeIndex}
-                  onSelectStop={handleSelectFacility}
-                  mapMode={mapMode}
-                  onMapCoordinatePick={handleMapCoordinatePick}
-                  draftPinCoords={draftPinCoords}
-                  walker={walkerState}
-                  customRoutePath={simActive ? simulationRoute : null}
-                />
+              <div className="space-y-3">
+                <div dir="ltr">
+                  <CampusMapCanvas
+                    stops={stops}
+                    selectedIndex={safeIndex}
+                    onSelectStop={handleSelectFacility}
+                    mapMode={mapMode}
+                    onMapCoordinatePick={handleMapCoordinatePick}
+                    draftPinCoords={draftPinCoords}
+                    walker={walkerState}
+                    customRoutePath={simActive ? simulationRoute : null}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-stone-300">
+                  <span className="text-emerald-200/90 font-medium">{cx.googleMapAddress}</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveView('earth')}
+                      className="px-3 py-1.5 rounded-lg bg-[#063f35] hover:bg-emerald-800 text-amber-200 border border-emerald-700 font-semibold inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Globe className="w-3.5 h-3.5 text-amber-300" />
+                      <span>{cx.satelliteViewBtn}</span>
+                    </button>
+                    <a
+                      href="https://earth.google.com/web/search/Government+Girls+Zubaida+College+Hyderabad+Sindh+Pakistan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 rounded-lg bg-[#021914] hover:bg-[#063f35] text-amber-300 border border-amber-400/35 font-semibold inline-flex items-center gap-1.5 transition-colors"
+                    >
+                      <span>{cx.openGoogleEarth}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : activeView === 'earth' ? (
+              <div className="rounded-2xl overflow-hidden border border-amber-300/40 bg-[#021914] shadow-xl">
+                <div className="p-4 sm:p-5 bg-[#04362c] border-b border-emerald-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div className="space-y-1 text-start">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
+                        {cx.freeMapBadge}
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-white">
+                      {cx.googleMapTitle}
+                    </h3>
+                    <p className="text-xs text-stone-300 max-w-2xl">
+                      {cx.googleMapSubtitle}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 shrink-0">
+                    <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-[#021914] border border-emerald-800">
+                      <button
+                        type="button"
+                        onClick={() => setEarthLayer('k')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                          earthLayer === 'k'
+                            ? 'bg-amber-400 text-emerald-950'
+                            : 'text-stone-300 hover:text-white'
+                        }`}
+                      >
+                        {cx.satelliteViewBtn}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEarthLayer('m')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                          earthLayer === 'm'
+                            ? 'bg-amber-400 text-emerald-950'
+                            : 'text-stone-300 hover:text-white'
+                        }`}
+                      >
+                        {cx.roadMapViewBtn}
+                      </button>
+                    </div>
+
+                    <a
+                      href="https://earth.google.com/web/search/Government+Girls+Zubaida+College+Hyderabad+Sindh+Pakistan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 text-xs font-extrabold inline-flex items-center gap-1.5 shadow"
+                    >
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>{cx.openGoogleEarth}</span>
+                    </a>
+
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Government+Girls+Zubaida+College+Pathan+Colony+Hirabad+Hyderabad+Sindh+Pakistan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3.5 py-2 rounded-xl bg-[#063f35] hover:bg-emerald-800 text-amber-200 border border-emerald-700 text-xs font-bold inline-flex items-center gap-1.5"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>{cx.openGoogleMaps}</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div dir="ltr" className="w-full h-[460px] sm:h-[560px] bg-[#021914]">
+                  <iframe
+                    title="Satellite and Street Map of Government Girls Zubaida College Hyderabad Sindh Pakistan"
+                    src={`https://maps.google.com/maps?q=Government%20Girls%20Zubaida%20College%20Pathan%20Colony%20Hirabad%20Hyderabad%20Sindh%20Pakistan&t=${earthLayer}&z=18&ie=UTF8&iwloc=&output=embed`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             ) : (
               <div>
@@ -1793,7 +1919,7 @@ export function VirtualCampusTour() {
                             setSimActive(true);
                             setSimProgress(val);
                           }}
-                          aria-label="Walk simulation progress"
+                          aria-label={cx.simProgressAria}
                           className="w-full accent-sky-400 cursor-pointer"
                         />
                         <span className="text-[11px] font-mono tabular-nums text-sky-300 w-9 text-right">
@@ -1807,7 +1933,7 @@ export function VirtualCampusTour() {
                       <div className="p-2.5 rounded-xl bg-[#042f28] border border-emerald-800/80">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1">
                           <ArrowUpLeft className="w-3 h-3" />
-                          <span>On Your Left</span>
+                          <span>{cx.leftView}</span>
                         </span>
                         <p className="text-xs text-stone-100 mt-1 leading-snug">
                           {visitorHorizon.leftView}
@@ -1817,7 +1943,7 @@ export function VirtualCampusTour() {
                       <div className="p-2.5 rounded-xl bg-[#042f28] border border-sky-500/40">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-sky-300 flex items-center gap-1">
                           <ArrowUp className="w-3 h-3" />
-                          <span>Straight Ahead</span>
+                          <span>{cx.aheadView}</span>
                         </span>
                         <p className="text-xs text-stone-100 mt-1 leading-snug">
                           {visitorHorizon.aheadView}
@@ -1827,7 +1953,7 @@ export function VirtualCampusTour() {
                       <div className="p-2.5 rounded-xl bg-[#042f28] border border-emerald-800/80">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1">
                           <ArrowUpRight className="w-3 h-3" />
-                          <span>On Your Right</span>
+                          <span>{cx.rightView}</span>
                         </span>
                         <p className="text-xs text-stone-100 mt-1 leading-snug">
                           {visitorHorizon.rightView}

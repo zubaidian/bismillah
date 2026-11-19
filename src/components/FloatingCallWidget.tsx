@@ -1,22 +1,28 @@
 import { useState } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
+import { useLanguage } from '../contexts/LanguageContext';
 import { Phone, PhoneCall, ChevronUp, ChevronDown } from 'lucide-react';
 
 export function FloatingCallWidget() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { dir, t } = useLanguage();
+  const cw = t.callWidget;
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
       {/* Expanded Quick Dial Card */}
       {isExpanded && (
-        <div className="mb-2 p-4 rounded-2xl bg-white border-2 border-emerald-800 shadow-2xl max-w-xs w-72 text-left animate-fadeIn text-stone-900">
+        <div
+          dir={dir}
+          className="mb-2 p-4 rounded-2xl bg-white border-2 border-emerald-800 shadow-2xl max-w-xs w-72 text-start animate-fadeIn text-stone-900"
+        >
           <div className="flex items-center justify-between pb-2 mb-2 border-b border-stone-200">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block">
-                Govt Girls Zubaida College
+                {cw.collegeTag}
               </span>
               <h4 className="font-serif font-bold text-sm text-stone-900">
-                Official Phone Numbers
+                {cw.title}
               </h4>
             </div>
             <button
@@ -36,9 +42,9 @@ export function FloatingCallWidget() {
             >
               <div>
                 <span className="text-[10px] text-emerald-700 font-bold uppercase block">
-                  College Office Landline
+                  {cw.landlineLabel}
                 </span>
-                <span className="font-mono font-bold text-sm text-[#064b36]">
+                <span dir="ltr" className="font-mono font-bold text-sm text-[#064b36] inline-block">
                   {COLLEGE_INFO.phone}
                 </span>
               </div>
@@ -54,9 +60,9 @@ export function FloatingCallWidget() {
             >
               <div>
                 <span className="text-[10px] text-amber-800 font-bold uppercase block">
-                  Admission Helpline
+                  {cw.helplineLabel}
                 </span>
-                <span className="font-mono font-bold text-sm text-amber-950">
+                <span dir="ltr" className="font-mono font-bold text-sm text-amber-950 inline-block">
                   {COLLEGE_INFO.helpline}
                 </span>
               </div>
@@ -67,7 +73,7 @@ export function FloatingCallWidget() {
           </div>
 
           <p className="text-[10px] text-stone-500 mt-2 text-center">
-            Office Hours: Mon–Sat 8:00 AM – 2:00 PM (PKT)
+            {cw.officeHours}
           </p>
         </div>
       )}
@@ -84,8 +90,10 @@ export function FloatingCallWidget() {
           <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-400" />
         </span>
         <Phone className="w-4 h-4 text-amber-300" />
-        <span className="hidden sm:inline font-mono tracking-tight">{COLLEGE_INFO.phone}</span>
-        <span className="sm:hidden font-sans">Call</span>
+        <span dir="ltr" className="hidden sm:inline font-mono tracking-tight">
+          {COLLEGE_INFO.phone}
+        </span>
+        <span className="sm:hidden font-sans">{cw.callShort}</span>
         {isExpanded ? (
           <ChevronDown className="w-3.5 h-3.5 text-amber-200" />
         ) : (

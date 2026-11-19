@@ -4,6 +4,7 @@ import {
   LibraryPhotoItem,
 } from '../data/collegeLibraryData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   BookOpen,
   CalendarClock,
@@ -157,6 +158,9 @@ export function CollegeLibrarySection() {
               <CalendarClock className="w-4 h-4 text-[#064b36]" />
               <span>{s.timings}</span>
             </span>
+          </div>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
           </div>
         </div>
 

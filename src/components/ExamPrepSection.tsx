@@ -13,6 +13,7 @@ import {
 } from '../data/examPrepData';
 import { triggerPastPaperDownload } from '../utils/pastPaperPdf';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { CareerCounselorChat } from './CareerCounselorChat';
 import {
   Award,
@@ -165,6 +166,9 @@ export function ExamPrepSection() {
           <p className="text-stone-200 text-sm sm:text-base leading-relaxed">
             {copy.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="dark" />
+          </div>
         </div>
 
         {/* Mode Switcher Bar */}

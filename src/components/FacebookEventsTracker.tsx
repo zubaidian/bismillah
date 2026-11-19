@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -381,6 +382,7 @@ export function FacebookEventsTracker() {
 
           {/* Action & Control Toolbar */}
           <div className="flex flex-wrap items-center gap-2.5">
+            <LanguageSwitcher variant="dark" compact />
             {/* Speed & Pause Controls */}
             <div className="flex items-center gap-1 bg-[#043329] px-2 py-1 rounded-xl border border-emerald-700/80 text-xs">
               <button

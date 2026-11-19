@@ -5,6 +5,7 @@ import {
   Smartphone,
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function CemisAttendanceSection() {
   const { t, dir } = useLanguage();
@@ -32,6 +33,9 @@ export function CemisAttendanceSection() {
             </strong>{' '}
             {s.subtitleAfter}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Official CEMIS App Card */}

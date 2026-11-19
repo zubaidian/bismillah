@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   ExternalLink,
   MessageCircle,
@@ -92,6 +93,10 @@ export function FacebookCommunitySection() {
             <p className="text-stone-300 text-base sm:text-lg leading-relaxed">
               {s.subtitle}
             </p>
+
+            <div>
+              <LanguageSwitcher variant="dark" />
+            </div>
 
             {/* Official Facebook Channel Card */}
             <div className="p-5 rounded-2xl bg-[#063f35] border border-emerald-700/80 space-y-3">

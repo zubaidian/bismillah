@@ -314,6 +314,89 @@ export interface PortalTranslations {
     backToTop: string;
     rights: string;
   };
+  faq: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    allQueries: string;
+    admissionsCat: string;
+    uniformCat: string;
+    documentsCat: string;
+    campusCat: string;
+    expandAll: string;
+    collapseAll: string;
+    noMatchTitle: string;
+    noMatchDescPrefix: string;
+    noMatchDescSuffix: string;
+    resetFilters: string;
+    keyInstructions: string;
+    officialNotice: string;
+    askAboutPrefix: string;
+    stillQuestionsTitle: string;
+    stillQuestionsDesc: string;
+    emailAdmin: string;
+    submitEnquiry: string;
+  };
+  enquiryModal: {
+    collegeTag: string;
+    title: string;
+    intro: string;
+    officeLabel: string;
+    helplineLabel: string;
+    sentTitle: string;
+    sentDescPrefix: string;
+    sentDescMid: string;
+    sentDescSuffix: string;
+    sendEmailBtn: string;
+    doneBtn: string;
+    nameLabel: string;
+    emailLabel: string;
+    phoneLabel: string;
+    subjectLabel: string;
+    messageLabel: string;
+    submitBtn: string;
+    submittingBtn: string;
+    submitError: string;
+    subjectOptions: { value: string; label: string }[];
+  };
+  callWidget: {
+    collegeTag: string;
+    title: string;
+    landlineLabel: string;
+    helplineLabel: string;
+    officeHours: string;
+    callShort: string;
+  };
+  contactExtra: {
+    thankYouPrefix: string;
+    submittedDescPrefix: string;
+    submittedDescSuffix: string;
+    toLabel: string;
+    fromLabel: string;
+    subjectLabel: string;
+    launchMailBtn: string;
+    sendAnotherBtn: string;
+    submitError: string;
+    subjectOptions: { value: string; label: string }[];
+  };
+  campusTourExtra: {
+    searchSelectPrompt: string;
+    searchNoMatchPrefix: string;
+    searchNoMatchSuffix: string;
+    leftView: string;
+    aheadView: string;
+    rightView: string;
+    simProgressAria: string;
+    googleMapTab: string;
+    satelliteViewBtn: string;
+    roadMapViewBtn: string;
+    openGoogleEarth: string;
+    openGoogleMaps: string;
+    googleMapTitle: string;
+    googleMapSubtitle: string;
+    googleMapAddress: string;
+    freeMapBadge: string;
+  };
   sections: SectionTranslations;
 }
 
@@ -678,6 +761,109 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       backToTop: 'Back to Top',
       rights: 'Government Girls Zubaida College, Hyderabad. All Rights Reserved.',
     },
+    faq: {
+      title: 'Frequently Asked Questions',
+      subtitle:
+        'Clear answers and official guidelines regarding admissions, mandatory daily & winter uniforms, required verification documents, and campus regulations.',
+      searchPlaceholder: 'Search FAQs by topic (e.g. uniform, B-Form, marksheet, timings)...',
+      allQueries: 'All Queries',
+      admissionsCat: 'Admissions & SECCAP',
+      uniformCat: 'Uniform & Dress Code',
+      documentsCat: 'Documentation Checklist',
+      campusCat: 'Timings & Campus Life',
+      expandAll: 'Expand All',
+      collapseAll: 'Collapse All',
+      noMatchTitle: 'No matching questions found',
+      noMatchDescPrefix: 'We couldn’t find an answer matching “',
+      noMatchDescSuffix: '”. Try another keyword or submit an inquiry using our online form above.',
+      resetFilters: 'Reset Filters',
+      keyInstructions: 'Key Instructions & Requirements:',
+      officialNotice: 'Official Notice:',
+      askAboutPrefix: 'Ask a question about',
+      stillQuestionsTitle: 'Can’t find your question answered here?',
+      stillQuestionsDesc:
+        'Our admission officers and administrative staff are here to assist you during college working hours.',
+      emailAdmin: 'Email Administration',
+      submitEnquiry: 'Submit Enquiry Form',
+    },
+    enquiryModal: {
+      collegeTag: 'Govt Girls Zubaida College Hyderabad',
+      title: 'Admission & Student Enquiry',
+      intro: 'Direct communication with college administration:',
+      officeLabel: 'Office:',
+      helplineLabel: 'Helpline:',
+      sentTitle: 'Enquiry Submitted!',
+      sentDescPrefix: 'Your enquiry for',
+      sentDescMid: 'regarding',
+      sentDescSuffix:
+        'has been saved for the administration desk. You can also send a direct copy via your email app:',
+      sendEmailBtn: 'Send via Email App',
+      doneBtn: 'Done / Close',
+      nameLabel: 'Your Full Name *',
+      emailLabel: 'Email Address *',
+      phoneLabel: 'Phone (Optional)',
+      subjectLabel: 'Enquiry Subject *',
+      messageLabel: 'Your Message / Question *',
+      submitBtn: 'Submit Enquiry',
+      submittingBtn: 'Submitting Enquiry...',
+      submitError: 'Could not submit your enquiry right now. Please try again or email directly.',
+      subjectOptions: [
+        { value: 'Intermediate Admissions', label: 'Intermediate Class XI Admission (SECCAP)' },
+        { value: 'BS Zoology', label: 'BS Zoology (4 Years Degree)' },
+        { value: 'AD Commerce', label: 'Associate Degree in Commerce (AD Commerce / ADC)' },
+        { value: 'Associate Degree Science/Arts', label: 'Associate Degree in Science / Arts (ADS / ADA)' },
+        { value: 'Marksheet Verification', label: 'Document / Marksheet Verification' },
+        { value: 'General Inquiry', label: 'General College Inquiry' },
+      ],
+    },
+    callWidget: {
+      collegeTag: 'Govt Girls Zubaida College',
+      title: 'Official Phone Numbers',
+      landlineLabel: 'College Office Landline',
+      helplineLabel: 'Admission Helpline',
+      officeHours: 'Office Hours: Mon–Sat 8:00 AM – 2:00 PM (PKT)',
+      callShort: 'Call',
+    },
+    contactExtra: {
+      thankYouPrefix: 'Thank You,',
+      submittedDescPrefix: 'Your enquiry regarding',
+      submittedDescSuffix:
+        'has been prepared and logged. You can also send this inquiry directly to our official college inbox:',
+      toLabel: 'To:',
+      fromLabel: 'From:',
+      subjectLabel: 'Subject:',
+      launchMailBtn: 'Launch in Mail Client',
+      sendAnotherBtn: 'Send Another Message',
+      submitError: 'Could not save your enquiry right now. Please try again or email directly.',
+      subjectOptions: [
+        { value: 'Admissions', label: 'Intermediate Class XI Admission (SECCAP)' },
+        { value: 'BS Zoology', label: 'BS Zoology (4 Years Degree)' },
+        { value: 'AD Commerce', label: 'Associate Degree in Commerce (AD Commerce / ADC)' },
+        { value: 'Associate Degree Science/Arts', label: 'Associate Degree in Science / Arts (ADS / ADA)' },
+        { value: 'Academic Verification', label: 'Marksheet & Document Verification' },
+        { value: 'General Inquiry', label: 'General College Inquiry' },
+      ],
+    },
+    campusTourExtra: {
+      searchSelectPrompt: 'Click any matching department to walk visitor directly from current spot:',
+      searchNoMatchPrefix: 'No department or room matched “',
+      searchNoMatchSuffix:
+        '”. Try Car Parking, Prayer Room, Greenhouse, Karate Club, Computer Lab, Very Big Ground, Economics, Sindhi, or Physics.',
+      leftView: 'On Your Left',
+      aheadView: 'Straight Ahead',
+      rightView: 'On Your Right',
+      simProgressAria: 'Walk simulation progress',
+      googleMapTab: 'Google Map & Earth',
+      satelliteViewBtn: 'Satellite Earth View',
+      roadMapViewBtn: 'Street Road Map',
+      openGoogleEarth: 'Open in Google Earth 3D ↗',
+      openGoogleMaps: 'Open in Google Maps ↗',
+      googleMapTitle: 'Satellite & Real-World Map — Govt Girls Zubaida College, Hyderabad, Sindh',
+      googleMapSubtitle:
+        'Explore the real-world aerial campus footprint in Pathan Colony, Hirabad, Hyderabad (opposite Central Jail) or launch Google Earth 3D.',
+      googleMapAddress: 'Govt Girls Zubaida College · Pathan Colony, Hirabad, Hyderabad, Sindh, Pakistan',
+      freeMapBadge: 'Free Public Map View · No Key Needed',
+    },
     sections: SECTION_TRANSLATIONS.en,
   },
   ur: {
@@ -1034,6 +1220,105 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       adminInbox: 'ایڈمن ان باکس',
       backToTop: 'اوپر جائیں',
       rights: 'گورنمنٹ گرلز زبیدہ کالج، حیدرآباد۔ جملہ حقوق محفوظ ہیں۔',
+    },
+    faq: {
+      title: 'اکثر پوچھے جانے والے سوالات (FAQs)',
+      subtitle:
+        'داخلوں، روزانہ اور سردیوں کے لازمی یونیفارم، تصدیقی دستاویزات اور کیمپس کے ضوابط سے متعلق واضح سرکاری رہنمائی۔',
+      searchPlaceholder: 'موضوع کے مطابق تلاش کریں (مثلاً یونیفارم، ب فارم، مارک شیٹ، اوقات)...',
+      allQueries: 'تمام سوالات',
+      admissionsCat: 'داخلے اور سی کیپ',
+      uniformCat: 'یونیفارم اور لباس',
+      documentsCat: 'دستاویزات کی فہرست',
+      campusCat: 'اوقات اور کیمپس زندگی',
+      expandAll: 'سب کھولیں',
+      collapseAll: 'سب بند کریں',
+      noMatchTitle: 'کوئی متعلقہ سوال نہیں ملا',
+      noMatchDescPrefix: 'آپ کی تلاش “',
+      noMatchDescSuffix: '” کے مطابق کوئی جواب نہیں ملا۔ کوئی دوسرا لفظ آزمائیں یا اوپر فارم کے ذریعے سوال بھیجیں۔',
+      resetFilters: 'فلٹرز صاف کریں',
+      keyInstructions: 'اہم ہدایات اور تقاضے:',
+      officialNotice: 'سرکاری اطلاع:',
+      askAboutPrefix: 'اس موضوع پر سوال پوچھیں:',
+      stillQuestionsTitle: 'کیا آپ کے سوال کا جواب یہاں موجود نہیں؟',
+      stillQuestionsDesc: 'ہمارا داخلہ عملہ اور انتظامیہ کالج کے دفتری اوقات میں آپ کی رہنمائی کے لیے حاضر ہے۔',
+      emailAdmin: 'انتظامیہ کو ای میل کریں',
+      submitEnquiry: 'آن لائن استفسار بھیجیں',
+    },
+    enquiryModal: {
+      collegeTag: 'گورنمنٹ گرلز زبیدہ کالج حیدرآباد',
+      title: 'داخلہ اور طالبات استفسار فارم',
+      intro: 'کالج انتظامیہ سے براہِ راست رابطہ:',
+      officeLabel: 'دفتر:',
+      helplineLabel: 'ہیلپ لائن:',
+      sentTitle: 'آپ کا استفسار جمع ہو گیا!',
+      sentDescPrefix: 'آپ کا پیغام برائے',
+      sentDescMid: 'بموضوع',
+      sentDescSuffix: 'انتظامیہ ڈیسک کے لیے محفوظ کر لیا گیا ہے۔ آپ اپنی ای میل ایپ کے ذریعے بھی کاپی بھیج سکتے ہیں:',
+      sendEmailBtn: 'ای میل ایپ سے بھیجیں',
+      doneBtn: 'مکمل / بند کریں',
+      nameLabel: 'آپ کا مکمل نام *',
+      emailLabel: 'ای میل ایڈریس *',
+      phoneLabel: 'فون نمبر (اختیاری)',
+      subjectLabel: 'استفسار کا عنوان *',
+      messageLabel: 'آپ کا پیغام / سوال *',
+      submitBtn: 'استفسار جمع کروائیں',
+      submittingBtn: 'جمع ہو رہا ہے...',
+      submitError: 'اس وقت آپ کا استفسار جمع نہیں ہو سکا۔ براہِ کرم دوبارہ کوشش کریں یا براہِ راست ای میل کریں۔',
+      subjectOptions: [
+        { value: 'Intermediate Admissions', label: 'انٹرمیڈیٹ گیارہویں جماعت داخلہ (SECCAP)' },
+        { value: 'BS Zoology', label: 'بی ایس زولوجی (4 سالہ ڈگری)' },
+        { value: 'AD Commerce', label: 'ایسوسی ایٹ ڈگری ان کامرس (AD Commerce)' },
+        { value: 'Associate Degree Science/Arts', label: 'ایسوسی ایٹ ڈگری سائنس / آرٹس (ADS / ADA)' },
+        { value: 'Marksheet Verification', label: 'دستاویزات / مارک شیٹ کی تصدیق' },
+        { value: 'General Inquiry', label: 'عمومی کالج استفسار' },
+      ],
+    },
+    callWidget: {
+      collegeTag: 'گورنمنٹ گرلز زبیدہ کالج',
+      title: 'سرکاری فون نمبرز',
+      landlineLabel: 'کالج آفس لینڈ لائن',
+      helplineLabel: 'داخلہ ہیلپ لائن',
+      officeHours: 'دفتری اوقات: پیر تا ہفتہ صبح 8:00 تا دوپہر 2:00 بجے',
+      callShort: 'کال',
+    },
+    contactExtra: {
+      thankYouPrefix: 'شکریہ،',
+      submittedDescPrefix: 'آپ کا استفسار بموضوع',
+      submittedDescSuffix: 'محفوظ کر لیا گیا ہے۔ آپ اسے براہِ راست کالج کے سرکاری ای میل ان باکس میں بھی بھیج سکتے ہیں:',
+      toLabel: 'بنام:',
+      fromLabel: 'از:',
+      subjectLabel: 'عنوان:',
+      launchMailBtn: 'ای میل ایپ میں کھولیں',
+      sendAnotherBtn: 'نیا پیغام بھیجیں',
+      submitError: 'اس وقت پیغام محفوظ نہیں ہو سکا۔ براہِ کرم دوبارہ کوشش کریں۔',
+      subjectOptions: [
+        { value: 'Admissions', label: 'انٹرمیڈیٹ گیارہویں جماعت داخلہ (SECCAP)' },
+        { value: 'BS Zoology', label: 'بی ایس زولوجی (4 سالہ ڈگری)' },
+        { value: 'AD Commerce', label: 'ایسوسی ایٹ ڈگری ان کامرس (ADC)' },
+        { value: 'Associate Degree Science/Arts', label: 'ایسوسی ایٹ ڈگری سائنس / آرٹس (ADS / ADA)' },
+        { value: 'Academic Verification', label: 'مارک شیٹ اور دستاویزات کی تصدیق' },
+        { value: 'General Inquiry', label: 'عمومی کالج استفسار' },
+      ],
+    },
+    campusTourExtra: {
+      searchSelectPrompt: 'موجودہ مقام سے براہِ راست چہل قدمی کے لیے کسی شعبے پر کلک کریں:',
+      searchNoMatchPrefix: 'کوئی شعبہ یا کمرہ “',
+      searchNoMatchSuffix: '” سے مطابقت نہیں رکھتا۔ کار پارکنگ، نماز روم، گرین ہاؤس، کراٹے کلب، کمپیوٹر لیب یا فزکس آزمائیں۔',
+      leftView: 'آپ کے بائیں جانب',
+      aheadView: 'بالکل سامنے',
+      rightView: 'آپ کے دائیں جانب',
+      simProgressAria: 'چلنے کی پیش رفت',
+      googleMapTab: 'گوگل میپ اور ارتھ',
+      satelliteViewBtn: 'سیٹلائٹ ارتھ ویو',
+      roadMapViewBtn: 'سڑکوں کا نقشہ',
+      openGoogleEarth: 'گوگل ارتھ 3D میں کھولیں ↗',
+      openGoogleMaps: 'گوگل میپس میں کھولیں ↗',
+      googleMapTitle: 'سیٹلائٹ اور حقیقی دنیا کا نقشہ — گورنمنٹ گرلز زبیدہ کالج، حیدرآباد، سندھ',
+      googleMapSubtitle:
+        'پٹھان کالونی، ہیرآباد، حیدرآباد (مقابل سینٹرل جیل) میں کالج کا فضائی سیٹلائٹ منظر دیکھیں یا گوگل ارتھ 3D کھولیں۔',
+      googleMapAddress: 'گورنمنٹ گرلز زبیدہ کالج · پٹھان کالونی، ہیرآباد، حیدرآباد، سندھ، پاکستان',
+      freeMapBadge: 'مفت عوامی نقشہ ویو',
     },
     sections: SECTION_TRANSLATIONS.ur,
   },
@@ -1392,6 +1677,105 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       adminInbox: 'ايڊمن انباڪس',
       backToTop: 'مٿي وڃو',
       rights: 'گورنمينٽ گرلز زبيده ڪاليج، حيدرآباد. سڀ حق محفوظ آهن.',
+    },
+    faq: {
+      title: 'عام پڇيا ويندڙ سوال (FAQs)',
+      subtitle:
+        'داخلائن، روزاني ۽ سياري جي لازمي يونيفارم، تصديقي دستاويزن ۽ ڪيمپس ضابطن بابت واضح سرڪاري رهنمائي.',
+      searchPlaceholder: 'موضوع موجب ڳوليو (مثال: يونيفارم، ب فارم، مارڪ شيٽ، وقت)...',
+      allQueries: 'سڀ سوال',
+      admissionsCat: 'داخلا ۽ سيڪيپ',
+      uniformCat: 'يونيفارم ۽ لباس',
+      documentsCat: 'دستاويزن جي فهرست',
+      campusCat: 'وقت ۽ ڪيمپس زندگي',
+      expandAll: 'سڀ کوليو',
+      collapseAll: 'سڀ بند ڪريو',
+      noMatchTitle: 'ڪو به لاڳاپيل سوال نه مليو',
+      noMatchDescPrefix: 'توهان جي ڳولا “',
+      noMatchDescSuffix: '” مطابق ڪو جواب نه مليو. ٻيو لفظ آزمايو يا مٿي فارم ذريعي سوال موڪليو.',
+      resetFilters: 'فلٽر صاف ڪريو',
+      keyInstructions: 'اهم هدايتون ۽ گهرجون:',
+      officialNotice: 'سرڪاري اطلاع:',
+      askAboutPrefix: 'هن موضوع بابت سوال پڇو:',
+      stillQuestionsTitle: 'ڇا توهان جي سوال جو جواب هتي موجود ناهي؟',
+      stillQuestionsDesc: 'اسان جو داخلا عملو ۽ انتظاميه ڪاليج وقتن ۾ توهان جي مدد لاءِ موجود آهي.',
+      emailAdmin: 'انتظاميه کي اي ميل ڪريو',
+      submitEnquiry: 'آن لائن پڇا ڳاڇا موڪليو',
+    },
+    enquiryModal: {
+      collegeTag: 'گورنمينٽ گرلز زبيده ڪاليج حيدرآباد',
+      title: 'داخلا ۽ شاگردياڻين جي پڇا ڳاڇا',
+      intro: 'ڪاليج انتظاميه سان سڌو رابطو:',
+      officeLabel: 'آفيس:',
+      helplineLabel: 'هيلپ لائين:',
+      sentTitle: 'توهان جو سوال جمع ٿي ويو!',
+      sentDescPrefix: 'توهان جو پيغام بابت',
+      sentDescMid: 'موضوع',
+      sentDescSuffix: 'انتظاميه ڊيسڪ لاءِ محفوظ ڪيو ويو آهي. توهان پنهنجي اي ميل ايپ ذريعي پڻ ڪاپي موڪلي سگهو ٿا:',
+      sendEmailBtn: 'اي ميل ايپ ذريعي موڪليو',
+      doneBtn: 'مڪمل / بند ڪريو',
+      nameLabel: 'توهان جو مڪمل نالو *',
+      emailLabel: 'اي ميل ايڊريس *',
+      phoneLabel: 'فون نمبر (اختياري)',
+      subjectLabel: 'سوال جو موضوع *',
+      messageLabel: 'توهان جو پيغام / سوال *',
+      submitBtn: 'سوال موڪليو',
+      submittingBtn: 'موڪليو پيو وڃي...',
+      submitError: 'هن وقت پيغام جمع نٿو ٿي سگهي. مهرباني ڪري ٻيهر ڪوشش ڪريو يا سڌو اي ميل ڪريو.',
+      subjectOptions: [
+        { value: 'Intermediate Admissions', label: 'انٽرميڊيٽ يارهين ڪلاس داخلا (SECCAP)' },
+        { value: 'BS Zoology', label: 'BS زولوجي (4 سالا ڊگري)' },
+        { value: 'AD Commerce', label: 'ايسوسيئيٽ ڊگري ان ڪامرس (AD Commerce)' },
+        { value: 'Associate Degree Science/Arts', label: 'ايسوسيئيٽ ڊگري سائنس / آرٽس (ADS / ADA)' },
+        { value: 'Marksheet Verification', label: 'دستاويز / مارڪ شيٽ جي تصديق' },
+        { value: 'General Inquiry', label: 'عام ڪاليج پڇا ڳاڇا' },
+      ],
+    },
+    callWidget: {
+      collegeTag: 'گورنمينٽ گرلز زبيده ڪاليج',
+      title: 'سرڪاري فون نمبر',
+      landlineLabel: 'ڪاليج آفيس لينڊ لائين',
+      helplineLabel: 'داخلا هيلپ لائين',
+      officeHours: 'آفيس وقت: سومر کان ڇنڇر صبح 8:00 کان 2:00 تائين',
+      callShort: 'ڪال',
+    },
+    contactExtra: {
+      thankYouPrefix: 'مهرباني،',
+      submittedDescPrefix: 'توهان جو سوال بابت',
+      submittedDescSuffix: 'محفوظ ڪيو ويو آهي. توهان هي پيغام سڌو ڪاليج جي سرڪاري اي ميل انباڪس ڏانهن پڻ موڪلي سگهو ٿا:',
+      toLabel: 'ڏانهن:',
+      fromLabel: 'طرفان:',
+      subjectLabel: 'موضوع:',
+      launchMailBtn: 'اي ميل ايپ ۾ کوليو',
+      sendAnotherBtn: 'ٻيو پيغام موڪليو',
+      submitError: 'هن وقت پيغام محفوظ نٿو ٿي سگهي. مهرباني ڪري ٻيهر ڪوشش ڪريو.',
+      subjectOptions: [
+        { value: 'Admissions', label: 'انٽرميڊيٽ يارهين ڪلاس داخلا (SECCAP)' },
+        { value: 'BS Zoology', label: 'BS زولوجي (4 سالا ڊگري)' },
+        { value: 'AD Commerce', label: 'ايسوسيئيٽ ڊگري ان ڪامرس (ADC)' },
+        { value: 'Associate Degree Science/Arts', label: 'ايسوسيئيٽ ڊگري سائنس / آرٽس (ADS / ADA)' },
+        { value: 'Academic Verification', label: 'مارڪ شيٽ ۽ دستاويزن جي تصديق' },
+        { value: 'General Inquiry', label: 'عام ڪاليج پڇا ڳاڇا' },
+      ],
+    },
+    campusTourExtra: {
+      searchSelectPrompt: 'موجوده هنڌ کان سڌو پنڌ هلي وڃڻ لاءِ ڪنهن به شعبي تي ڪلڪ ڪريو:',
+      searchNoMatchPrefix: 'ڪو به شعبو يا ڪمرو “',
+      searchNoMatchSuffix: '” سان نه مليو. ڪار پارڪنگ، نماز ڪمرو، گرين هائوس، ڪراٽي ڪلب، ڪمپيوٽر ليب يا فزڪس ڳوليو.',
+      leftView: 'توهان جي کاٻي پاسي',
+      aheadView: 'بلڪل سامهون',
+      rightView: 'توهان جي ساڄي پاسي',
+      simProgressAria: 'هلڻ جي اڳڀرائي',
+      googleMapTab: 'گوگل ميپ ۽ ارٿ',
+      satelliteViewBtn: 'سيٽلائيٽ ارٿ منظر',
+      roadMapViewBtn: 'روڊ ۽ گهٽين جو نقشو',
+      openGoogleEarth: 'گوگل ارٿ 3D ۾ کوليو ↗',
+      openGoogleMaps: 'گوگل ميپس ۾ کوليو ↗',
+      googleMapTitle: 'سيٽلائيٽ ۽ حقيقي نقشو — گورنمينٽ گرلز زبيده ڪاليج، حيدرآباد، سنڌ',
+      googleMapSubtitle:
+        'پٺاڻ ڪالوني، هيرآباد، حيدرآباد (سينٽرل جيل سامهون) ۾ ڪاليج جو حقيقي فضائي سيٽلائيٽ منظر ڏسو يا گوگل ارٿ 3D کوليو.',
+      googleMapAddress: 'گورنمينٽ گرلز زبيده ڪاليج · پٺاڻ ڪالوني، هيرآباد، حيدرآباد، سنڌ، پاڪستان',
+      freeMapBadge: 'مفت عوامي نقشو',
     },
     sections: SECTION_TRANSLATIONS.sd,
   },

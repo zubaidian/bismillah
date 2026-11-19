@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Calendar, Clock, GraduationCap, BookOpen, Flag } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 type CalendarTrack = 'all' | 'intermediate' | 'degree' | 'campus';
 
@@ -143,6 +144,9 @@ export function AcademicCalendarSection() {
             <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
               {t.calendar.subtitle}
             </p>
+            <div className="pt-1">
+              <LanguageSwitcher variant="light" />
+            </div>
           </div>
 
           {/* Filter Tabs */}

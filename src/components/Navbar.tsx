@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
 import { PortalLanguage } from '../data/translations';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { Menu, X, ChevronRight, Phone } from 'lucide-react';
 
 interface NavbarProps {
@@ -160,8 +161,14 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Always-visible Multilingual Switcher (Desktop & Tablet/Mobile) */}
+          <div className="flex items-center gap-2 shrink-0">
+            <LanguageSwitcher variant="navbar" compact className="hidden lg:inline-flex" />
+          </div>
+
+          {/* Mobile Menu & Compact Language Controls */}
+          <div className="flex lg:hidden items-center gap-1.5">
+            <LanguageSwitcher variant="navbar" compact />
             <a
               href={`tel:${COLLEGE_INFO.phoneRaw}`}
               className="sm:hidden p-2 rounded-md bg-[#03241e] text-amber-300 border border-amber-400/40"

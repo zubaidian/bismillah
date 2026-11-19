@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { SYLLABUS_BOOKS, SyllabusBookItem } from '../data/digitalLibraryData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { ExternalLink, Maximize2, X } from 'lucide-react';
 
 export function DigitalLibrarySection() {
@@ -34,6 +35,9 @@ export function DigitalLibrarySection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Category Filter Tabs */}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { COLLEGE_LABS, CollegeLabInfo, LabPhotoItem, LabSlug } from '../data/collegeLabsData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import {
   Camera,
   CheckCircle2,
@@ -159,6 +160,9 @@ export function CollegeLabsSection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Lab Filter Tabs + Quick Upload Button */}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ACADEMIC_PROGRAMS, AcademicProgram } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
 export function AcademicsSection() {
@@ -24,6 +25,9 @@ export function AcademicsSection() {
           <p className="text-stone-600 text-base sm:text-lg">
             {s.subtitle}
           </p>
+          <div className="pt-1 flex justify-center">
+            <LanguageSwitcher variant="light" />
+          </div>
         </div>
 
         {/* Filter Tabs */}
