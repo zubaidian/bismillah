@@ -13,6 +13,7 @@ import {
 import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { openAiTutorSection } from '../utils/sectionNavigation';
 
 interface HeroProps {
   onOpenEnquiry: () => void;
@@ -102,6 +103,15 @@ export function Hero({ onOpenEnquiry }: HeroProps) {
                 <FileSpreadsheet className="w-4 h-4 text-amber-300" />
                 <span>{t.hero.ctaExamPrep}</span>
               </a>
+
+              <button
+                type="button"
+                onClick={openAiTutorSection}
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-900/95 hover:bg-emerald-800 border border-amber-300/75 text-amber-200 font-semibold text-sm shadow-md transition-all cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>{t.hero.ctaAiTutor}</span>
+              </button>
 
               <a
                 href="#board-results"

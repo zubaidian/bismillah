@@ -9,10 +9,12 @@ import {
   FileSpreadsheet,
   GraduationCap,
   MapPin,
+  Sparkles,
   X,
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { openAiTutorSection } from '../utils/sectionNavigation';
 
 interface QuickShortcut {
   id: string;
@@ -24,6 +26,11 @@ interface QuickShortcut {
 }
 
 function scrollToSectionHref(href: string) {
+  if (href === '#ai-tutor') {
+    openAiTutorSection();
+    return;
+  }
+
   if (href === '#campus-tour') {
     import('./VirtualCampusTour').catch(() => {});
     window.dispatchEvent(new CustomEvent('campus-tour:open-map'));
@@ -98,6 +105,14 @@ export function FloatingQuickAccess() {
       hint: t.quickAccess.examPrepHint,
       href: '#exam-prep',
       icon: FileSpreadsheet,
+      priority: true,
+    },
+    {
+      id: 'ai-tutor',
+      label: t.quickAccess.aiTutor,
+      hint: t.quickAccess.aiTutorHint,
+      href: '#ai-tutor',
+      icon: Sparkles,
       priority: true,
     },
     {

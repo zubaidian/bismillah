@@ -1,106 +1,103 @@
-import { lazy, Suspense, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { TopUtilityBar } from './components/TopUtilityBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { FloatingCallWidget } from './components/FloatingCallWidget';
 import { FloatingQuickAccess } from './components/FloatingQuickAccess';
+import { LazySection, lazyWithRetry } from './components/LazySection';
 import { FirebaseProvider } from './contexts/FirebaseContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 
-const BoardHonorsSection = lazy(() =>
+const BoardHonorsSection = lazyWithRetry(() =>
   import('./components/BoardHonorsSection').then((m) => ({ default: m.BoardHonorsSection }))
 );
-const StudentAchievementsSection = lazy(() =>
+const StudentAchievementsSection = lazyWithRetry(() =>
   import('./components/StudentAchievementsSection').then((m) => ({
     default: m.StudentAchievementsSection,
   }))
 );
-const NoticesSection = lazy(() =>
+const NoticesSection = lazyWithRetry(() =>
   import('./components/NoticesSection').then((m) => ({ default: m.NoticesSection }))
 );
-const FacebookEventsTracker = lazy(() =>
+const FacebookEventsTracker = lazyWithRetry(() =>
   import('./components/FacebookEventsTracker').then((m) => ({
     default: m.FacebookEventsTracker,
   }))
 );
-const AboutAndHistory = lazy(() =>
+const AboutAndHistory = lazyWithRetry(() =>
   import('./components/AboutAndHistory').then((m) => ({ default: m.AboutAndHistory }))
 );
-const PrincipalSection = lazy(() =>
+const PrincipalSection = lazyWithRetry(() =>
   import('./components/PrincipalSection').then((m) => ({ default: m.PrincipalSection }))
 );
-const AcademicsSection = lazy(() =>
+const AcademicsSection = lazyWithRetry(() =>
   import('./components/AcademicsSection').then((m) => ({ default: m.AcademicsSection }))
 );
-const DepartmentsSection = lazy(() =>
+const DepartmentsSection = lazyWithRetry(() =>
   import('./components/DepartmentsSection').then((m) => ({ default: m.DepartmentsSection }))
 );
-const VirtualCampusTour = lazy(() =>
+const VirtualCampusTour = lazyWithRetry(() =>
   import('./components/VirtualCampusTour').then((m) => ({ default: m.VirtualCampusTour }))
 );
-const CollegeLibrarySection = lazy(() =>
+const CollegeLibrarySection = lazyWithRetry(() =>
   import('./components/CollegeLibrarySection').then((m) => ({
     default: m.CollegeLibrarySection,
   }))
 );
-const CollegeLabsSection = lazy(() =>
+const CollegeLabsSection = lazyWithRetry(() =>
   import('./components/CollegeLabsSection').then((m) => ({ default: m.CollegeLabsSection }))
 );
-const DigitalLibrarySection = lazy(() =>
+const DigitalLibrarySection = lazyWithRetry(() =>
   import('./components/DigitalLibrarySection').then((m) => ({
     default: m.DigitalLibrarySection,
   }))
 );
-const ExamPrepSection = lazy(() =>
+const ExamPrepSection = lazyWithRetry(() =>
   import('./components/ExamPrepSection').then((m) => ({
     default: m.ExamPrepSection,
   }))
 );
-const AlumnaeSection = lazy(() =>
+const AlumnaeSection = lazyWithRetry(() =>
   import('./components/AlumnaeSection').then((m) => ({ default: m.AlumnaeSection }))
 );
-const AdmissionsSection = lazy(() =>
+const AdmissionsSection = lazyWithRetry(() =>
   import('./components/AdmissionsSection').then((m) => ({ default: m.AdmissionsSection }))
 );
-const AcademicCalendarSection = lazy(() =>
+const AcademicCalendarSection = lazyWithRetry(() =>
   import('./components/AcademicCalendarSection').then((m) => ({
     default: m.AcademicCalendarSection,
   }))
 );
-const StudentResourcesSection = lazy(() =>
+const StudentResourcesSection = lazyWithRetry(() =>
   import('./components/StudentResourcesSection').then((m) => ({
     default: m.StudentResourcesSection,
   }))
 );
-const CemisAttendanceSection = lazy(() =>
+const CemisAttendanceSection = lazyWithRetry(() =>
   import('./components/CemisAttendanceSection').then((m) => ({
     default: m.CemisAttendanceSection,
   }))
 );
-const GallerySection = lazy(() =>
+const GallerySection = lazyWithRetry(() =>
   import('./components/GallerySection').then((m) => ({ default: m.GallerySection }))
 );
-const FacebookCommunitySection = lazy(() =>
+const FacebookCommunitySection = lazyWithRetry(() =>
   import('./components/FacebookCommunitySection').then((m) => ({
     default: m.FacebookCommunitySection,
   }))
 );
-const ContactAndLocation = lazy(() =>
+const ContactAndLocation = lazyWithRetry(() =>
   import('./components/ContactAndLocation').then((m) => ({ default: m.ContactAndLocation }))
 );
-const Footer = lazy(() =>
+const Footer = lazyWithRetry(() =>
   import('./components/Footer').then((m) => ({ default: m.Footer }))
 );
-const EnquiryModal = lazy(() =>
+const EnquiryModal = lazyWithRetry(() =>
   import('./components/EnquiryModal').then((m) => ({ default: m.EnquiryModal }))
 );
-const AdminInboxModal = lazy(() =>
+const AdminInboxModal = lazyWithRetry(() =>
   import('./components/AdminInboxModal').then((m) => ({ default: m.AdminInboxModal }))
 );
-
-function SectionPlaceholder({ id }: { id: string }) {
-  return <section id={id} className="min-h-[160px]" aria-hidden="true" />;
-}
 
 export default function App() {
   const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
@@ -128,115 +125,115 @@ export default function App() {
           <Hero onOpenEnquiry={() => setIsEnquiryModalOpen(true)} />
 
           {/* Board Examination Honors & Top Positions Spotlight */}
-          <Suspense fallback={<SectionPlaceholder id="board-results" />}>
+          <LazySection id="board-results" minHeight="min-h-[320px]" placeholderClassName="bg-[#f4f7f4]">
             <BoardHonorsSection />
-          </Suspense>
+          </LazySection>
 
           {/* Student Achievements & Roll of Honor */}
-          <Suspense fallback={<SectionPlaceholder id="student-achievements" />}>
+          <LazySection id="student-achievements" minHeight="min-h-[320px]" placeholderClassName="bg-white">
             <StudentAchievementsSection />
-          </Suspense>
+          </LazySection>
 
           {/* Official News & Announcements Board */}
-          <Suspense fallback={<SectionPlaceholder id="notices" />}>
+          <LazySection id="notices" minHeight="min-h-[260px]" placeholderClassName="bg-white">
             <NoticesSection />
-          </Suspense>
+          </LazySection>
 
           {/* Facebook 2026 Live College Events Scrolling Window Tracker */}
-          <Suspense fallback={<SectionPlaceholder id="events" />}>
+          <LazySection id="events" minHeight="min-h-[260px]" placeholderClassName="bg-[#021f19]">
             <FacebookEventsTracker />
-          </Suspense>
+          </LazySection>
 
           {/* 70-Year History, Legacy & Core Pillars */}
-          <Suspense fallback={<SectionPlaceholder id="about" />}>
+          <LazySection id="about" aliasIds={['history']} minHeight="min-h-[360px]" placeholderClassName="bg-[#064b36]">
             <AboutAndHistory />
-          </Suspense>
+          </LazySection>
 
           {/* Principal's Desk: Prof. Yasmeen Panhwar */}
-          <Suspense fallback={<SectionPlaceholder id="principal" />}>
+          <LazySection id="principal" minHeight="min-h-[340px]" placeholderClassName="bg-[#042f28]">
             <PrincipalSection />
-          </Suspense>
+          </LazySection>
 
           {/* Academic Faculties & Programs Explorer */}
-          <Suspense fallback={<SectionPlaceholder id="academics" />}>
+          <LazySection id="academics" minHeight="min-h-[340px]" placeholderClassName="bg-white">
             <AcademicsSection />
-          </Suspense>
+          </LazySection>
 
           {/* Academic Departments, Laboratories & Subject Chairs */}
-          <Suspense fallback={<SectionPlaceholder id="departments" />}>
+          <LazySection id="departments" minHeight="min-h-[360px]" placeholderClassName="bg-[#fbfdfa]">
             <DepartmentsSection onOpenEnquiry={() => setIsEnquiryModalOpen(true)} />
-          </Suspense>
+          </LazySection>
 
           {/* Interactive Virtual Campus Tour */}
-          <Suspense fallback={<SectionPlaceholder id="campus-tour" />}>
+          <LazySection id="campus-tour" aliasIds={['campus-virtual-map']} minHeight="min-h-[420px]" placeholderClassName="bg-[#042f28]">
             <VirtualCampusTour />
-          </Suspense>
+          </LazySection>
 
           {/* Central College Library: Photos, Collections & Membership Rules */}
-          <Suspense fallback={<SectionPlaceholder id="college-library" />}>
+          <LazySection id="college-library" minHeight="min-h-[340px]" placeholderClassName="bg-white">
             <CollegeLibrarySection />
-          </Suspense>
+          </LazySection>
 
           {/* College Laboratories: Computer Science, Physics, Chemistry, Zoology & Botany */}
-          <Suspense fallback={<SectionPlaceholder id="college-labs" />}>
+          <LazySection id="college-labs" minHeight="min-h-[340px]" placeholderClassName="bg-[#f8faf7]">
             <CollegeLabsSection />
-          </Suspense>
+          </LazySection>
 
           {/* Digital Library: Syllabus Book Photos & Internet Links */}
-          <Suspense fallback={<SectionPlaceholder id="digital-library" />}>
+          <LazySection id="digital-library" minHeight="min-h-[320px]" placeholderClassName="bg-[#f8faf7]">
             <DigitalLibrarySection />
-          </Suspense>
+          </LazySection>
 
           {/* Dynamic Past Papers & Examination Prep Hub */}
-          <Suspense fallback={<SectionPlaceholder id="exam-prep" />}>
+          <LazySection id="exam-prep" aliasIds={['ai-tutor']} minHeight="min-h-[400px]" placeholderClassName="bg-[#032922]">
             <ExamPrepSection />
-          </Suspense>
+          </LazySection>
 
           {/* Alumnae Success Stories */}
-          <Suspense fallback={<SectionPlaceholder id="alumnae" />}>
+          <LazySection id="alumnae" minHeight="min-h-[340px]" placeholderClassName="bg-white">
             <AlumnaeSection />
-          </Suspense>
+          </LazySection>
 
           {/* SECCAP Centralized Admissions Guide */}
-          <Suspense fallback={<SectionPlaceholder id="admissions" />}>
+          <LazySection id="admissions" minHeight="min-h-[340px]" placeholderClassName="bg-[#042f28]">
             <AdmissionsSection />
-          </Suspense>
+          </LazySection>
 
           {/* Academic Calendar (2026–2027 Key Dates & Examinations) */}
-          <Suspense fallback={<SectionPlaceholder id="academic-calendar" />}>
+          <LazySection id="academic-calendar" minHeight="min-h-[300px]" placeholderClassName="bg-[#faf8f4]">
             <AcademicCalendarSection />
-          </Suspense>
+          </LazySection>
 
           {/* Student Resources: Downloadable Forms, Enrollment Slips & Registration Guides */}
-          <Suspense fallback={<SectionPlaceholder id="student-resources" />}>
+          <LazySection id="student-resources" minHeight="min-h-[300px]" placeholderClassName="bg-[#f8faf7]">
             <StudentResourcesSection />
-          </Suspense>
+          </LazySection>
 
           {/* CEMIS Biometric Attendance & Faculty Portal (Sindh College Education Dept) */}
-          <Suspense fallback={<SectionPlaceholder id="cemis-attendance" />}>
+          <LazySection id="cemis-attendance" minHeight="min-h-[280px]" placeholderClassName="bg-white">
             <CemisAttendanceSection />
-          </Suspense>
+          </LazySection>
 
           {/* Campus Gallery & Archives */}
-          <Suspense fallback={<SectionPlaceholder id="gallery" />}>
+          <LazySection id="gallery" minHeight="min-h-[320px]" placeholderClassName="bg-[#f8faf7]">
             <GallerySection />
-          </Suspense>
+          </LazySection>
 
           {/* Official Facebook Community Updates */}
-          <Suspense fallback={<SectionPlaceholder id="facebook-community" />}>
+          <LazySection id="facebook-community" aliasIds={['facebook-updates']} minHeight="min-h-[360px]" placeholderClassName="bg-[#042f28]">
             <FacebookCommunitySection />
-          </Suspense>
+          </LazySection>
 
           {/* Location, Google Map, QR Code, Working Contact Form & FAQs */}
-          <Suspense fallback={<SectionPlaceholder id="contact" />}>
+          <LazySection id="contact" aliasIds={['faq', 'enquiryFormContainer']} minHeight="min-h-[400px]" placeholderClassName="bg-white">
             <ContactAndLocation />
-          </Suspense>
+          </LazySection>
         </main>
 
         {/* Institutional Footer */}
-        <Suspense fallback={<div className="min-h-[160px] bg-[#021914]" />}>
+        <LazySection id="site-footer" minHeight="min-h-[200px]" placeholderClassName="bg-[#021914]">
           <Footer onOpenAdmin={() => setIsAdminModalOpen(true)} />
-        </Suspense>
+        </LazySection>
 
         {/* Lazy-loaded Modals (only downloaded when opened) */}
         {isEnquiryModalOpen && (

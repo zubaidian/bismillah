@@ -1,12 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-  User,
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { auth, db, googleProvider } from '../firebase';
+import type { User } from 'firebase/auth';
 
 const ADMIN_EMAIL = 'zubaidaisbest@gmail.com';
 
@@ -32,39 +25,72 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
-      setUser(nextUser);
+    let active = true;
+    let unsubscribe: (() => void) | undefined;
 
-      if (!nextUser || !nextUser.emailVerified) {
-        setIsAdmin(false);
-        setAuthReady(true);
-        return;
-      }
-
-      if (nextUser.email?.toLowerCase() === ADMIN_EMAIL) {
-        setIsAdmin(true);
-        setAuthReady(true);
-        return;
-      }
-
+    const initFirebase = async () => {
       try {
-        const adminSnap = await getDoc(doc(db, 'admins', nextUser.uid));
-        setIsAdmin(adminSnap.exists());
-      } catch {
-        setIsAdmin(false);
-      } finally {
-        setAuthReady(true);
-      }
-    });
+        const [{ onAuthStateChanged }, { doc, getDoc }, { auth, db }] =
+          await Promise.all([
+            import('firebase/auth'),
+            import('firebase/firestore'),
+            import('../firebase'),
+          ]);
 
-    return () => unsubscribe();
+        if (!active) return;
+
+        unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
+          if (!active) return;
+          setUser(nextUser);
+
+          if (!nextUser || !nextUser.emailVerified) {
+            setIsAdmin(false);
+            setAuthReady(true);
+            return;
+          }
+
+          if (nextUser.email?.toLowerCase() === ADMIN_EMAIL) {
+            setIsAdmin(true);
+            setAuthReady(true);
+            return;
+          }
+
+          try {
+            const adminSnap = await getDoc(doc(db, 'admins', nextUser.uid));
+            if (active) setIsAdmin(adminSnap.exists());
+          } catch {
+            if (active) setIsAdmin(false);
+          } finally {
+            if (active) setAuthReady(true);
+          }
+        });
+      } catch {
+        if (active) setAuthReady(true);
+      }
+    };
+
+    const timer = window.setTimeout(initFirebase, 0);
+
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+      unsubscribe?.();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
+    const [{ signInWithPopup }, { auth, googleProvider }] = await Promise.all([
+      import('firebase/auth'),
+      import('../firebase'),
+    ]);
     await signInWithPopup(auth, googleProvider);
   };
 
   const signOutUser = async () => {
+    const [{ signOut }, { auth }] = await Promise.all([
+      import('firebase/auth'),
+      import('../firebase'),
+    ]);
     await signOut(auth);
   };
 

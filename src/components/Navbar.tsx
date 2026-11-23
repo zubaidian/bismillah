@@ -3,6 +3,7 @@ import { COLLEGE_INFO } from '../data/collegeData';
 import { useLanguage } from '../contexts/LanguageContext';
 import { PortalLanguage } from '../data/translations';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { openAiTutorSection } from '../utils/sectionNavigation';
 import { Menu, X, ChevronRight, Phone } from 'lucide-react';
 
 interface NavbarProps {
@@ -35,6 +36,7 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
     { label: t.nav.events, href: '#events' },
     { label: t.nav.academics, href: '#academics' },
     { label: t.nav.examPrep, href: '#exam-prep' },
+    { label: t.nav.aiTutor, href: '#ai-tutor' },
     { label: t.nav.departments, href: '#departments' },
     { label: t.nav.campusTour, href: '#campus-tour' },
     { label: t.nav.collegeLibrary, href: '#college-library' },
@@ -55,6 +57,11 @@ export function Navbar({ onOpenEnquiry }: NavbarProps) {
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false);
+
+    if (href === '#ai-tutor') {
+      openAiTutorSection();
+      return;
+    }
 
     if (href === '#campus-tour') {
       import('./VirtualCampusTour').catch(() => {});

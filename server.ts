@@ -178,6 +178,153 @@ async function startServer() {
     }
   });
 
+  interface TutorRequestBody {
+    message?: string;
+    history?: ChatHistoryTurn[];
+    subject?: string;
+    level?: string;
+    mode?: 'concept' | 'exam-answer' | 'practical' | 'quiz';
+    language?: 'en' | 'ur' | 'sd';
+  }
+
+  function buildSubjectTutorSystemInstruction(
+    subject?: string,
+    level?: string,
+    mode?: TutorRequestBody['mode'],
+    language?: 'en' | 'ur' | 'sd'
+  ): string {
+    const languageDirective =
+      language === 'ur'
+        ? 'Respond primarily in clear, supportive Urdu (اردو) unless the student writes in English or Sindhi. Keep standard scientific formulas, C++/SQL syntax, and accounting terms in English alongside Urdu explanations.'
+        : language === 'sd'
+          ? 'Respond primarily in clear, supportive Sindhi (سنڌي) unless the student writes in English or Urdu. Keep standard scientific formulas, C++/SQL syntax, and accounting terms in English alongside Sindhi explanations.'
+          : 'Respond in clear, encouraging English (or match the student’s language if they write in Urdu or Sindhi).';
+
+    const modeDirective =
+      mode === 'exam-answer'
+        ? 'Format the response as a high-scoring BISE Hyderabad / University of Sindh written exam answer: concise Definition, numbered Key Points/Headings, Formula/Diagram notes (if applicable), and a brief Marking Tip.'
+        : mode === 'practical'
+          ? 'Focus on the new Sindh Textbook Board (Jamshoro) unified paper pattern where Practical-Based Questions appear directly inside the written exam paper: cover Apparatus/Requirements, Principle/Formula, Step-by-Step Procedure or Observation Table / C++ or SQL dry-run, and Precautions.'
+          : mode === 'quiz'
+            ? 'Generate 3 realistic BISE Hyderabad / University of Sindh style Multiple Choice Questions (MCQs) on the requested topic with options (a)–(d), followed by a clearly separated Answer Key with a 1-sentence explanation for each.'
+            : 'Explain the concept step by step from fundamentals, include one clear worked example or real-life analogy, and finish with one quick check-yourself question.';
+
+    return `You are the AI Subject Tutor for Government Girls Zubaida College (GGZC), Hyderabad, Sindh, Pakistan (affiliated with BISE Hyderabad for Class XI–XII and University of Sindh, Jamshoro for BS Zoology & Associate Degree programs).
+
+SELECTED CONTEXT:
+- Subject: ${subject || 'General College Subject'}
+- Academic Level: ${level || 'Intermediate (Class XI–XII) / Undergraduate'}
+- Study Mode: ${mode || 'concept'}
+
+TUTORING RULES:
+- ${languageDirective}
+- ${modeDirective}
+- Align strictly with Sindh Textbook Board (Jamshoro) and BISE Hyderabad / University of Sindh syllabi.
+- For numericals (Physics, Chemistry, Mathematics, Accounting), show every formula, substitution, and unit clearly.
+- For Computer Science, use clean code blocks for C++ or SQL and explain line-by-line output clearly.
+- Keep responses focused, accurate, encouraging, and well-structured (~180–320 words unless a multi-step numerical requires slightly more).
+- If a student shares an incorrect attempt or misconception, gently point out the exact step where it went off track and guide them to the right method.`;
+  }
+
+  app.post('/api/subject-tutor', async (req: Request, res: Response) => {
+    const body = (req.body || {}) as TutorRequestBody;
+    const message = typeof body.message === 'string' ? body.message.trim() : '';
+
+    if (!message) {
+      res.status(400).json({ error: 'Please enter a subject question or topic.' });
+      return;
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      res.status(500).json({
+        error: 'AI Subject Tutor is awaiting a Gemini API key in Settings > Secrets.',
+      });
+      return;
+    }
+
+    try {
+      const ai = new GoogleGenAI({
+        apiKey,
+        httpOptions: {
+          headers: {
+            'User-Agent': 'aistudio-build',
+          },
+        },
+      });
+
+      const systemInstruction = buildSubjectTutorSystemInstruction(
+        body.subject,
+        body.level,
+        body.mode,
+        body.language
+      );
+
+      const safeHistory = Array.isArray(body.history)
+        ? body.history
+            .filter(
+              (turn) =>
+                turn &&
+                (turn.role === 'user' || turn.role === 'model') &&
+                typeof turn.text === 'string' &&
+                turn.text.trim().length > 0
+            )
+            .slice(-10)
+            .map((turn) => ({
+              role: turn.role,
+              parts: [{ text: turn.text.trim() }],
+            }))
+        : [];
+
+      const chat = ai.chats.create({
+        model: 'gemini-4-hydrogen',
+        history: safeHistory,
+        config: {
+          systemInstruction,
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+        },
+      });
+
+      const response = await chat.sendMessage({ message });
+      const reply = response.text?.trim();
+
+      if (!reply) {
+        res.status(502).json({
+          error: 'The tutor did not return a response. Please try asking again.',
+        });
+        return;
+      }
+
+      res.json({ reply });
+    } catch (err: unknown) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      console.error('Gemini Subject Tutor error:', errMessage);
+
+      if (
+        errMessage.includes('PERMISSION_DENIED') ||
+        errMessage.includes('API_KEY_INVALID') ||
+        errMessage.includes('403') ||
+        errMessage.includes('400')
+      ) {
+        res.status(401).json({
+          error: 'Please verify your Gemini API key in Settings > Secrets.',
+        });
+        return;
+      }
+
+      if (errMessage.includes('RESOURCE_EXHAUSTED') || errMessage.includes('429')) {
+        res.status(429).json({
+          error: 'Tutor service is temporarily busy. Please wait a moment and try again.',
+        });
+        return;
+      }
+
+      res.status(500).json({
+        error: 'Unable to reach the AI Subject Tutor right now. Please try again shortly.',
+      });
+    }
+  });
+
   if (process.env.NODE_ENV !== 'production') {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({

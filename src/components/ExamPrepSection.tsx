@@ -15,6 +15,7 @@ import { triggerPastPaperDownload } from '../utils/pastPaperPdf';
 import { useLanguage } from '../contexts/LanguageContext';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { CareerCounselorChat } from './CareerCounselorChat';
+import { SubjectTutorChat } from './SubjectTutorChat';
 import {
   Award,
   BookCheck,
@@ -35,13 +36,24 @@ import {
   XCircle,
 } from 'lucide-react';
 
-type PrepTab = 'papers' | 'pattern' | 'quiz' | 'viva' | 'counselor';
+type PrepTab = 'papers' | 'pattern' | 'quiz' | 'viva' | 'tutor' | 'counselor';
 
 export function ExamPrepSection() {
   const { dir, t } = useLanguage();
   const copy = t.examPrep;
 
-  const [activeTab, setActiveTab] = useState<PrepTab>('papers');
+  const [activeTab, setActiveTab] = useState<PrepTab>(() => {
+    if (typeof window === 'undefined') return 'papers';
+    if (window.__ggzcPendingExamTab) {
+      const pending = window.__ggzcPendingExamTab;
+      delete window.__ggzcPendingExamTab;
+      return pending;
+    }
+    if (window.location.hash === '#ai-tutor') {
+      return 'tutor';
+    }
+    return 'papers';
+  });
   const [selectedStream, setSelectedStream] = useState<'all' | ExamStream>('all');
   const [selectedLevel, setSelectedLevel] = useState<'all' | ExamLevel>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,6 +70,33 @@ export function ExamPrepSection() {
   // Viva State
   const [selectedLab, setSelectedLab] = useState<string>('all');
   const [revealedVivaIds, setRevealedVivaIds] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.__ggzcPendingExamTab) {
+      const pending = window.__ggzcPendingExamTab;
+      delete window.__ggzcPendingExamTab;
+      setActiveTab(pending);
+    }
+
+    const handleOpenTutor = () => {
+      delete window.__ggzcPendingExamTab;
+      setActiveTab('tutor');
+    };
+
+    const handleHashChange = () => {
+      if (window.location.hash === '#ai-tutor') {
+        setActiveTab('tutor');
+      }
+    };
+
+    window.addEventListener('exam-prep:open-tutor', handleOpenTutor);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => {
+      window.removeEventListener('exam-prep:open-tutor', handleOpenTutor);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (!selectedPaper) return;
@@ -223,6 +262,19 @@ export function ExamPrepSection() {
           >
             <FlaskConical className="w-4 h-4 shrink-0" />
             <span>{copy.tabs.viva}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('tutor')}
+            className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              activeTab === 'tutor'
+                ? 'bg-amber-400 text-emerald-950 shadow-lg'
+                : 'bg-[#064b36] text-amber-200 hover:bg-[#085c43] border border-amber-300/60'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 shrink-0" />
+            <span>{copy.tabs.tutor}</span>
           </button>
 
           <button
@@ -946,7 +998,14 @@ export function ExamPrepSection() {
           </div>
         )}
 
-        {/* MODE 4: AI CAREER COUNSELOR */}
+        {/* MODE 4: AI SUBJECT TUTOR */}
+        {activeTab === 'tutor' && (
+          <div id="ai-tutor-panel" className="scroll-mt-24">
+            <SubjectTutorChat />
+          </div>
+        )}
+
+        {/* MODE 5: AI CAREER COUNSELOR */}
         {activeTab === 'counselor' && <CareerCounselorChat />}
       </div>
 

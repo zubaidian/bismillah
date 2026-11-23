@@ -20,6 +20,7 @@ export interface PortalTranslations {
     events: string;
     academics: string;
     examPrep: string;
+    aiTutor: string;
     departments: string;
     campusTour: string;
     collegeLibrary: string;
@@ -49,6 +50,8 @@ export interface PortalTranslations {
     admissionsHint: string;
     examPrep: string;
     examPrepHint: string;
+    aiTutor: string;
+    aiTutorHint: string;
     downloads: string;
     downloadsHint: string;
     calendar: string;
@@ -69,6 +72,7 @@ export interface PortalTranslations {
     mottoQuote: string;
     ctaAdmissions: string;
     ctaExamPrep: string;
+    ctaAiTutor: string;
     ctaHonors: string;
     ctaEnquiry: string;
     triad1Title: string;
@@ -176,6 +180,7 @@ export interface PortalTranslations {
       pattern: string;
       quiz: string;
       viva: string;
+      tutor: string;
       counselor: string;
     };
     streams: {
@@ -230,6 +235,27 @@ export interface PortalTranslations {
       resetBtn: string;
       streamLabel: string;
       subjectsLabel: string;
+      welcomeHeading: string;
+      welcomeBody: string;
+      starterTitle: string;
+      thinking: string;
+      inputPlaceholder: string;
+      sendBtn: string;
+      errorFallback: string;
+    };
+    tutor: {
+      title: string;
+      subtitle: string;
+      resetBtn: string;
+      subjectLabel: string;
+      levelLabel: string;
+      modeLabel: string;
+      modes: {
+        concept: string;
+        examAnswer: string;
+        practical: string;
+        quiz: string;
+      };
       welcomeHeading: string;
       welcomeBody: string;
       starterTitle: string;
@@ -419,6 +445,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       events: 'Events',
       academics: 'Academics',
       examPrep: 'Past Papers & Prep',
+      aiTutor: 'AI Subject Tutor',
       departments: 'Departments',
       campusTour: 'Virtual Campus Tour',
       collegeLibrary: 'College Library',
@@ -448,6 +475,8 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       admissionsHint: 'SECCAP & Merit Desk',
       examPrep: 'Past Papers & Prep',
       examPrepHint: 'BISE, MCQs & Viva',
+      aiTutor: 'AI Subject Tutor',
+      aiTutorHint: 'BISE & STBB Study Chat',
       downloads: 'Downloads',
       downloadsHint: 'Forms, Slips & PDFs',
       calendar: 'Academic Calendar',
@@ -469,6 +498,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       mottoQuote: '“Service Above Self”',
       ctaAdmissions: 'SECCAP Admissions 2026',
       ctaExamPrep: 'Past Papers & Exam Prep',
+      ctaAiTutor: 'AI Subject Tutor',
       ctaHonors: 'Board Honors (2nd & 4th)',
       ctaEnquiry: 'Online Enquiry',
       triad1Title: 'Curiosity',
@@ -613,6 +643,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
         pattern: 'Paper Pattern (Theory + Practical)',
         quiz: 'MCQ Practice Quiz',
         viva: 'In-Paper Practical Guide',
+        tutor: 'AI Subject Tutor',
         counselor: 'AI Career Counselor',
       },
       streams: {
@@ -678,6 +709,29 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
         inputPlaceholder: 'Ask about BBA, CA, MBBS, BS CS, MUET/UoS admissions, or careers...',
         sendBtn: 'Ask Counselor',
         errorFallback: 'Unable to reach the Career Counselor right now. Please try again.',
+      },
+      tutor: {
+        title: 'AI Subject Tutor (BISE & Sindh Textbook Aligned)',
+        subtitle:
+          'Pick your subject, class level, and study mode to get step-by-step explanations, BISE exam-ready answers, numerical walkthroughs, or in-paper practical help.',
+        resetBtn: 'New Topic',
+        subjectLabel: 'Subject:',
+        levelLabel: 'Class Level:',
+        modeLabel: 'Answer Style:',
+        modes: {
+          concept: 'Step-by-Step Concept',
+          examAnswer: 'BISE Exam Format',
+          practical: 'In-Paper Practical',
+          quiz: '3-MCQ Quick Check',
+        },
+        welcomeHeading: 'Ask any question from your syllabus',
+        welcomeBody:
+          'Select your subject (Biology, Chemistry, Physics, Computer Science, Mathematics, Accounting, or English) above, type your question or paste a numerical below, or try one of the quick topic starters.',
+        starterTitle: 'Quick Topic Starters for This Subject',
+        thinking: 'Preparing your step-by-step explanation...',
+        inputPlaceholder: 'Ask a concept, paste a Physics/Accounting numerical, or request C++/SQL help...',
+        sendBtn: 'Ask Tutor',
+        errorFallback: 'Unable to reach the AI Subject Tutor right now. Please try again.',
       },
       pattern: {
         eyebrow: 'Sindh Textbook Board (Jamshoro) · New Unified Paper Pattern (Since Last Year)',
@@ -884,6 +938,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       events: 'تقریبات',
       academics: 'تعلیمی پروگرام',
       examPrep: 'ماضی کے پرچے اور تیاری',
+      aiTutor: 'اے آئی مضمون ٹیوٹر',
       departments: 'شعبہ جات',
       campusTour: 'کیمپس کا ورچوئل دورہ',
       collegeLibrary: 'کالج لائبریری',
@@ -913,6 +968,8 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       admissionsHint: 'سی کیپ اور میرٹ ڈیسک',
       examPrep: 'ماضی کے پرچے',
       examPrepHint: 'بورڈ پرچے، معروضی اور وائیوا',
+      aiTutor: 'اے آئی ٹیوٹر',
+      aiTutorHint: 'بورڈ مضامین کی فوری مدد',
       downloads: 'ڈاؤن لوڈز',
       downloadsHint: 'فارمز، سلپس اور پی ڈی ایف',
       calendar: 'تعلیمی کیلنڈر',
@@ -934,6 +991,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       mottoQuote: '“خدمتِ خلق قبل از ذات”',
       ctaAdmissions: 'سی کیپ داخلے 2026',
       ctaExamPrep: 'ماضی کے پرچے اور امتحانی تیاری',
+      ctaAiTutor: 'اے آئی مضمون ٹیوٹر',
       ctaHonors: 'بورڈ اعزازات (دوسری اور چوتھی پوزیشن)',
       ctaEnquiry: 'آن لائن استفسار',
       triad1Title: 'تجسس',
@@ -1075,6 +1133,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
         pattern: 'نیا پیپر پیٹرن (تھیوری + پریکٹیکل)',
         quiz: 'معروضی مشق کوئز',
         viva: 'پرچے میں پریکٹیکل گائیڈ',
+        tutor: 'اے آئی مضمون ٹیوٹر',
         counselor: 'اے آئی کیریئر کونسلر',
       },
       streams: {
@@ -1138,6 +1197,29 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
         inputPlaceholder: 'بی بی اے، سی اے، ایم بی بی ایس، بی ایس سی ایس یا جامعہ سندھ کے بارے میں پوچھیں...',
         sendBtn: 'مشورہ حاصل کریں',
         errorFallback: 'اس وقت کیریئر کونسلر سے رابطہ ممکن نہیں۔ براہِ کرم دوبارہ کوشش کریں۔',
+      },
+      tutor: {
+        title: 'اے آئی مضمون ٹیوٹر (سندھ ٹیکسٹ بک اور تعلیمی بورڈ کے مطابق)',
+        subtitle:
+          'اپنا مضمون، درجہ اور مطالعہ کا انداز منتخب کریں تاکہ مرحلہ وار وضاحت، بورڈ امتحانی طرز کا جواب، حسابی سوال کا حل یا تحریری پریکٹیکل مدد حاصل کر سکیں۔',
+        resetBtn: 'نیا موضوع',
+        subjectLabel: 'مضمون:',
+        levelLabel: 'جماعت / درجہ:',
+        modeLabel: 'جواب کا انداز:',
+        modes: {
+          concept: 'مرحلہ وار تفہیم',
+          examAnswer: 'بورڈ امتحانی طرز',
+          practical: 'پرچے میں پریکٹیکل',
+          quiz: '3 معروضی سوالات کی مشق',
+        },
+        welcomeHeading: 'اپنے نصاب سے کوئی بھی سوال پوچھیں',
+        welcomeBody:
+          'اوپر سے اپنا مضمون (بائیولوجی، کیمسٹری، فزکس، کمپیوٹر سائنس، ریاضی، اکاؤنٹنگ یا انگریزی) منتخب کریں اور نیچے اپنا سوال یا عددی مسئلہ لکھیں۔',
+        starterTitle: 'اس مضمون کے فوری مثالی سوالات',
+        thinking: 'آپ کے لیے مرحلہ وار وضاحت تیار کی جا رہی ہے...',
+        inputPlaceholder: 'کوئی سوال، فزکس/اکاؤنٹنگ کا عددی مسئلہ یا C++/SQL کوڈ کے بارے میں پوچھیں...',
+        sendBtn: 'ٹیوٹر سے پوچھیں',
+        errorFallback: 'اس وقت اے آئی مضمون ٹیوٹر سے رابطہ ممکن نہیں۔ براہِ کرم دوبارہ کوشش کریں۔',
       },
       pattern: {
         eyebrow: 'سندھ ٹیکسٹ بک بورڈ (جامشورو) · گزشتہ سال سے نافذ نیا مشترکہ پیپر پیٹرن',
@@ -1340,6 +1422,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       events: 'تقريبون',
       academics: 'تعليمي پروگرام',
       examPrep: 'پراڻا پرچا ۽ تياري',
+      aiTutor: 'AI مضمون ٽيوٽر',
       departments: 'شعبا',
       campusTour: 'ڪيمپس جو ورچوئل سير',
       collegeLibrary: 'ڪاليج لائبريري',
@@ -1369,6 +1452,8 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       admissionsHint: 'سيڪيپ ۽ ميرٽ ڊيسڪ',
       examPrep: 'پراڻا پرچا',
       examPrepHint: 'بورڊ پرچا، MCQ ۽ وائيوا',
+      aiTutor: 'AI ٽيوٽر',
+      aiTutorHint: 'بورڊ مضمونن جي فوري مدد',
       downloads: 'ڊائون لوڊز',
       downloadsHint: 'فارم، سلپس ۽ PDF',
       calendar: 'تعليمي ڪئلينڊر',
@@ -1390,6 +1475,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
       mottoQuote: '“ذات کان مٿي خدمت”',
       ctaAdmissions: 'سيڪيپ داخلا 2026',
       ctaExamPrep: 'پراڻا پرچا ۽ امتحاني تياري',
+      ctaAiTutor: 'AI مضمون ٽيوٽر',
       ctaHonors: 'بورڊ اعزاز (ٻي ۽ چوٿين پوزيشن)',
       ctaEnquiry: 'آن لائن پڇا ڳاڇا',
       triad1Title: 'تجسس',
@@ -1531,6 +1617,7 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
         pattern: 'پيپر پيٽرن (ٿيوري + پريڪٽيڪل)',
         quiz: 'معروضي مشق کوئز',
         viva: 'پرچي اندر پريڪٽيڪل گائيڊ',
+        tutor: 'AI مضمون ٽيوٽر',
         counselor: 'AI ڪيريئر ڪائونسلر',
       },
       streams: {
@@ -1595,6 +1682,29 @@ export const PORTAL_TRANSLATIONS: Record<PortalLanguage, PortalTranslations> = {
         inputPlaceholder: 'BBA، CA، MBBS، BS CS يا سنڌ يونيورسٽي داخلائن بابت پڇو...',
         sendBtn: 'صلاح وٺو',
         errorFallback: 'هن وقت ڪيريئر ڪائونسلر سان رابطو نٿو ٿي سگهي. مهرباني ڪري ٻيهر ڪوشش ڪريو.',
+      },
+      tutor: {
+        title: 'AI مضمون ٽيوٽر (سنڌ ٽيڪسٽ بڪ ۽ بورڊ نصاب مطابق)',
+        subtitle:
+          'پنهنجو مضمون، ڪلاس ۽ جواب جو انداز چونڊيو ته جيئن مرحليوار سمجهاڻي، بورڊ امتحاني طرز جو جواب، حسابي سوال جو حل يا پرچي اندر پريڪٽيڪل مدد حاصل ڪري سگهو.',
+        resetBtn: 'نئون موضوع',
+        subjectLabel: 'مضمون:',
+        levelLabel: 'ڪلاس / درجو:',
+        modeLabel: 'جواب جو انداز:',
+        modes: {
+          concept: 'مرحليوار سمجهاڻي',
+          examAnswer: 'بورڊ امتحاني طرز',
+          practical: 'پرچي اندر پريڪٽيڪل',
+          quiz: '3 معروضي سوالن جي مشق',
+        },
+        welcomeHeading: 'پنهنجي نصاب مان ڪو به سوال پڇو',
+        welcomeBody:
+          'مٿان پنهنجو مضمون (بائيولاجي، ڪيميسٽري، فزڪس، ڪمپيوٽر سائنس، رياضي، اڪائونٽنگ يا انگريزي) چونڊيو ۽ هيٺ پنهنجو سوال يا حسابي مسئلو لکو.',
+        starterTitle: 'هن مضمون جا تڪڙا مثالي سوال',
+        thinking: 'توهان لاءِ مرحليوار سمجهاڻي تيار ڪئي پئي وڃي...',
+        inputPlaceholder: 'ڪو موضوع، فزڪس/اڪائونٽنگ جو سوال يا C++/SQL بابت پڇو...',
+        sendBtn: 'ٽيوٽر کان پڇو',
+        errorFallback: 'هن وقت AI مضمون ٽيوٽر سان رابطو نٿو ٿي سگهي. مهرباني ڪري ٻيهر ڪوشش ڪريو.',
       },
       pattern: {
         eyebrow: 'سنڌ ٽيڪسٽ بڪ بورڊ (ڄامشورو) · گذريل سال کان نئون گڏيل پيپر پيٽرن',

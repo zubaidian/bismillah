@@ -44,6 +44,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = language;
+
+    if (language === 'ur' || language === 'sd') {
+      const existing = document.getElementById('ggzc-rtl-fonts');
+      if (!existing) {
+        const link = document.createElement('link');
+        link.id = 'ggzc-rtl-fonts';
+        link.rel = 'stylesheet';
+        link.href =
+          'https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap';
+        document.head.appendChild(link);
+      }
+    }
   }, [language]);
 
   const isRTL = language === 'ur' || language === 'sd';
